@@ -1,0 +1,5357 @@
+[
+  {
+    "id": "ocd-bill/0505ea13-b494-4b0e-b5d0-1d0447b99999",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:id/government",
+      "name": "Idaho",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/7a59916c-201a-49b2-9288-776ffea9f6cb",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "H 149",
+    "title": "RESIDENTIAL MORTGAGE PRACTICES \u2013 Adds to existing law to provide for consumer privacy in mortgage applications.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "CONSUMERS",
+      "DEBTORS AND CREDITORS",
+      "HOMES AND HOUSING",
+      "PRIVACY"
+    ],
+    "extras": {},
+    "created_at": "2025-02-06T20:25:47.111856+00:00",
+    "updated_at": "2025-02-09T22:27:05.468430+00:00",
+    "openstates_url": "https://openstates.org/id/bills/2025/H149/",
+    "first_action_date": "2025-02-06",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Reported Printed and Referred to Business",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/26c3528f-6d26-45e0-a666-358ac11fc4f4",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:mo/government",
+      "name": "Missouri",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/8ff25b39-cd33-4cee-a2a9-d88b80b2c6fe",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 632",
+    "title": "Establishes a cause of action against business for violations of privacy in changing facilities or restrooms",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-28T01:09:31.505376+00:00",
+    "updated_at": "2025-02-09T22:15:50.296036+00:00",
+    "openstates_url": "https://openstates.org/mo/bills/2025/SB632/",
+    "first_action_date": "2025-01-27T06:00:00+00:00",
+    "latest_action_date": "2025-01-27T06:00:00+00:00",
+    "latest_action_description": "S First Read",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/6c5b0cf0-efc7-4cb0-92d2-aaa0c0fdf4a2",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1576",
+    "title": "Medicaid; terms; Oklahoma Health Care Authority; coverage; Medicaid; criteria; medical necessity; discretion; Chief Operating Officer; Health Information Portability and Accountability Act; scientific research; consent; research; opting-out; minors; promulgation of rules and regulations; waiver application; effective date; emergency.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T00:14:39.355247+00:00",
+    "updated_at": "2025-02-09T20:15:12.168526+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1576/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-05",
+    "latest_action_description": "Authored by Senator Hicks (principal Senate author)",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/7cdc17e3-7da3-40c4-8eae-2aa2658e935d",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 2081",
+    "title": "Child abduction prevention; Uniform Child Abduction Prevention Act; terms; order or petition; warrant; jurisdiction; requirements; factors; risk; evidence; conditions; custody or visitation; remedies; hearing; search; service; law enforcement; costs and fees; duration; federal acts; codification; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T00:38:52.861903+00:00",
+    "updated_at": "2025-02-09T20:15:04.608378+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB2081/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Referred to Civil Judiciary",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/2673ea00-38eb-451f-9049-45827ccd8f99",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 2086",
+    "title": "Labor; Oklahoma Earned Wage Access Services Act; definitions; requirements; prohibitions; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T00:38:48.881993+00:00",
+    "updated_at": "2025-02-09T20:13:48.976819+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB2086/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Referred to Business",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/ae8ce2ab-4574-4b19-851c-e17921ab3141",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1366",
+    "title": "Dentists and dental hygienists; purpose; terms; Commission membership; duties; Compact Member States; powers and duties; Compact Commission; Compact license privilege; practice state; jurisdiction; fees; military waiver; joint investigations; disciplinary actions; nonmember states; oversight; enforcement; dispute resolution; withdrawal; dissolution; severability; binding; rules of order; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-15T21:14:52.495847+00:00",
+    "updated_at": "2025-02-09T20:13:11.539831+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1366/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Referred to Business",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/8c798c50-c4b4-41b5-a866-2d926b93d5e3",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 2104",
+    "title": "Classification of felony offenses; designating classification for certain offenses; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T11:00:04.294983+00:00",
+    "updated_at": "2025-02-09T20:13:02.331372+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB2104/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Rules",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/7cf950fd-1e6e-4223-8a4c-a73429ccda04",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 611",
+    "title": "State government; creating the Citizen's Bill of Rights. Emergency.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-14T20:48:16.232706+00:00",
+    "updated_at": "2025-02-09T20:12:25.476226+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB611/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Judiciary",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/ba50cc2b-8418-4469-81cb-4061702449dd",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 959",
+    "title": "Health care; granting certain rights and protections to health care institutions and payors; prohibiting certain discrimination and adverse actions. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T23:25:46.552513+00:00",
+    "updated_at": "2025-02-09T20:12:09.308796+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB959/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Health and Human Services",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/87a97605-df03-4174-85e3-02df32a84f00",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 540",
+    "title": "Professions and occupations; enacting the Dentist and Dental Hygienist Compact and authorizing the Governor to enter into Compact with certain jurisdictions. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-13T20:47:27.305487+00:00",
+    "updated_at": "2025-02-09T20:11:31.152235+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB540/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Health and Human Services",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/ea5ceb29-8fa1-4159-8ddf-892d6319b0d6",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1012",
+    "title": "Data privacy; Oklahoma Computer Data Privacy Act; consumer protection; civil penalties; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2024-12-13T20:33:51.201267+00:00",
+    "updated_at": "2025-02-09T20:11:17.437279+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1012/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-06",
+    "latest_action_description": "Authored by Senator Howard (principal Senate author)",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/08cc938f-070d-4b75-9fda-6492c08fd36b",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 805",
+    "title": "Professions and occupations; enacting the Dietitian Licensure Compact and authorizing the Governor to enter into Compact with certain jurisdictions. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T03:04:13.852076+00:00",
+    "updated_at": "2025-02-09T20:10:11.596869+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB805/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Health and Human Services",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/8c5598ee-b6e8-4d01-8a59-51b57a4a1c78",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 1107",
+    "title": "Financial services; creating the Financial Services Freedom Act. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T23:30:31.087038+00:00",
+    "updated_at": "2025-02-09T20:09:23.956752+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB1107/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Revenue and Taxation",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/db268123-f95f-4c78-9c61-dcf6bf50ff81",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 2095",
+    "title": "Oklahoma Open Records Act; thirty-day records request response time; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T00:38:53.647943+00:00",
+    "updated_at": "2025-02-09T20:07:28.128479+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB2095/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Referred to General Government",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/23114249-8431-4d9c-a3f8-34250d91fe1a",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 944",
+    "title": "Crimes and punishments; modifying provisions and penalties related to hazing. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T23:25:58.842671+00:00",
+    "updated_at": "2025-02-09T20:07:06.160612+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB944/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Public Safety",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/6dec87d6-a6c2-4e2e-8eee-d224ef82cbbf",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1404",
+    "title": "Firearms; creating the Voluntary Firearm Restriction Act; authorizing individuals to voluntarily place themselves on a firearm restriction list; codification; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T01:15:03.301741+00:00",
+    "updated_at": "2025-02-09T20:06:48.633690+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1404/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Rules",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/235e6697-1064-4678-b7de-f149c7a0bb0e",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 2253",
+    "title": "Teacher certification; Data Governance Council; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T11:02:42.163190+00:00",
+    "updated_at": "2025-02-09T20:06:33.457006+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB2253/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Rules",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/cd8efe7a-5204-4c0c-8b5c-7eac60202ea6",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1971",
+    "title": "Children; Accountability, Transparency, and Protection for Exploited Youth Act; report; sexual misconduct or exploitation; penalties; Office of Juvenile Affairs; Independent Oversight Committee; responsibilities; investigations; civil liability; damages; negligence; civil penalties; training; annual report; exception; Oklahoma Open Records Act; disclosure; confidentiality; judicial review; juvenile records; exception; codification; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T00:32:52.491149+00:00",
+    "updated_at": "2025-02-09T20:05:13.566441+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1971/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-05",
+    "latest_action_description": "Referred to Criminal Judiciary",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/58b4a47c-0fcd-4727-8408-dc3bca873915",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 488",
+    "title": "Unmanned aerial systems; prohibiting certain purchase by state agencies after certain date; directing the Office of Homeland Security to maintain certain list. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-10T20:47:20.321832+00:00",
+    "updated_at": "2025-02-09T20:05:03.120176+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB488/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Aeronautics and Transportation",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/fe3f3745-c2b2-4947-bfc7-9a7390a76171",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 2151",
+    "title": "Education; Federal Education Guidance Disclosure Act; requiring the State Department of Education to publish certain guidance documents online; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T00:43:16.974678+00:00",
+    "updated_at": "2025-02-09T20:04:54.242225+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB2151/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Referred to Common Education",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/ee429f01-b3f7-4b7c-953c-be9d8a306530",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 546",
+    "title": "Data privacy; establishing consumer rights for processing of certain data. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-13T20:47:22.438459+00:00",
+    "updated_at": "2025-02-09T20:04:48.741290+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB546/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Technology and Telecommunications",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/bc6bed11-535a-45fe-bec5-2378b25f22e5",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1762",
+    "title": "Children; covered entities; data protection impact assessment; personal data of children; Attorney General; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T00:25:07.025370+00:00",
+    "updated_at": "2025-02-09T20:04:09.084172+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1762/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Referred to Children, Youth and Family Services",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/ef890ba8-18ee-4306-b949-50e1f82e5e41",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 16",
+    "title": "Financial institutions; creating the Oklahoma Second Amendment Financial Privacy Act; authorizing certain investigations by Attorney General. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2024-12-10T04:33:30.915810+00:00",
+    "updated_at": "2025-02-09T20:03:41.596663+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB16/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Business and Insurance",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/369df16c-0906-4b1e-84b0-dd919223d35f",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 958",
+    "title": "Health care; granting certain rights and protections to parents and legal guardians; modifying conditions for self-consent of minors. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T23:25:54.749138+00:00",
+    "updated_at": "2025-02-09T20:02:20.948992+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB958/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Health and Human Services",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/e4cae5a2-823f-4890-a59e-860787de246a",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1163",
+    "title": "Medical marijuana; decreasing weight amount of marijuana for aggravated trafficking offense; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-15T05:05:35.273998+00:00",
+    "updated_at": "2025-02-09T20:02:05.915548+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1163/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Policy recommendation to the Judiciary and Public Safety Oversight committee; Do Pass Criminal Judiciary",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/883f7498-3c88-4447-86d1-ea132c37588a",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 2603",
+    "title": "Motor carriers; creating the Motor Carrier Public Safety Enforcement Act; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T10:59:45.040772+00:00",
+    "updated_at": "2025-02-09T20:01:42.901352+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB2603/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-05",
+    "latest_action_description": "Referred to Transportation",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/ebf018e2-d6a1-49db-9945-d95115c04f72",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 596",
+    "title": "Asset forfeiture transparency; making certain reports available for public inspection; requiring submission of report on seizure of property. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-14T16:47:48.290225+00:00",
+    "updated_at": "2025-02-09T20:01:36.218177+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB596/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Judiciary",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/2fbba683-57a8-4f40-8b7d-9917ee5fec47",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1214",
+    "title": "Human trafficking; Justice for Noncitizen Minors and Human Trafficking Accountability Act of 2025; findings; Human Trafficking Response Unit; report; information; Attorney General; standards; duties; task; terms; responsibilities; codification; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-15T17:03:19.834413+00:00",
+    "updated_at": "2025-02-09T20:01:03.782346+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1214/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Referred to Criminal Judiciary",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/d3bd7c92-0d88-4ab2-b8af-2cf5f30d0c56",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 774",
+    "title": "Medical marijuana licenses; modifying certain identification number; requiring certain barcode. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T00:58:21.891497+00:00",
+    "updated_at": "2025-02-09T20:00:22.269445+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB774/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Business and Insurance",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/2b6b5433-c981-4acd-a0be-92b0ced44bc1",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1275",
+    "title": "Social media; social network; parents and guardians; permission; verification; effective date; emergency.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-15T21:12:24.871032+00:00",
+    "updated_at": "2025-02-09T20:00:13.452869+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1275/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-05",
+    "latest_action_description": "Authored by Senator Seifried (principal Senate author)",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/6d9ef2e1-f26a-49e9-8d5f-339cfe29bc42",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1984",
+    "title": "Domestic violence; purpose; terms; vehicles; information; severability; exception; liability; provider; alert; duties; legal ownership; mechanism; notification; codification; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T00:32:54.798284+00:00",
+    "updated_at": "2025-02-09T19:59:31.268539+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1984/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Referred to Criminal Judiciary",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/6e7a134a-088e-4141-95b7-941c4eb8b4d7",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 508",
+    "title": "Schools; making certain whistleblower protections applicable to support employees. Effective date. Emergency.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-12T16:44:38.322289+00:00",
+    "updated_at": "2025-02-09T19:58:49.027456+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB508/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Education",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/5cadd3b0-9786-4cbf-bd67-2ddeac563439",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 577",
+    "title": "Ad valorem tax; requiring submission of certain information for eligibility of certain exemption; requiring the Oklahoma Tax Commission to share information with the Incentive Evaluation Commission. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-14T04:52:27.960611+00:00",
+    "updated_at": "2025-02-09T19:58:29.144033+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB577/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Revenue and Taxation",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/6b77cde6-687e-45c2-a0cc-1aa0849cb534",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1621",
+    "title": "Public finance; Government Spending Transparency Act; reports; procedures; website; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T00:16:10.386012+00:00",
+    "updated_at": "2025-02-09T19:58:27.108435+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1621/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-05",
+    "latest_action_description": "Referred to General Government",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/80ca4a14-8cf5-44ee-87a6-25231e56b7e2",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1915",
+    "title": "Artificial intelligence; AI devices in health care; qualified end-user; deployer; quality assurance program; State Department of Health; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T00:30:38.497566+00:00",
+    "updated_at": "2025-02-09T19:57:45.487858+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1915/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Rules",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/ab021616-5474-4acf-bc77-94c25ac9ccb6",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 1097",
+    "title": "Oklahoma Open Records Act; requiring certain written notice when records request cannot be completed within a specified time. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T23:30:29.005577+00:00",
+    "updated_at": "2025-02-09T19:57:41.839469+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB1097/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Judiciary",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/c2fed570-f35f-4ac7-bfba-f33cce782f9f",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 1058",
+    "title": "Public health; requiring certain perinatal mental health screenings; requiring the State Department of Health to make available certain resources; requiring compilation and publication of certain data. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T23:30:53.103004+00:00",
+    "updated_at": "2025-02-09T19:57:07.013345+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB1058/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Health and Human Services",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/867a2a14-773f-44b6-a8ee-7e89c63a8160",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 2235",
+    "title": "Wrongful convictions; increasing liability amount for claims of wrongful incarceration; codification; effective date; emergency.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T10:53:35.255651+00:00",
+    "updated_at": "2025-02-09T19:57:01.780443+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB2235/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Referred to Appropriations and Budget Judiciary Subcommittee",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/a6154962-9fd0-40c0-ad78-693667a81bbe",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 765",
+    "title": "Dentists and dental hygienists; enacting the Interstate Dental and Dental Hygienist Compact. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T00:58:23.074526+00:00",
+    "updated_at": "2025-02-09T19:56:49.123326+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB765/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Health and Human Services",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/3f828c12-62d0-4c23-869c-9cf5cb42be78",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1388",
+    "title": "Children; covered entities; data protection impact assessment; personal data of children; attorney general; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T01:15:28.634034+00:00",
+    "updated_at": "2025-02-09T19:56:08.408402+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1388/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Referred to Children, Youth and Family Services",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/da42a919-9050-4d77-813b-56262a52ec3f",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 702",
+    "title": "Schools; modifying the Health Education Act; modifying topics to be included in health education; providing for review and approval of curricula and materials. Effective date. Emergency.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-15T16:54:33.445892+00:00",
+    "updated_at": "2025-02-09T19:56:01.660424+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB702/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Education",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/3a7b387d-a6f5-4c72-b501-73576f68b77c",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1916",
+    "title": "Artificial intelligence; Responsible Deployment of AI Systems Act; AI Council; AI Regulatory Sandbox Program; Artificial Intelligence Workforce Development Program; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T00:30:39.713804+00:00",
+    "updated_at": "2025-02-09T19:56:00.304302+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1916/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Rules",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/7cb015e2-9f1d-46b0-a57a-54c2b0918f9c",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 547",
+    "title": "Health care; modifying applicability of certain self-consent authorization for minors; granting certain protections to parent or legal guardian. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-13T20:47:30.764517+00:00",
+    "updated_at": "2025-02-09T19:55:38.798381+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB547/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Health and Human Services",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/0b886d79-d640-432a-823e-874ef61161c0",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 2261",
+    "title": "Professions and occupations; licensing; social workers; compact; procedures; commission; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T11:01:14.217998+00:00",
+    "updated_at": "2025-02-09T19:55:29.509354+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB2261/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Referred to Business",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/4f5040dc-aca1-4c6c-8beb-8c78bfd79c67",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1575",
+    "title": "Social services; Streamlined Services Act; Department of Human Services; coordinate; feasibility study; integrated access system; effective date; emergency.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T00:14:43.837682+00:00",
+    "updated_at": "2025-02-09T19:54:55.782632+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1575/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Referred to Children, Youth and Family Services",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/441a7555-2d7b-425c-8a26-c47b6ae9e985",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1835",
+    "title": "Abuse of elderly and disabled adults; Protective Services for the Vulnerable Adults Act; definition; persons required to report; investigation and reporting; Oklahoma's Protection and Advocacy System; Nursing Home Care Act; liability; waivers; reports; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T00:27:12.189938+00:00",
+    "updated_at": "2025-02-09T19:54:21.528120+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1835/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Referred to Civil Judiciary",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/224dbf5c-5de1-4a6c-b69e-4db1e00f3c4c",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 870",
+    "title": "Oklahoma Children's Code; creating the Accountability, Transparency, and Protection for Exploited Youth Act. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T23:22:11.350449+00:00",
+    "updated_at": "2025-02-09T19:53:53.100338+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB870/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Judiciary",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/9b971ca1-58f4-4cfe-b503-e320bd8c1f40",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 804",
+    "title": "Long-term care; requiring employment of certain professionals in specified circumstances; requiring assisted living centers to establish internal quality assurance committee. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T03:04:14.398168+00:00",
+    "updated_at": "2025-02-09T19:53:30.949909+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB804/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Health and Human Services",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/b918ed95-73ac-4dee-acba-bd08b01c911a",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1600",
+    "title": "Health care; Lori Brand Patient Bill of Rights Act of 2025; rights of patient; responsibilities of patients; rights of minors; responsibilities of parents; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T00:16:04.951503+00:00",
+    "updated_at": "2025-02-09T19:53:14.424482+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1600/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Referred to Public Health",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/c86792af-3b82-4c4e-b6ec-e97f0b0b4c4e",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 792",
+    "title": "School Safety and Bullying Prevention Act; requiring certain policy. Effective date. Emergency.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T01:00:34.188801+00:00",
+    "updated_at": "2025-02-09T19:52:58.018572+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB792/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Education",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/adf7c2a5-4bae-455c-9135-aeec6a73b0f2",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 2022",
+    "title": "Records; Oklahoma Open Records Act; definitions; exemptions; redacting or deleting of certain personal information; advance payments; requests require reasonable specificity; attorney fees; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T00:33:56.969950+00:00",
+    "updated_at": "2025-02-09T19:52:07.162028+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB2022/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Rules",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/c988195b-2473-488b-8e01-91d1774bce90",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 931",
+    "title": "Social media; requiring certain age verification; requiring social media platforms to provide certain supervisory tools. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T23:22:11.893954+00:00",
+    "updated_at": "2025-02-09T19:51:40.202891+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB931/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Technology and Telecommunications",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/86cf2902-2adb-4c48-a74c-38c7d36ad0ad",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 2209",
+    "title": "Oklahoma Open Meeting Act; allowing members of a public body to participate in a meeting from a private residence under certain circumstances; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T00:46:35.768635+00:00",
+    "updated_at": "2025-02-09T19:51:25.497148+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB2209/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Policy recommendation to the Government Oversight committee; Do Pass General Government",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/95079203-bc06-4055-9829-7dcada6c4f2c",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1886",
+    "title": "Human trafficking; creating the Oklahoma Human Trafficking Justice for Victims and Advocacy Act of 2025; increasing penalties for certain unlawful act; codification; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T00:27:59.313903+00:00",
+    "updated_at": "2025-02-09T19:51:13.702177+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1886/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Referred to Criminal Judiciary",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/c23886d0-0222-4713-a0c1-e1e99e0d3229",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 2837",
+    "title": "Medical marijuana; requiring medical marijuana business employees to submit proof of completion of education training; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T10:55:56.007244+00:00",
+    "updated_at": "2025-02-09T19:50:50.753991+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB2837/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-05",
+    "latest_action_description": "Referred to Alcohol, Tobacco and Controlled Substances",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/94c43e2d-846b-4c74-a705-9ec24ed042f0",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 773",
+    "title": "Pharmacy benefit managers; modifying definitions; prohibiting certain circumstances; requiring nonpayment under providing venue for certain court proceeding; allowing Attorney General to obtain certain information. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T00:58:20.767165+00:00",
+    "updated_at": "2025-02-09T19:50:49.496338+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB773/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Business and Insurance",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/5570c96c-73c9-4bd8-a7f6-c3258eecaa53",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1224",
+    "title": "Health care; defining terms; granting certain protections to health care institutions and health care payors; civil actions; discrimination; protections; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-15T17:03:32.262556+00:00",
+    "updated_at": "2025-02-09T19:49:34.192448+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1224/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Rules",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/130338bc-e25e-408a-ba03-583f88716d85",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 761",
+    "title": "Health care; creating the Lori Brand Patient Bill of Rights Act of 2025; specifying certain patient rights and responsibilities. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-15T21:00:20.568942+00:00",
+    "updated_at": "2025-02-09T19:49:12.160643+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB761/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Coauthored by Senator Hamilton",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/1c426e9b-06d6-4bcf-a357-a2eb5fb8daed",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1674",
+    "title": "Nursing homes; Nursing Homes Care Act; definition; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T00:19:06.119930+00:00",
+    "updated_at": "2025-02-09T19:49:09.707998+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1674/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Rules",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/18c75af0-7817-497d-8fe1-43bafd5a7e19",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 863",
+    "title": "Oklahoma Self-Defense Act; modifying certain registration approval requirements. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T23:22:07.572097+00:00",
+    "updated_at": "2025-02-09T19:48:53.143228+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB863/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Public Safety",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/2b81a6d0-dd39-4af1-9c45-66d22f338a26",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1109",
+    "title": "Truancy; prohibiting detention for failure to attend school; waiver of certain fines; requiring written notice for certain absences; requiring school districts to create and adopt progressive truancy intervention plans; prohibiting suspension; permitting report of absences to court under certain circumstances; effective date; emergency.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-14T04:56:13.456437+00:00",
+    "updated_at": "2025-02-09T19:47:48.195173+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1109/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-05",
+    "latest_action_description": "Referred to Rules",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/703411c8-f836-451b-be91-e5f72bbee441",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 535",
+    "title": "Oklahoma Open Records Act; modifying requirements for public body to complete certain records requests. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-13T20:47:17.924232+00:00",
+    "updated_at": "2025-02-09T19:47:38.693151+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB535/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Judiciary",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/d7e15ffd-16bd-4f27-9875-119ad874b71d",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 626",
+    "title": "Security Breach Notification Act; requiring notice of security breach of certain information; modifying provisions. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-14T20:48:15.407395+00:00",
+    "updated_at": "2025-02-09T19:47:20.407199+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB626/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Technology and Telecommunications",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/f1df1d68-aabd-4068-9e56-1114d623a162",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 2884",
+    "title": "Parental rights in health care; minor child's health care consultations; parental abuse exception; Attorney General enforcement; relief; immunity; physician and psychotherapist patient privilege; minor cannot refuse to disclose information to their parent or legal guardian; disclosure of confidential information, privileges, and testimony in hearings; parent or legal guardian's consent is required; disclosure of information and exceptions; right of self-consent under certain conditions and doctor-patient privileges; minors can consent without a parent or legal guardian; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T11:08:57.186749+00:00",
+    "updated_at": "2025-02-09T19:46:45.156663+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB2884/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Referred to Civil Judiciary",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/e2d1e4ed-6613-47f1-b54b-28df16a81827",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 885",
+    "title": "Social media; creating the Safe Screens for Kids Act. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T23:22:10.486602+00:00",
+    "updated_at": "2025-02-09T19:46:44.516962+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB885/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Technology and Telecommunications",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/de3a6f81-2bb8-4882-be2f-5e7043adfa52",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 807",
+    "title": "Health care; creating the Vaccine Transparency and Informed Consent Act; requiring certain informed consent; providing certain penalties and remedies. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T05:17:13.749378+00:00",
+    "updated_at": "2025-02-09T19:46:41.412424+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB807/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Health and Human Services",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/6aa715a5-29a7-4d07-83eb-06a3e99a5cf3",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 781",
+    "title": "Wages; creating the Oklahoma Earned Wages Access Services Act; allowing an earned wage access services provider to provide certain services. Effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T00:58:23.814839+00:00",
+    "updated_at": "2025-02-09T19:46:23.198601+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB781/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Economic Development, Workforce and Tourism",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/dcd2d92f-1680-4f97-892f-69dbd0d61535",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/5c78775c-6ff3-4cf8-a5f2-4e5e550861f3",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 865",
+    "title": "Public safety; creating the Oklahoma Public Safety and Immigration Enforcement Act. Effective date. Emergency.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-16T23:22:06.228237+00:00",
+    "updated_at": "2025-02-09T19:45:44.368392+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/SB865/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Second Reading referred to Public Safety Committee then to Appropriations Committee",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/ca6e3438-7162-4f38-882d-fd8a65ebbaff",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1160",
+    "title": "Insurance; Oklahoma Property and Casualty Insurance Guaranty Association; powers and duties; joining organizations; records; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-15T05:05:40.137879+00:00",
+    "updated_at": "2025-02-09T19:45:42.433244+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1160/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Referred to Insurance",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/59832642-7916-4f4b-b2b7-60eb007e9551",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1860",
+    "title": "Confidential records; requiring certain victim photographs submitted to the Pardon and Parole Board be kept confidential; clemency; Open Records Act; clemency hearing packets; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T00:28:01.335165+00:00",
+    "updated_at": "2025-02-09T19:45:14.576562+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB1860/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Referred to Criminal Judiciary",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/a246b44f-85aa-4105-82d1-68dc1fa246f7",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ok/government",
+      "name": "Oklahoma",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/cba1f18c-65a2-4eb0-886d-eada16da3d8a",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 2017",
+    "title": "Bullying; crimes and punishments; prohibiting certain communications through an online platform; schools; modifying provisions of the School Safety and Bullying Prevention Act; effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T00:33:53.624948+00:00",
+    "updated_at": "2025-02-09T19:44:18.871774+00:00",
+    "openstates_url": "https://openstates.org/ok/bills/2025/HB2017/",
+    "first_action_date": "2025-02-03",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Referred to Criminal Judiciary",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/6ccbff72-b02f-4424-9ef2-23549dce6cf9",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:md/government",
+      "name": "Maryland",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/bd8388d3-8fcd-4e28-9c1b-f23f0e376544",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1365",
+    "title": "Commercial Law - Online Data Privacy - Limits on Data Collection",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {
+      "date_effective": "October 1, 2025"
+    },
+    "created_at": "2025-02-07T11:30:37.568415+00:00",
+    "updated_at": "2025-02-09T17:41:34.064855+00:00",
+    "openstates_url": "https://openstates.org/md/bills/2025/HB1365/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Hearing 3/04 at 1:00 p.m.",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/006d343c-5d37-4bb2-a528-ef1d8443dd7f",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:mt/government",
+      "name": "Montana",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/803c558f-dec2-4f43-9c35-e73a6e849408",
+      "name": "Montana Legislature",
+      "classification": "legislature"
+    },
+    "identifier": "LC 3519",
+    "title": "Resolution to protect online personally identifiable information",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Information Technology  (see also: Communications)",
+      "Privacy"
+    ],
+    "extras": {
+      "by_request_of": "Bob Carter",
+      "bill_draft_number": "LC3519"
+    },
+    "created_at": "2024-12-15T00:52:09.945331+00:00",
+    "updated_at": "2025-02-09T04:50:33.129117+00:00",
+    "openstates_url": "https://openstates.org/mt/bills/2025/LC3519/",
+    "first_action_date": "2024-12-14T18:15:49+00:00",
+    "latest_action_date": "2025-02-08T23:36:17+00:00",
+    "latest_action_description": "(LC) Draft in Edit",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/6879d0b8-c717-4b81-96c6-df3e723cae7c",
+    "session": "2025R1",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:or/government",
+      "name": "Oregon",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/9b08e1e9-5a70-48c1-983d-508a3281c378",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 2047",
+    "title": "Relating to parental rights.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-13T01:41:14.013016+00:00",
+    "updated_at": "2025-02-09T01:09:04.307166+00:00",
+    "openstates_url": "https://openstates.org/or/bills/2025R1/HB2047/",
+    "first_action_date": "2025-01-13T16:01:32+00:00",
+    "latest_action_date": "2025-01-17T20:47:46+00:00",
+    "latest_action_description": "Referred to Judiciary.",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/9c37ddbb-b848-4c14-a105-c3cc8d18d347",
+    "session": "194th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ma/government",
+      "name": "Massachusetts",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/ca38ad9c-c3d5-4c4f-bc2f-d885218ed802",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HD 1458",
+    "title": "An Act fostering artificial intelligence responsibility",
+    "classification": [
+      "proposed bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-15T17:10:10.505987+00:00",
+    "updated_at": "2025-02-09T00:05:30.293244+00:00",
+    "openstates_url": "https://openstates.org/ma/bills/194th/HD1458/",
+    "first_action_date": "",
+    "latest_action_date": "",
+    "latest_action_description": "",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/03d3d0b3-8f0f-4e3a-8844-38be22057914",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:mt/government",
+      "name": "Montana",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/1cf80fcd-e90e-4d0b-87d6-304fad2262f9",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 272",
+    "title": "Create rules of conduct for child protection specialists",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Family Law  (see also: Minors)",
+      "Minors  (see also: Family Law)",
+      "Professions and Occupations  Generally",
+      "Professions and Occupations O-Z"
+    ],
+    "extras": {
+      "by_request_of": "Daniel Emrich",
+      "bill_draft_number": "LC0055"
+    },
+    "created_at": "2025-02-06T04:27:48.754658+00:00",
+    "updated_at": "2025-02-08T22:46:38.255905+00:00",
+    "openstates_url": "https://openstates.org/mt/bills/2025/SB272/",
+    "first_action_date": "2024-08-28T13:35:39+00:00",
+    "latest_action_date": "2025-02-08T17:17:28+00:00",
+    "latest_action_description": "(S) Hearing - (S) Judiciary",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/572aa837-a9a5-4a31-9e03-bb936fcb81e7",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:mt/government",
+      "name": "Montana",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/7508efaf-3ca6-436d-8858-45b2f73a78d9",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 121",
+    "title": "Provide privacy in certain restrooms, changing rooms, and sleeping quarters",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Health Care Services (see also: Health)",
+      "Minors  (see also: Family Law)",
+      "Safety  (see also: Health)"
+    ],
+    "extras": {
+      "by_request_of": "Kerri Seekins-Crowe",
+      "bill_draft_number": "LC2129"
+    },
+    "created_at": "2025-01-07T01:39:33.260844+00:00",
+    "updated_at": "2025-02-08T22:45:28.920893+00:00",
+    "openstates_url": "https://openstates.org/mt/bills/2025/HB121/",
+    "first_action_date": "2024-11-29T16:04:29+00:00",
+    "latest_action_date": "2025-02-10T20:00:00+00:00",
+    "latest_action_description": "(S) Scheduled for 2nd Reading",
+    "latest_passage_date": "2025-01-16T21:50:01+00:00"
+  },
+  {
+    "id": "ocd-bill/1f0bf194-721f-4496-ba82-888b0e45d857",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ut/government",
+      "name": "Utah",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/c7625e7e-dc12-49cf-aa73-fa96c5bf4b11",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 60",
+    "title": "State Income Tax Amendments",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Corporate Tax",
+      "Income Tax",
+      "Individual Income Tax",
+      "Revenue and Taxation",
+      "State Tax Commission",
+      "Tax Credits"
+    ],
+    "extras": {},
+    "created_at": "2024-12-21T00:59:28.658229+00:00",
+    "updated_at": "2025-02-08T19:25:48.549295+00:00",
+    "openstates_url": "https://openstates.org/ut/bills/2025/HB60/",
+    "first_action_date": "2024-12-20",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Senate/ placed on 2nd Reading Calendar",
+    "latest_passage_date": "2025-01-28"
+  },
+  {
+    "id": "ocd-bill/1c6c30a8-a078-4cea-98f8-51cf3e3c0885",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ut/government",
+      "name": "Utah",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/c7625e7e-dc12-49cf-aa73-fa96c5bf4b11",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 357",
+    "title": "Medical Cannabis Modifications",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Agriculture",
+      "Agriculture & Food",
+      "Controlled Substances",
+      "Health and Human Services",
+      "Medical Cannabis"
+    ],
+    "extras": {},
+    "created_at": "2025-01-30T01:19:40.188010+00:00",
+    "updated_at": "2025-02-08T17:25:34.772133+00:00",
+    "openstates_url": "https://openstates.org/ut/bills/2025/HB357/",
+    "first_action_date": "2025-01-29",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "House/ received fiscal note from Fiscal Analyst",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/da14e15d-f3c8-4d4e-b8a0-3db5a1e8f82e",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ut/government",
+      "name": "Utah",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/98cb21d7-f3ae-416b-93e7-df3da962aff9",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 164",
+    "title": "Modifications to Election Law",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Administrative Rulemaking and Procedures",
+      "Election Administration",
+      "Election Law",
+      "Government Operations (State Issues)",
+      "New Rulemaking Authority",
+      "Voting and Voter Registration"
+    ],
+    "extras": {},
+    "created_at": "2025-01-24T19:14:52.052544+00:00",
+    "updated_at": "2025-02-08T17:24:11.220499+00:00",
+    "openstates_url": "https://openstates.org/ut/bills/2025/SB164/",
+    "first_action_date": "2025-01-24",
+    "latest_action_date": "2025-01-31",
+    "latest_action_description": "Senate/ received fiscal note from Fiscal Analyst",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/46890fde-00dc-4c6c-afdc-c9439fe443a5",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ut/government",
+      "name": "Utah",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/c7625e7e-dc12-49cf-aa73-fa96c5bf4b11",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 69",
+    "title": "Government Records and Information Amendments",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Constitutional Officers",
+      "Counties",
+      "County Officers",
+      "Election Administration",
+      "Election Law",
+      "Government Operations (State Issues)",
+      "Government Records",
+      "Municipal Officers",
+      "Municipalities",
+      "Political Subdivisions (Local Issues)",
+      "State Officers and Employees",
+      "Voting and Voter Registration"
+    ],
+    "extras": {},
+    "created_at": "2024-12-27T19:00:41.128617+00:00",
+    "updated_at": "2025-02-08T17:23:39.766895+00:00",
+    "openstates_url": "https://openstates.org/ut/bills/2025/HB69/",
+    "first_action_date": "2024-12-27",
+    "latest_action_date": "2025-02-04",
+    "latest_action_description": "Senate/ placed on 2nd Reading Calendar",
+    "latest_passage_date": "2025-01-29"
+  },
+  {
+    "id": "ocd-bill/2ea97247-44ef-4e79-98d6-a3444b40eac2",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ut/government",
+      "name": "Utah",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/c7625e7e-dc12-49cf-aa73-fa96c5bf4b11",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 332",
+    "title": "Voter Registration Data Amendments",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Constitutional Officers",
+      "Election Law",
+      "Government Operations (State Issues)",
+      "Government Records",
+      "Lieutenant Governor",
+      "Voting and Voter Registration"
+    ],
+    "extras": {},
+    "created_at": "2025-01-27T19:16:51.664131+00:00",
+    "updated_at": "2025-02-08T17:21:57.217842+00:00",
+    "openstates_url": "https://openstates.org/ut/bills/2025/HB332/",
+    "first_action_date": "2025-01-27",
+    "latest_action_date": "2025-02-05",
+    "latest_action_description": "House/ 2nd reading",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/a6816edf-ba20-4157-b53b-b1853e2540bd",
+    "session": "2025-2026",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:wa/government",
+      "name": "Washington",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/7417a716-eba8-4437-a6e9-df14694bcb79",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1591",
+    "title": "Providing remedies for defendant survivors of domestic violence, sexual assault, or human trafficking.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-24T18:53:27.671224+00:00",
+    "updated_at": "2025-02-08T07:00:21.023070+00:00",
+    "openstates_url": "https://openstates.org/wa/bills/2025-2026/HB1591/",
+    "first_action_date": "2025-02-10T18:30:00+00:00",
+    "latest_action_date": "2025-02-10T18:30:00+00:00",
+    "latest_action_description": "Scheduled for public hearing in the House Committee on Community Safety at 01:30 PM",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/ad9863c8-eae3-43dd-8c46-616b5c966586",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:mt/government",
+      "name": "Montana",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/1cf80fcd-e90e-4d0b-87d6-304fad2262f9",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 279",
+    "title": "Adopt the dietitian licensure compact",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Interstate Cooperation",
+      "Professions and Occupations  Generally",
+      "Rule Making"
+    ],
+    "extras": {
+      "by_request_of": "Wendy McKamey",
+      "bill_draft_number": "LC1890"
+    },
+    "created_at": "2025-02-07T04:46:16.080135+00:00",
+    "updated_at": "2025-02-08T06:30:36.444222+00:00",
+    "openstates_url": "https://openstates.org/mt/bills/2025/SB279/",
+    "first_action_date": "2024-11-22T20:57:01+00:00",
+    "latest_action_date": "2025-02-07T20:24:00+00:00",
+    "latest_action_description": "(S) First Reading",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/e62ac047-79c1-48d9-861d-feed0dcc8aee",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:mt/government",
+      "name": "Montana",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/7508efaf-3ca6-436d-8858-45b2f73a78d9",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 255",
+    "title": "Revise online data privacy laws for K-12 pupil records",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Information Technology  (see also: Communications)",
+      "Privacy",
+      "Schools and Education"
+    ],
+    "extras": {
+      "by_request_of": "Bob Carter",
+      "bill_draft_number": "LC2117"
+    },
+    "created_at": "2025-01-23T04:30:10.440277+00:00",
+    "updated_at": "2025-02-08T06:30:06.973709+00:00",
+    "openstates_url": "https://openstates.org/mt/bills/2025/HB255/",
+    "first_action_date": "2024-11-29T15:48:29+00:00",
+    "latest_action_date": "2025-02-10T20:00:00+00:00",
+    "latest_action_description": "(H) Scheduled for 3rd Reading",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/5545e50e-7f27-4bf5-b481-81dcc4dec0d5",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:mt/government",
+      "name": "Montana",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/7508efaf-3ca6-436d-8858-45b2f73a78d9",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 268",
+    "title": "Generally revise notification requirements related to the registration of sexual and violent offenders",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Criminal Procedure  (see also: Law Enforcement)",
+      "Law Enforcement  (see also: Criminal Procedure)"
+    ],
+    "extras": {
+      "by_request_of": "Barry Usher",
+      "bill_draft_number": "LC3854"
+    },
+    "created_at": "2025-01-23T04:45:43.407204+00:00",
+    "updated_at": "2025-02-08T06:27:39.027323+00:00",
+    "openstates_url": "https://openstates.org/mt/bills/2025/HB268/",
+    "first_action_date": "2024-12-15T14:45:18+00:00",
+    "latest_action_date": "2025-02-07T20:21:49+00:00",
+    "latest_action_description": "(S) First Reading",
+    "latest_passage_date": "2025-02-06T21:54:00+00:00"
+  },
+  {
+    "id": "ocd-bill/52149815-7d57-4532-9f7d-47c6da65b193",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:mt/government",
+      "name": "Montana",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/803c558f-dec2-4f43-9c35-e73a6e849408",
+      "name": "Montana Legislature",
+      "classification": "legislature"
+    },
+    "identifier": "LC 372",
+    "title": "Generally revise privacy laws",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Communications  (see also: Information Technology)",
+      "Minors  (see also: Family Law)",
+      "Privacy"
+    ],
+    "extras": {
+      "by_request_of": "Daniel Zolnikov",
+      "bill_draft_number": "LC0372"
+    },
+    "created_at": "2024-12-12T03:10:37.396777+00:00",
+    "updated_at": "2025-02-08T06:23:13.485406+00:00",
+    "openstates_url": "https://openstates.org/mt/bills/2025/LC372/",
+    "first_action_date": "2024-09-27T13:27:05+00:00",
+    "latest_action_date": "2025-02-07T20:16:26+00:00",
+    "latest_action_description": "(LC) Draft in Assembly",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/c53a9daa-fb38-442c-ab50-0a7945f51811",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:mt/government",
+      "name": "Montana",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/1cf80fcd-e90e-4d0b-87d6-304fad2262f9",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 233",
+    "title": "Adopting the interstate massage compact",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Professions and Occupations  Generally",
+      "Professions and Occupations E-N",
+      "Rule Making"
+    ],
+    "extras": {
+      "by_request_of": "Willis Curdy",
+      "bill_draft_number": "LC0868"
+    },
+    "created_at": "2025-01-29T22:38:51.563425+00:00",
+    "updated_at": "2025-02-08T06:18:55.754106+00:00",
+    "openstates_url": "https://openstates.org/mt/bills/2025/SB233/",
+    "first_action_date": "2024-11-06T20:31:52+00:00",
+    "latest_action_date": "2025-02-07T20:13:00+00:00",
+    "latest_action_description": "(S) Committee Report--Bill Passed - (S) Business, Labor  and Economic Affairs",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/e6496c85-71dc-4f96-87c1-01cdc21c2e10",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:mt/government",
+      "name": "Montana",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/7508efaf-3ca6-436d-8858-45b2f73a78d9",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 403",
+    "title": "Generally revise laws related to state hospital",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Health (see also: Health Care Services; Safety)",
+      "Legislature",
+      "State Government"
+    ],
+    "extras": {
+      "by_request_of": "Donavon Hawk",
+      "bill_draft_number": "LC1372"
+    },
+    "created_at": "2025-02-06T04:41:04.794508+00:00",
+    "updated_at": "2025-02-08T06:17:24.760851+00:00",
+    "openstates_url": "https://openstates.org/mt/bills/2025/HB403/",
+    "first_action_date": "2024-11-14T15:44:13+00:00",
+    "latest_action_date": "2025-02-07T16:20:31+00:00",
+    "latest_action_description": "(H) Hearing - (H) Human Services",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/77420d5e-6658-4b80-8ac0-4c4992d4e03c",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:mt/government",
+      "name": "Montana",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/7508efaf-3ca6-436d-8858-45b2f73a78d9",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 320",
+    "title": "Establish the Montana's academic prosperity program for scholars act",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Revenue, State",
+      "Rule Making",
+      "Schools and Education",
+      "Taxation (Generally)",
+      "Taxation--Corporations",
+      "Taxation--Individual Income"
+    ],
+    "extras": {
+      "by_request_of": "Sue Vinton",
+      "bill_draft_number": "LC2582"
+    },
+    "created_at": "2025-01-28T04:33:04.091893+00:00",
+    "updated_at": "2025-02-08T06:16:27.605231+00:00",
+    "openstates_url": "https://openstates.org/mt/bills/2025/HB320/",
+    "first_action_date": "2024-12-09T17:08:04+00:00",
+    "latest_action_date": "2025-02-10T20:00:00+00:00",
+    "latest_action_description": "(H) Scheduled for 2nd Reading",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/ed9f2a62-17b2-4624-838a-355772ae3471",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:mt/government",
+      "name": "Montana",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/1cf80fcd-e90e-4d0b-87d6-304fad2262f9",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 282",
+    "title": "Limit state government use of personal electronic data",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Criminal Procedure  (see also: Law Enforcement)",
+      "Information Technology  (see also: Communications)",
+      "Privacy"
+    ],
+    "extras": {
+      "by_request_of": "Daniel Emrich",
+      "bill_draft_number": "LC0061"
+    },
+    "created_at": "2025-02-07T10:48:58.835850+00:00",
+    "updated_at": "2025-02-08T06:16:11.742368+00:00",
+    "openstates_url": "https://openstates.org/mt/bills/2025/SB282/",
+    "first_action_date": "2024-08-28T13:49:50+00:00",
+    "latest_action_date": "2025-02-07T20:25:00+00:00",
+    "latest_action_description": "(S) First Reading",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/cc1abc2d-50dd-4f77-9667-a7d7670eb55c",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:mt/government",
+      "name": "Montana",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/1cf80fcd-e90e-4d0b-87d6-304fad2262f9",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 206",
+    "title": "Generally revise laws related to child abuse and neglect proceedings and investigations",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Family Law  (see also: Minors)",
+      "Minors  (see also: Family Law)"
+    ],
+    "extras": {
+      "by_request_of": "Dennis Lenz",
+      "bill_draft_number": "LC0476"
+    },
+    "created_at": "2025-01-24T16:21:56.792128+00:00",
+    "updated_at": "2025-02-08T06:16:01.937397+00:00",
+    "openstates_url": "https://openstates.org/mt/bills/2025/SB206/",
+    "first_action_date": "2024-10-04T19:57:46+00:00",
+    "latest_action_date": "2025-02-06T00:47:15+00:00",
+    "latest_action_description": "(S) Tabled in Committee - (S) Public Health, Welfare and Safety",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/f688c3a2-0e1b-4918-ae29-e37e9215e2e7",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:mt/government",
+      "name": "Montana",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/7508efaf-3ca6-436d-8858-45b2f73a78d9",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 338",
+    "title": "Revise laws regarding targeted early numeracy intervention",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Schools and Education"
+    ],
+    "extras": {
+      "by_request_of": "Melissa Romano",
+      "bill_draft_number": "LC1779"
+    },
+    "created_at": "2025-01-29T22:52:51.315822+00:00",
+    "updated_at": "2025-02-08T06:15:47.863996+00:00",
+    "openstates_url": "https://openstates.org/mt/bills/2025/HB338/",
+    "first_action_date": "2024-11-20T22:59:49+00:00",
+    "latest_action_date": "2025-02-07T22:56:53+00:00",
+    "latest_action_description": "(H) Committee Executive Action--Bill Passed - (H) Education",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/4bceb26d-ae40-4fd1-9894-4628671d0f4a",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:mt/government",
+      "name": "Montana",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/7508efaf-3ca6-436d-8858-45b2f73a78d9",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 397",
+    "title": "Revise laws related to privacy in mental health digital service",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Health Care Services (see also: Health)",
+      "Privacy"
+    ],
+    "extras": {
+      "by_request_of": "Katie Sullivan",
+      "bill_draft_number": "LC4356"
+    },
+    "created_at": "2025-02-06T04:53:42.102787+00:00",
+    "updated_at": "2025-02-08T06:14:55.384108+00:00",
+    "openstates_url": "https://openstates.org/mt/bills/2025/HB397/",
+    "first_action_date": "2025-01-30T23:28:39+00:00",
+    "latest_action_date": "2025-02-07T16:14:46+00:00",
+    "latest_action_description": "(H) Hearing - (H) Human Services",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/d06a6a28-b3d1-4fc2-832f-0a8bae7e8ab0",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:mt/government",
+      "name": "Montana",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/1cf80fcd-e90e-4d0b-87d6-304fad2262f9",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 138",
+    "title": "Revise education laws related to a teacher's authority to maintain a positive classroom environment",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Schools and Education",
+      "Teachers"
+    ],
+    "extras": {
+      "by_request_of": "Russ Tempel",
+      "bill_draft_number": "LC0630"
+    },
+    "created_at": "2025-01-15T02:06:55.226757+00:00",
+    "updated_at": "2025-02-08T06:10:39.794089+00:00",
+    "openstates_url": "https://openstates.org/mt/bills/2025/SB138/",
+    "first_action_date": "2024-10-29T12:09:33+00:00",
+    "latest_action_date": "2025-02-10T20:00:00+00:00",
+    "latest_action_description": "(S) Scheduled for 2nd Reading",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/d482311e-aaa9-4d93-83d2-f350ecf1eeaa",
+    "session": "20252026 Special Session 1",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ca/government",
+      "name": "California",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/98623fa0-f9c3-47ae-80bb-51465349ed71",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 2",
+    "title": "Budget Act of 2024.",
+    "classification": [
+      "bill",
+      "appropriation"
+    ],
+    "subject": [
+      "Budget Act of 2024"
+    ],
+    "extras": {
+      "tags": [
+        "fiscal committee",
+        "urgency"
+      ],
+      "impact_clause": "An act to amend the Budget Act of 2024 (Chs. 22, 35, and 994, Stats. 2024), by amending Section 99.50 of, and by adding Section 5.26 to, that act, relating to the state budget, and making an appropriation therefor, to take effect immediately, budget bill."
+    },
+    "created_at": "2025-01-09T08:01:45.149435+00:00",
+    "updated_at": "2025-02-08T05:56:42.507147+00:00",
+    "openstates_url": "https://openstates.org/ca/bills/20252026 Special Session 1/SB2/",
+    "first_action_date": "2025-01-08",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Chaptered by Secretary of State. Chapter 4, Statutes of 2025.",
+    "latest_passage_date": "2025-02-03"
+  },
+  {
+    "id": "ocd-bill/30159fca-49e2-44cb-94d2-89b430b9122d",
+    "session": "20252026",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ca/government",
+      "name": "California",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/e70e812e-44d2-46b0-9eae-2f3b9a1d5150",
+      "name": "Assembly",
+      "classification": "lower"
+    },
+    "identifier": "AB 446",
+    "title": "Surveillance pricing.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Surveillance pricing"
+    ],
+    "extras": {
+      "tags": [],
+      "impact_clause": "An act to add Part 5.6 (commencing with Section 7200) to Division 4 of the Civil Code, relating to consumer protection."
+    },
+    "created_at": "2025-02-07T05:55:54.521834+00:00",
+    "updated_at": "2025-02-08T05:54:02.122896+00:00",
+    "openstates_url": "https://openstates.org/ca/bills/20252026/AB446/",
+    "first_action_date": "2025-02-06",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "From printer. May be heard in committee March 9.",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/e5ab8328-ab80-4519-8b67-57b7c69e4535",
+    "session": "20252026",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ca/government",
+      "name": "California",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/e70e812e-44d2-46b0-9eae-2f3b9a1d5150",
+      "name": "Assembly",
+      "classification": "lower"
+    },
+    "identifier": "AB 441",
+    "title": "Wildfire prevention: Office of Wildfire Technology Research and Development: wildfire mitigation program.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Office of Wildfire Technology Research and Development",
+      "Wildfire prevention",
+      "wildfire mitigation program"
+    ],
+    "extras": {
+      "tags": [
+        "fiscal committee"
+      ],
+      "impact_clause": "An act to amend Sections 8586.8 and 8654.10 of the Government Code, relating to wildfire prevention."
+    },
+    "created_at": "2025-02-07T05:54:52.169783+00:00",
+    "updated_at": "2025-02-08T05:52:28.205709+00:00",
+    "openstates_url": "https://openstates.org/ca/bills/20252026/AB441/",
+    "first_action_date": "2025-02-06",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "From printer. May be heard in committee March 9.",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/f333a14f-c1c9-4bb6-95a1-d23351dd8437",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3483",
+    "title": "FAMILY & MEDICAL LEAVE PROGRAM",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:27:01.384294+00:00",
+    "updated_at": "2025-02-08T05:27:01.608019+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3483/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Anna Moeller",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/ec8ef6af-173b-4253-a1e9-1c3270027c37",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/20782ae5-cc22-4470-846b-fd9788ad3db7",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 2423",
+    "title": "SCH CD-SUSPENSION/EXPULSION",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:26:52.389359+00:00",
+    "updated_at": "2025-02-08T05:26:52.615719+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/SB2423/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Referred to Assignments",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/01c00a8a-ec8d-46ca-9c59-a71e1407b6b4",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3522",
+    "title": "UNI DIRECT ADMISSION PROGRAM",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:25:35.215862+00:00",
+    "updated_at": "2025-02-08T05:25:35.443342+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3522/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Katie Stuart",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/d3fae607-3b1a-422c-9813-122b9ecaebc7",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3580",
+    "title": "PROP TX-SENIOR FREEZE",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:25:22.771199+00:00",
+    "updated_at": "2025-02-08T05:25:22.998142+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3580/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Jennifer Sanalitro",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/9c7b392a-bd54-4fda-9dec-31610cc12e50",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3692",
+    "title": "FOID CARD-FINGERPRINTS/FEES",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:24:04.281076+00:00",
+    "updated_at": "2025-02-08T05:24:04.508619+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3692/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Maura Hirschauer",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/f36f8eec-5b35-4aef-a74b-146668358c77",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3500",
+    "title": "ABLE ACCOUNT PROGRAM INFO",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:22:49.953303+00:00",
+    "updated_at": "2025-02-08T05:22:50.197112+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3500/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Suzanne M. Ness",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/12d77c9c-c091-4f99-89f2-b7ea54e77b9c",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3689",
+    "title": "HIGHER ED-PREVENT SEX VIOLENCE",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:22:29.696578+00:00",
+    "updated_at": "2025-02-08T05:22:29.920581+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3689/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Mary Beth Canty",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/17711e42-4087-4921-891d-9888be05837c",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ut/government",
+      "name": "Utah",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/c7625e7e-dc12-49cf-aa73-fa96c5bf4b11",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 294",
+    "title": "Infectious Disease Procedures Amendments",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Department of Health and Human Services",
+      "Disease Control and Prevention",
+      "Health and Human Services",
+      "Local Health Departments",
+      "Public Health"
+    ],
+    "extras": {},
+    "created_at": "2025-01-22T19:12:30.971524+00:00",
+    "updated_at": "2025-02-08T05:22:24.436422+00:00",
+    "openstates_url": "https://openstates.org/ut/bills/2025/HB294/",
+    "first_action_date": "2025-01-22",
+    "latest_action_date": "2025-02-03",
+    "latest_action_description": "House/ 2nd reading",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/14ae3122-fcc2-4542-94ae-d1b128629893",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3567",
+    "title": "AI-MEANINGFUL HUMAN REVIEW",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:20:36.798549+00:00",
+    "updated_at": "2025-02-08T05:20:37.023839+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3567/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Amy Briel",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/4e881a38-a6fd-4d13-ab11-efddd60f0858",
+    "session": "57th-1st-regular",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:az/government",
+      "name": "Arizona",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/b00585a8-0bd5-4a6b-bde1-1c96400f882f",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 2514",
+    "title": "notices; directory information; disclosure; consent",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-17T01:20:22.688550+00:00",
+    "updated_at": "2025-02-08T05:20:29.820746+00:00",
+    "openstates_url": "https://openstates.org/az/bills/57th-1st-regular/HB2514/",
+    "first_action_date": "2025-01-27",
+    "latest_action_date": "2025-01-28",
+    "latest_action_description": "House Second Reading",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/170e4abf-7880-4acb-810c-7414ce537aa0",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/20782ae5-cc22-4470-846b-fd9788ad3db7",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 2339",
+    "title": "PRIVACY IN THE WORKPLACE",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:20:19.608598+00:00",
+    "updated_at": "2025-02-08T05:20:19.837494+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/SB2339/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Referred to Assignments",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/6654d77f-78b7-4a0d-ad40-9bdbb8c389d9",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3780",
+    "title": "IL UNIVERSAL HEALTH CARE ACT",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:19:53.460019+00:00",
+    "updated_at": "2025-02-08T05:19:53.687938+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3780/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Barbara Hernandez",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/4a8e1214-c286-4bd5-83ba-c605ffbd1c72",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3667",
+    "title": "BIPA-SECURITY PURPOSES",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:18:24.412759+00:00",
+    "updated_at": "2025-02-08T05:18:24.638083+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3667/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Jeff Keicher",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/3e3ada1b-13e4-4ea3-a982-538de12be27a",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3576",
+    "title": "WATER UTILITY CYBERSECURITY",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:17:17.786342+00:00",
+    "updated_at": "2025-02-08T05:17:18.017372+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3576/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Dagmara Avelar",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/6c8bd89e-befd-4eff-aa84-e3a4ee40803b",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3494",
+    "title": "HEALTH DATA PRIVACY ACT",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:17:13.455926+00:00",
+    "updated_at": "2025-02-08T05:17:13.680664+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3494/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Ann M. Williams",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/6e0772fe-6da1-40e6-bac6-f6d9989e103a",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3720",
+    "title": "AI-MEANINGFUL HUMAN REVIEW",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:16:27.206933+00:00",
+    "updated_at": "2025-02-08T05:16:27.431722+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3720/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Abdelnasser Rashid",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/2c2488fa-6f53-4459-aba8-7640f919bd59",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/20782ae5-cc22-4470-846b-fd9788ad3db7",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 2474",
+    "title": "YOUTH HEALTH PROTECTION ACT",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:16:20.957917+00:00",
+    "updated_at": "2025-02-08T05:16:21.190203+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/SB2474/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Referred to Assignments",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/7e71a77f-7a08-4ac4-a8fd-523a434763a2",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3515",
+    "title": "FOIA-COMMERCIAL PURPOSES",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:15:52.579202+00:00",
+    "updated_at": "2025-02-08T05:15:52.806500+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3515/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Janet Yang Rohr",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/016516fc-3a63-4fad-8ee0-28f7e6412ff1",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3524",
+    "title": "OFFICER-WORN CAMERA EXCEPTIONS",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:15:18.880965+00:00",
+    "updated_at": "2025-02-08T05:15:19.127446+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3524/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Justin Slaughter",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/6aedb783-b54a-4c25-93fd-ab5500684a03",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3611",
+    "title": "FOIA-NUCLEAR SECURITY",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:15:15.218345+00:00",
+    "updated_at": "2025-02-08T05:15:15.445196+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3611/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. William \"Will\" Davis",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/5da433ee-7484-4806-a8c6-7e10bf53889e",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/20782ae5-cc22-4470-846b-fd9788ad3db7",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 2400",
+    "title": "HOSPICE DATA COLLECTION",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:14:30.044286+00:00",
+    "updated_at": "2025-02-08T05:14:30.271703+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/SB2400/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Referred to Assignments",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/4d9694df-822e-49fe-9e15-9e0ae51c26d4",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/20782ae5-cc22-4470-846b-fd9788ad3db7",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 2448",
+    "title": "UNI DIRECT ADMISSION PROGRAM",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:13:08.365708+00:00",
+    "updated_at": "2025-02-08T05:13:08.614825+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/SB2448/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Referred to Assignments",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/89e7ac84-2894-4650-8846-f3bfd1912af7",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3665",
+    "title": "CRIME VICT-LICENSEE COMPLAINT",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:12:49.397607+00:00",
+    "updated_at": "2025-02-08T05:12:49.622795+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3665/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Tom Weber",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/9cac0fed-86be-453f-b17f-0b6480437d6d",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3632",
+    "title": "CASE REVIEW-HOMICIDE VICTIMS",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:12:20.023784+00:00",
+    "updated_at": "2025-02-08T05:12:20.252049+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3632/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Kam Buckner",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/0d55e208-5f3c-4ff1-966b-d535833f459b",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/20782ae5-cc22-4470-846b-fd9788ad3db7",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 2436",
+    "title": "FOIA-NUCLEAR SECURITY",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:10:43.371505+00:00",
+    "updated_at": "2025-02-08T05:10:43.598178+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/SB2436/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Referred to Assignments",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/40d7c51a-ba0d-4e00-8739-0e676a3d91f4",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/20782ae5-cc22-4470-846b-fd9788ad3db7",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 2507",
+    "title": "PARENTAGE-EQUALITY",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:07:46.204710+00:00",
+    "updated_at": "2025-02-08T05:07:46.440721+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/SB2507/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Referred to Assignments",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/d39a708d-bd4b-4573-87cb-beb063b67e3f",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3568",
+    "title": "HEALTH CARE FOR ALL",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:06:19.481806+00:00",
+    "updated_at": "2025-02-08T05:06:19.708797+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3568/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Carol Ammons",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/fb7785a0-69e2-489d-970f-9fb488fce5c5",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3477",
+    "title": "BUSINESS TRUTH IN LENDING ACT",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:05:13.652159+00:00",
+    "updated_at": "2025-02-08T05:05:13.883308+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3477/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Dagmara Avelar",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/79a2343b-98f5-4355-8e00-a4ee4ffc48ae",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3712",
+    "title": "PRIVACY PROTECTION-LOCATION",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:03:29.321850+00:00",
+    "updated_at": "2025-02-08T05:03:29.554213+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3712/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Ann M. Williams",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/49265dd3-ee79-4f3f-a929-118053dfb05f",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/20782ae5-cc22-4470-846b-fd9788ad3db7",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 2413",
+    "title": "FAMILY & MEDICAL LEAVE PROGRAM",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:02:35.534419+00:00",
+    "updated_at": "2025-02-08T05:02:35.754197+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/SB2413/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Referred to Assignments",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/cc0c4a6f-cf0b-4fe7-a284-b81004808036",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/20782ae5-cc22-4470-846b-fd9788ad3db7",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 2327",
+    "title": "DCFS-CULTURAL OMBUDSMAN",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:01:25.824154+00:00",
+    "updated_at": "2025-02-08T05:01:26.066747+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/SB2327/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Referred to Assignments",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/49263aa8-f48b-4b7e-99b9-0bc9a6d94372",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3772",
+    "title": "SCH CD-SUSPENSION/EXPULSION",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T05:00:45.902852+00:00",
+    "updated_at": "2025-02-08T05:00:46.128093+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3772/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. William \"Will\" Davis",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/2e67dedb-35a6-46b6-96c7-f752217e0337",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:wy/government",
+      "name": "Wyoming",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/683ca907-05d4-4c84-8d7b-f04f73e295ad",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 215",
+    "title": "Prohibition on electronic voting equipment.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {
+      "wy_bill_id": 12626,
+      "effective_date": "2025-03-01"
+    },
+    "created_at": "2025-01-16T18:53:06.970142+00:00",
+    "updated_at": "2025-02-08T04:58:04.724524+00:00",
+    "openstates_url": "https://openstates.org/wy/bills/2025/HB215/",
+    "first_action_date": "2025-01-16T18:07:21+00:00",
+    "latest_action_date": "2025-02-08T03:24:33+00:00",
+    "latest_action_description": "H:Died in Committee Returned Bill Pursuant to HR 5-4",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/1e8f841d-b5fd-4028-a029-ca59bc07fdd7",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3592",
+    "title": "POLICE-MISCONDUCT DATABASE",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T04:55:11.107532+00:00",
+    "updated_at": "2025-02-08T04:55:11.334957+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3592/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Justin Slaughter",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/8d3b5403-cde6-4ac2-b236-07c42adcfabc",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3489",
+    "title": "PHARMACISTS-CONTRACEPTIVES",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T04:54:30.361532+00:00",
+    "updated_at": "2025-02-08T04:54:30.586415+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3489/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Michelle Mussman",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/3f5c6be4-6ea9-4638-8544-508d3548b318",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3506",
+    "title": "ARTIFICIAL INTELLIGENCE SAFETY",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T04:53:52.563564+00:00",
+    "updated_at": "2025-02-08T04:53:52.791404+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3506/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Daniel Didech",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/7753d81d-cf05-4013-9976-1b66e70e16ee",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/20782ae5-cc22-4470-846b-fd9788ad3db7",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 2364",
+    "title": "UNMANNED AERIAL DRONE SECURITY",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T04:53:09.508175+00:00",
+    "updated_at": "2025-02-08T04:53:09.742549+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/SB2364/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Referred to Assignments",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/323882bb-44b9-46c6-9b54-ce80e3ffe01e",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3465",
+    "title": "CD CORR-ELECTRON MONITOR-FOIA",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T04:52:13.184625+00:00",
+    "updated_at": "2025-02-08T04:52:13.421831+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3465/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Mary Gill",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/9797592c-baae-4af4-8054-dcd29722401a",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/20782ae5-cc22-4470-846b-fd9788ad3db7",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 2353",
+    "title": "INS-OUTPATIENT MENTAL HEALTH",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T04:51:22.281107+00:00",
+    "updated_at": "2025-02-08T04:51:22.519688+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/SB2353/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Referred to Assignments",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/4664e986-6a9f-4a0e-aa13-28f38e9831e2",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3487",
+    "title": "BHWC DATA COLLECTION",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T04:49:37.340440+00:00",
+    "updated_at": "2025-02-08T04:49:37.572948+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3487/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Lindsey LaPointe",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/28faf90d-e7c5-43f3-9730-7a6706f0234a",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3710",
+    "title": "CRIME VICTIMS RIGHTS",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T04:49:29.838006+00:00",
+    "updated_at": "2025-02-08T04:49:30.112477+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3710/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Kelly M. Cassidy",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/2955a963-46da-4abd-966a-acffb974123c",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3629",
+    "title": "KINDERGARTEN READINESS PROGRAM",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T04:48:47.434126+00:00",
+    "updated_at": "2025-02-08T04:48:47.668976+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3629/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Edgar Gonz\u00e1lez, Jr.",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/3907d493-c674-46ba-aa25-9e879df2c01f",
+    "session": "104th",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:il/government",
+      "name": "Illinois",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/76120f9a-2982-4cc5-a6e2-de7401fa0d38",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 3851",
+    "title": "SCH CD-CYBER-BULLYING",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-08T04:48:15.114462+00:00",
+    "updated_at": "2025-02-08T04:48:15.352969+00:00",
+    "openstates_url": "https://openstates.org/il/bills/104th/HB3851/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Filed with the Clerk by Rep. Janet Yang Rohr",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/e680f88e-dbf9-466c-8d8b-8a28eb443019",
+    "session": "2025-2026",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:wa/government",
+      "name": "Washington",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/ddae63d3-9f3e-4c46-a00f-703fe21b54d1",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 5708",
+    "title": "Protecting Washington children online.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-07T18:44:57.571954+00:00",
+    "updated_at": "2025-02-08T03:59:24.817219+00:00",
+    "openstates_url": "https://openstates.org/wa/bills/2025-2026/SB5708/",
+    "first_action_date": "2025-02-13T13:00:00+00:00",
+    "latest_action_date": "2025-02-13T13:00:00+00:00",
+    "latest_action_description": "Scheduled for public hearing in the Senate Committee on Business, Financial Services & Trade at 08:00 AM",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/ca173d7f-077a-4d9c-a118-3c38978c2ff4",
+    "session": "2025-2026",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:wa/government",
+      "name": "Washington",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/7417a716-eba8-4437-a6e9-df14694bcb79",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1662",
+    "title": "Removing the requirement for certain education agencies to reside in the office of the superintendent of public instruction for administrative purposes and by making other necessary changes to support independent administration of each agency.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-28T19:04:35.063873+00:00",
+    "updated_at": "2025-02-08T03:52:44.961966+00:00",
+    "openstates_url": "https://openstates.org/wa/bills/2025-2026/HB1662/",
+    "first_action_date": "2025-02-11T21:00:00+00:00",
+    "latest_action_date": "2025-02-11T21:00:00+00:00",
+    "latest_action_description": "Scheduled for public hearing in the House Committee on Education at 04:00 PM",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/edd0a88c-fff5-48a3-b948-b2aabaf8f5b0",
+    "session": "2025-2026",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:wa/government",
+      "name": "Washington",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/ddae63d3-9f3e-4c46-a00f-703fe21b54d1",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 5201",
+    "title": "Concerning access to psychedelic substances.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-10T01:39:41.163548+00:00",
+    "updated_at": "2025-02-08T03:50:56.266197+00:00",
+    "openstates_url": "https://openstates.org/wa/bills/2025-2026/SB5201/",
+    "first_action_date": "2025-02-06T13:00:00+00:00",
+    "latest_action_date": "2025-02-11T15:30:00+00:00",
+    "latest_action_description": "Scheduled for public hearing in the Senate Committee on Health & Long-Term Care at 10:30 AM",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/7c0cbb78-27ea-49cf-a32b-7d3f49c28661",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ut/government",
+      "name": "Utah",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/98cb21d7-f3ae-416b-93e7-df3da962aff9",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 195",
+    "title": "Transportation Amendments",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Active Transportation",
+      "Aeronautics",
+      "Bicycles",
+      "Commercial Motor Vehicle Regulation",
+      "Crimes",
+      "Department of Transportation",
+      "Division of Motor Vehicles",
+      "Emergency Management",
+      "Emergency Medical Services",
+      "Health Care Professionals",
+      "Health and Human Services",
+      "Land Use",
+      "Law Enforcement and Criminal Justice",
+      "Legislative Committees and Task Forces",
+      "Legislative Operations",
+      "Legislative Organization",
+      "Municipalities",
+      "Pedestrian Safety",
+      "Planning and Zoning",
+      "Political Subdivisions (Local Issues)",
+      "Property Conveyance",
+      "Public Transit",
+      "Public Transit Districts",
+      "Revenue and Taxation",
+      "Right of Way",
+      "Roads/Highways",
+      "State Tax Commission",
+      "Traffic Violations",
+      "Transportation",
+      "Transportation Commission",
+      "Transportation Fund",
+      "Transportation Funding",
+      "Transportation Investment Fund of 2005",
+      "Vehicle Registration",
+      "Water Utilities, Irrigation, and Sewer"
+    ],
+    "extras": {},
+    "created_at": "2025-01-30T01:17:04.629058+00:00",
+    "updated_at": "2025-02-08T03:23:03.507812+00:00",
+    "openstates_url": "https://openstates.org/ut/bills/2025/SB195/",
+    "first_action_date": "2025-01-29",
+    "latest_action_date": "2025-02-05",
+    "latest_action_description": "Senate/ received fiscal note from Fiscal Analyst",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/3f646630-f699-4f80-ac48-5689424ac1ee",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:nh/government",
+      "name": "New Hampshire",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/3b857974-4029-4508-94d4-ce3b86c64602",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 186",
+    "title": "relative to the legalization and regulation of cannabis and making appropriations therefor.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {
+      "_code": "3102"
+    },
+    "created_at": "2025-01-07T04:02:20.061548+00:00",
+    "updated_at": "2025-02-08T03:09:10.916831+00:00",
+    "openstates_url": "https://openstates.org/nh/bills/2025/HB186/",
+    "first_action_date": "2025-01-06",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Subcommittee Work Session: 02/11/2025 10:00 am LOB 104",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/4723dbba-d57d-4b9b-95e6-48cf846a179a",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:nh/government",
+      "name": "New Hampshire",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/c95932a0-2ac1-4f14-a0c4-ade8568daac6",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 268",
+    "title": "permitting classification of individuals based on biological sex under certain limited circumstances.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {
+      "_code": ""
+    },
+    "created_at": "2025-01-24T03:09:24.483248+00:00",
+    "updated_at": "2025-02-08T03:05:04.581225+00:00",
+    "openstates_url": "https://openstates.org/nh/bills/2025/SB268/",
+    "first_action_date": "2025-01-23",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Hearing: 02/13/2025, Room 100, SH, 02:30 pm;  SC 9A",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/6b663923-df2d-4212-93b5-d2d0fd5771d0",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:nh/government",
+      "name": "New Hampshire",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/3b857974-4029-4508-94d4-ce3b86c64602",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 145",
+    "title": "relative to background checks for licensed dietitians and adopting the dietitian licensure compact.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {
+      "_code": "5019"
+    },
+    "created_at": "2025-01-07T04:02:00.919932+00:00",
+    "updated_at": "2025-02-08T03:04:53.567000+00:00",
+    "openstates_url": "https://openstates.org/nh/bills/2025/HB145/",
+    "first_action_date": "2025-01-06",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Subcommittee Work Session: 02/06/2025 01:30 pm LOB 302-304",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/fbe9b9d2-11c2-4024-8f29-8d7e01d11b2c",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:nh/government",
+      "name": "New Hampshire",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/3b857974-4029-4508-94d4-ce3b86c64602",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 483",
+    "title": "relative to the definition of a scholarship organization for purposes of the education tax credit.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {
+      "_code": "5019"
+    },
+    "created_at": "2025-01-14T04:03:10.108146+00:00",
+    "updated_at": "2025-02-08T03:04:51.002023+00:00",
+    "openstates_url": "https://openstates.org/nh/bills/2025/HB483/",
+    "first_action_date": "2025-01-13",
+    "latest_action_date": "2025-01-29",
+    "latest_action_description": "Public Hearing: 02/12/2025 10:30 am LOB 203",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/95330583-b323-4ecc-9e57-0f70990496f8",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:nh/government",
+      "name": "New Hampshire",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/3b857974-4029-4508-94d4-ce3b86c64602",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 548",
+    "title": "relative to licensing requirements for health care facilities that operate on a membership-based business model.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {
+      "_code": ""
+    },
+    "created_at": "2025-01-15T04:05:17.202205+00:00",
+    "updated_at": "2025-02-08T03:04:28.226734+00:00",
+    "openstates_url": "https://openstates.org/nh/bills/2025/HB548/",
+    "first_action_date": "2025-01-14",
+    "latest_action_date": "2025-02-05",
+    "latest_action_description": "Public Hearing: 02/12/2025 01:00 pm LOB 301-303",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/d1be5809-f3ee-4d5d-957a-08f516baea23",
+    "session": "114",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:tn/government",
+      "name": "Tennessee",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/d4c442c8-d4d7-4ea9-a3fd-b856b2904d8b",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 468",
+    "title": "Safety - As introduced, enacts the \"Women's Safety and Protection Act.\" - Amends TCA Title 4; Title 37; Title 41; Title 49 and Title 68.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Safety"
+    ],
+    "extras": {},
+    "created_at": "2025-01-29T20:33:58.445668+00:00",
+    "updated_at": "2025-02-08T02:34:42.989844+00:00",
+    "openstates_url": "https://openstates.org/tn/bills/114/SB468/",
+    "first_action_date": "2025-01-29",
+    "latest_action_date": "2025-02-12",
+    "latest_action_description": "Passed on Second Consideration, refer to Senate Judiciary Committee",
+    "latest_passage_date": "2025-02-12"
+  },
+  {
+    "id": "ocd-bill/8e319052-6693-4504-9e19-b52dcd6cfac0",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:nm/government",
+      "name": "New Mexico",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/af9a59f2-c6b2-4bb1-b270-85f5d40605b4",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 81",
+    "title": "OCCUPATIONAL THERAPY LICENSURE COMPACT",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "HEALTH & HEALTH FACILITIES",
+      "LICENSURE"
+    ],
+    "extras": {},
+    "created_at": "2025-01-11T00:01:36.435925+00:00",
+    "updated_at": "2025-02-08T02:05:14.046305+00:00",
+    "openstates_url": "https://openstates.org/nm/bills/2025/HB81/",
+    "first_action_date": "2025-01-10",
+    "latest_action_date": "2025-02-03",
+    "latest_action_description": "DO PASS committee report adopted",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/c93d622f-bbd8-484f-a54a-3c88a2b17dc4",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:nm/government",
+      "name": "New Mexico",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/a6719ff4-d604-4144-95e3-453a03672dfd",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 69",
+    "title": "RIGHT TO REPAIR CONSUMER ELECTRONICS ACT",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "BUSINESS & INDUSTRY"
+    ],
+    "extras": {},
+    "created_at": "2025-01-23T00:02:37.465378+00:00",
+    "updated_at": "2025-02-08T02:05:00.816788+00:00",
+    "openstates_url": "https://openstates.org/nm/bills/2025/SB69/",
+    "first_action_date": "2025-01-22",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "DO PASS committee report adopted",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/85b6171c-b530-4f43-b902-1758498e8465",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:nm/government",
+      "name": "New Mexico",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/af9a59f2-c6b2-4bb1-b270-85f5d40605b4",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 79",
+    "title": "AUDIOLOGY & SPEECH-LANGUAGE PATHOLOGY COMPACT",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "HEALTH & HEALTH FACILITIES",
+      "LICENSURE"
+    ],
+    "extras": {},
+    "created_at": "2025-01-11T00:01:28.569936+00:00",
+    "updated_at": "2025-02-08T02:04:12.651832+00:00",
+    "openstates_url": "https://openstates.org/nm/bills/2025/HB79/",
+    "first_action_date": "2025-01-10",
+    "latest_action_date": "2025-02-03",
+    "latest_action_description": "DO PASS committee report adopted",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/7c78e265-7360-46b3-a249-4d7c90a14a3b",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:nm/government",
+      "name": "New Mexico",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/af9a59f2-c6b2-4bb1-b270-85f5d40605b4",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 82",
+    "title": "PHYSICAL THERAPY LICENSURE COMPACT",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "HEALTH & HEALTH FACILITIES",
+      "LICENSURE"
+    ],
+    "extras": {},
+    "created_at": "2025-01-11T00:01:39.983776+00:00",
+    "updated_at": "2025-02-08T02:04:03.692843+00:00",
+    "openstates_url": "https://openstates.org/nm/bills/2025/HB82/",
+    "first_action_date": "2025-01-10",
+    "latest_action_date": "2025-02-03",
+    "latest_action_description": "DO PASS committee report adopted",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/e6516918-edb8-40a6-89a5-2b7ca49a8ee1",
+    "session": "69",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:nd/government",
+      "name": "North Dakota",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/b9f9b32c-a2cc-4cca-941f-862aecc30617",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1489",
+    "title": "A BILL for an Act to create and enact chapter 14-07.7 of the North Dakota Century Code, relating to civil protection orders; to amend and reenact sections 11-15-32 and 12-60-23, subsection 2 of section 12.1-17-13, section 14-05-23, subsection 4 of section 14-07.1-01, sections 14-07.1-02.1 and 14-07.1-11, subsection 1 of section 14-07.1-14, section 14-07.1-19, subdivision a of subsection 1 of section 14-07.6-01, subdivision b of subsection 1 of section 15.1-09-33.4, sections 16.1-02-07 and 29-01-15, subdivision g of subsection 1 of section 29-06-15, and subdivision a of subsection 2 of section 47-16-17.1 of the North Dakota Century Code, relating to restraining orders and protection orders; to repeal sections 12.1-31-01.2, 12.1-31.2-01, 14-07.1-02, 14-07.1-03, 14-07.1-03.1, 14-07.1-04, 14-07.1-05, 14-07.1-05.1, 14-07.1-06, 14-07.1-07, and 14-07.1-08 of the North Dakota Century Code, relating to sexual assault restraining orders and domestic violence protection orders; to provide a penalty; and to provide an effective date.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-20T23:45:44.647384+00:00",
+    "updated_at": "2025-02-08T01:39:45.307536+00:00",
+    "openstates_url": "https://openstates.org/nd/bills/69/HB1489/",
+    "first_action_date": "2025-01-20",
+    "latest_action_date": "2025-02-11",
+    "latest_action_description": "Committee Hearing 09:00",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/ec8a91ea-35f8-4d48-a1b3-0d79a9721afa",
+    "session": "69",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:nd/government",
+      "name": "North Dakota",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/79645ed7-6baa-4842-ac97-09b444c4020b",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 2223",
+    "title": "A BILL for an Act to create and enact chapter 43-44.1 of the North Dakota Century Code, relating to adoption of the dietitian licensure compact.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-01-20T23:46:29.053379+00:00",
+    "updated_at": "2025-02-08T01:38:56.512151+00:00",
+    "openstates_url": "https://openstates.org/nd/bills/69/SB2223/",
+    "first_action_date": "2025-01-17",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Reported back amended, do pass, amendment placed on calendar 4 0 1",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/e069fd2b-85cb-4dbe-8010-26904b23ad43",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ut/government",
+      "name": "Utah",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/c7625e7e-dc12-49cf-aa73-fa96c5bf4b11",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 270",
+    "title": "Voter Registration Records Amendments",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Election Administration",
+      "Election Law",
+      "Government Operations (State Issues)",
+      "Government Records",
+      "Political Parties",
+      "Voting and Voter Registration"
+    ],
+    "extras": {},
+    "created_at": "2025-01-20T19:12:07.733893+00:00",
+    "updated_at": "2025-02-08T01:26:12.758476+00:00",
+    "openstates_url": "https://openstates.org/ut/bills/2025/HB270/",
+    "first_action_date": "2025-01-20",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "House Comm - Not Considered",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/565ed2dd-24e5-40bd-be1b-187f5bca536c",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ut/government",
+      "name": "Utah",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/c7625e7e-dc12-49cf-aa73-fa96c5bf4b11",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 457",
+    "title": "Signature Verification Amendments",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Government Operations (State Issues)"
+    ],
+    "extras": {},
+    "created_at": "2025-02-08T01:26:07.974945+00:00",
+    "updated_at": "2025-02-08T01:26:08.201752+00:00",
+    "openstates_url": "https://openstates.org/ut/bills/2025/HB457/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Numbered Bill Publicly Distributed",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/4a396673-c5ef-4a42-b337-eaa0e3c941b6",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ut/government",
+      "name": "Utah",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/98cb21d7-f3ae-416b-93e7-df3da962aff9",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 79",
+    "title": "Technical Code Amendments",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Government Operations (State Issues)",
+      "Legislative Operations",
+      "Revisor Legislation"
+    ],
+    "extras": {},
+    "created_at": "2025-01-10T01:05:51.200879+00:00",
+    "updated_at": "2025-02-08T01:25:54.607909+00:00",
+    "openstates_url": "https://openstates.org/ut/bills/2025/SB79/",
+    "first_action_date": "2025-01-09",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "House Comm - Favorable Recommendation",
+    "latest_passage_date": "2025-02-04"
+  },
+  {
+    "id": "ocd-bill/78b6c7da-f743-4421-b7c2-2512ae92edfe",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ut/government",
+      "name": "Utah",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/c7625e7e-dc12-49cf-aa73-fa96c5bf4b11",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 215",
+    "title": "Office of Legislative Auditor General Provisions",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Crimes",
+      "Education",
+      "Government Operations (State Issues)",
+      "Law Enforcement and Criminal Justice",
+      "Legislative Operations",
+      "Legislative Organization",
+      "Legislative Staff Offices",
+      "Utah System of Higher Education"
+    ],
+    "extras": {},
+    "created_at": "2025-01-15T01:08:33.750614+00:00",
+    "updated_at": "2025-02-08T01:25:25.233222+00:00",
+    "openstates_url": "https://openstates.org/ut/bills/2025/HB215/",
+    "first_action_date": "2025-01-14",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "House Comm - Favorable Recommendation",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/b964c61b-6866-4dba-8ad2-f7d427b1c348",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ut/government",
+      "name": "Utah",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/c7625e7e-dc12-49cf-aa73-fa96c5bf4b11",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 299",
+    "title": "Election Code Time Computation Revisions",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Election Administration",
+      "Election Law",
+      "Government Operations (State Issues)"
+    ],
+    "extras": {},
+    "created_at": "2025-01-23T01:13:30.140126+00:00",
+    "updated_at": "2025-02-08T01:24:29.687773+00:00",
+    "openstates_url": "https://openstates.org/ut/bills/2025/HB299/",
+    "first_action_date": "2025-01-22",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "House Comm - Not Considered",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/cfefb324-390d-4d94-aeb9-793c1e088de6",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ut/government",
+      "name": "Utah",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/c7625e7e-dc12-49cf-aa73-fa96c5bf4b11",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 452",
+    "title": "Artificial Intelligence Amendments",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Public Utilities and Technology"
+    ],
+    "extras": {},
+    "created_at": "2025-02-08T01:22:47.788527+00:00",
+    "updated_at": "2025-02-08T01:22:48.023558+00:00",
+    "openstates_url": "https://openstates.org/ut/bills/2025/HB452/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Numbered Bill Publicly Distributed",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/f2e8c2c6-2b50-4c45-a2cd-babf1b3ee2e9",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ut/government",
+      "name": "Utah",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/c7625e7e-dc12-49cf-aa73-fa96c5bf4b11",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 124",
+    "title": "Education Industry Employee Privacy",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Education",
+      "K-12 Education",
+      "School Personnel"
+    ],
+    "extras": {},
+    "created_at": "2025-01-08T01:03:19.775424+00:00",
+    "updated_at": "2025-02-08T01:22:26.942960+00:00",
+    "openstates_url": "https://openstates.org/ut/bills/2025/HB124/",
+    "first_action_date": "2025-01-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Senate Comm - Favorable Recommendation",
+    "latest_passage_date": "2025-01-31"
+  },
+  {
+    "id": "ocd-bill/c2c3ebed-14cf-4f01-9a33-67bf455d8ebf",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ut/government",
+      "name": "Utah",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/c7625e7e-dc12-49cf-aa73-fa96c5bf4b11",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 455",
+    "title": "Utah Fits All Scholarship Program Amendments",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Education",
+      "K-12 Education",
+      "State Board of Education"
+    ],
+    "extras": {},
+    "created_at": "2025-02-08T01:21:46.870959+00:00",
+    "updated_at": "2025-02-08T01:21:47.185528+00:00",
+    "openstates_url": "https://openstates.org/ut/bills/2025/HB455/",
+    "first_action_date": "2025-02-07",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Numbered Bill Publicly Distributed",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/690d026c-7f21-4875-9922-6bcab76dca2e",
+    "session": "57th-1st-regular",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:az/government",
+      "name": "Arizona",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/b00585a8-0bd5-4a6b-bde1-1c96400f882f",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 2758",
+    "title": "antidiscrimination; public accommodations; employment; housing",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-06T00:21:12.191327+00:00",
+    "updated_at": "2025-02-08T01:13:36.050503+00:00",
+    "openstates_url": "https://openstates.org/az/bills/57th-1st-regular/HB2758/",
+    "first_action_date": "",
+    "latest_action_date": "",
+    "latest_action_description": "",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/2383c329-9bd6-46e4-881e-0c68ac3fafd8",
+    "session": "114",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:tn/government",
+      "name": "Tennessee",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/47760e16-8071-49dd-bd9f-354198c8b653",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 571",
+    "title": "Safety - As introduced, enacts the \"Women's Safety and Protection Act.\" - Amends TCA Title 4; Title 37; Title 41; Title 49 and Title 68.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Safety"
+    ],
+    "extras": {},
+    "created_at": "2025-01-30T02:44:16.532245+00:00",
+    "updated_at": "2025-02-08T01:02:24.363517+00:00",
+    "openstates_url": "https://openstates.org/tn/bills/114/HB571/",
+    "first_action_date": "2025-01-29",
+    "latest_action_date": "2025-02-06",
+    "latest_action_description": "Sponsor(s) Added.",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/9d155892-772f-46bd-8dcf-3711a86452fe",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:wy/government",
+      "name": "Wyoming",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/683ca907-05d4-4c84-8d7b-f04f73e295ad",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 72",
+    "title": "Protecting women's privacy in public spaces act.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {
+      "wy_bill_id": 12300,
+      "effective_date": "2025-03-01"
+    },
+    "created_at": "2024-12-24T00:48:22.272199+00:00",
+    "updated_at": "2025-02-08T00:59:21.625518+00:00",
+    "openstates_url": "https://openstates.org/wy/bills/2025/HB72/",
+    "first_action_date": "2024-12-23T21:22:02+00:00",
+    "latest_action_date": "2025-02-07T23:08:33+00:00",
+    "latest_action_description": "S Received for Introduction",
+    "latest_passage_date": "2025-02-07T16:51:21+00:00"
+  },
+  {
+    "id": "ocd-bill/fd76f6ae-ad3d-457a-9751-6029faa60e03",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:wy/government",
+      "name": "Wyoming",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/683ca907-05d4-4c84-8d7b-f04f73e295ad",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "SF 126",
+    "title": "Establishment of a K-8 public lab school.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {
+      "wy_bill_id": 12342,
+      "effective_date": "2025-03-01"
+    },
+    "created_at": "2025-01-17T00:54:16.830212+00:00",
+    "updated_at": "2025-02-08T00:57:56.381150+00:00",
+    "openstates_url": "https://openstates.org/wy/bills/2025/SF126/",
+    "first_action_date": "2025-01-16T21:49:12+00:00",
+    "latest_action_date": "2025-02-08T00:16:09+00:00",
+    "latest_action_description": "S 2nd Reading:Passed",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/d999206c-79b5-49e6-a1c3-303314700305",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:wy/government",
+      "name": "Wyoming",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/683ca907-05d4-4c84-8d7b-f04f73e295ad",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "SF 172",
+    "title": "Physical therapy licensure compact.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {
+      "wy_bill_id": 12246,
+      "effective_date": "2025-03-01"
+    },
+    "created_at": "2025-01-24T06:55:03.452022+00:00",
+    "updated_at": "2025-02-08T00:57:53.634695+00:00",
+    "openstates_url": "https://openstates.org/wy/bills/2025/SF172/",
+    "first_action_date": "2025-01-24T02:23:51+00:00",
+    "latest_action_date": "2025-02-08T00:17:57+00:00",
+    "latest_action_description": "S 2nd Reading:Passed",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/6ac4d38e-ebf9-4ef0-894d-655e9cb42d81",
+    "session": "2025-2026",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:wa/government",
+      "name": "Washington",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/7417a716-eba8-4437-a6e9-df14694bcb79",
+      "name": "House",
+      "classification": "lower"
+    },
+    "identifier": "HB 1889",
+    "title": "Adopting the department of social and health services report recommendations addressing a regulatory oversight plan for continuing care retirement communities.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {},
+    "created_at": "2025-02-07T18:52:19.550687+00:00",
+    "updated_at": "2025-02-08T00:57:14.459930+00:00",
+    "openstates_url": "https://openstates.org/wa/bills/2025-2026/HB1889/",
+    "first_action_date": "",
+    "latest_action_date": "",
+    "latest_action_description": "",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/05b58570-e91c-445e-bcd7-51984df2ab66",
+    "session": "109",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ne/government",
+      "name": "Nebraska",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/a0563aa3-1ab5-4e1e-afd1-643aca03b3b8",
+      "name": "Nebraska Legislature",
+      "classification": "legislature"
+    },
+    "identifier": "LB 385",
+    "title": "Change provisions relating to the Uniform Deceptive Trade Practices Act",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {
+      "NE_REF_COM": "Judiciary Committee",
+      "NE_REF_DATE": "March 06, 2025"
+    },
+    "created_at": "2025-01-17T18:29:28.262390+00:00",
+    "updated_at": "2025-02-08T00:46:13.963301+00:00",
+    "openstates_url": "https://openstates.org/ne/bills/109/LB385/",
+    "first_action_date": "2025-01-17",
+    "latest_action_date": "2025-02-06",
+    "latest_action_description": "Notice of hearing for March 06, 2025",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/9aab40a7-e75e-467d-8b69-ba72e9f3b1a1",
+    "session": "109",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ne/government",
+      "name": "Nebraska",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/a0563aa3-1ab5-4e1e-afd1-643aca03b3b8",
+      "name": "Nebraska Legislature",
+      "classification": "legislature"
+    },
+    "identifier": "LB 215",
+    "title": "Adopt the Clean Slate Act and provide for a program for second chance relief to obtain a commutation from the Board of Pardons",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {
+      "NE_REF_COM": "Judiciary Committee",
+      "NE_REF_DATE": "February 26, 2025"
+    },
+    "created_at": "2025-01-14T18:25:41.453266+00:00",
+    "updated_at": "2025-02-08T00:44:59.949998+00:00",
+    "openstates_url": "https://openstates.org/ne/bills/109/LB215/",
+    "first_action_date": "2025-01-14",
+    "latest_action_date": "2025-02-06",
+    "latest_action_description": "Notice of hearing for February 26, 2025",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/286c5e54-ef4b-446d-bfe3-dd0ff11a39a1",
+    "session": "109",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ne/government",
+      "name": "Nebraska",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/a0563aa3-1ab5-4e1e-afd1-643aca03b3b8",
+      "name": "Nebraska Legislature",
+      "classification": "legislature"
+    },
+    "identifier": "LB 606",
+    "title": "Eliminate the Division of Parole Supervision and the position of Director of Supervision and Services, transfer powers and duties to the Department of Correctional Services, and change provisions relating to correctional system overcrowding emergencies",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {
+      "NE_REF_COM": "Judiciary Committee",
+      "NE_REF_DATE": "March 12, 2025"
+    },
+    "created_at": "2025-01-22T18:34:22.188982+00:00",
+    "updated_at": "2025-02-08T00:44:38.073732+00:00",
+    "openstates_url": "https://openstates.org/ne/bills/109/LB606/",
+    "first_action_date": "2025-01-22",
+    "latest_action_date": "2025-02-06",
+    "latest_action_description": "Notice of hearing for March 12, 2025",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/6cbffbb1-eeaa-47f6-b7b0-dfee784f4ee6",
+    "session": "109",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ne/government",
+      "name": "Nebraska",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/a0563aa3-1ab5-4e1e-afd1-643aca03b3b8",
+      "name": "Nebraska Legislature",
+      "classification": "legislature"
+    },
+    "identifier": "LB 31",
+    "title": "Require school policies relating to the use of student surveillance, monitoring, and tracking technology by school districts",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {
+      "NE_REF_COM": "Education Committee",
+      "NE_REF_DATE": "February 04, 2025"
+    },
+    "created_at": "2025-01-09T18:22:21.696554+00:00",
+    "updated_at": "2025-02-08T00:43:29.147537+00:00",
+    "openstates_url": "https://openstates.org/ne/bills/109/LB31/",
+    "first_action_date": "2025-01-09",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Placed on General File",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/7493aba0-c73f-4ae6-a20a-bfe8b74d6039",
+    "session": "109",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ne/government",
+      "name": "Nebraska",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/a0563aa3-1ab5-4e1e-afd1-643aca03b3b8",
+      "name": "Nebraska Legislature",
+      "classification": "legislature"
+    },
+    "identifier": "LB 51",
+    "title": "Adopt the National Crime Prevention and Privacy Compact",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {
+      "NE_REF_COM": "Judiciary Committee",
+      "NE_REF_DATE": "January 22, 2025"
+    },
+    "created_at": "2025-01-09T18:22:35.347904+00:00",
+    "updated_at": "2025-02-08T00:42:53.679191+00:00",
+    "openstates_url": "https://openstates.org/ne/bills/109/LB51/",
+    "first_action_date": "2025-01-09",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Advanced to Enrollment and Review for Engrossment",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/c28fb96f-7ee8-45f4-a2a5-efd0588b6319",
+    "session": "109",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ne/government",
+      "name": "Nebraska",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/a0563aa3-1ab5-4e1e-afd1-643aca03b3b8",
+      "name": "Nebraska Legislature",
+      "classification": "legislature"
+    },
+    "identifier": "LB 504",
+    "title": "Adopt the Age-Appropriate Online Design Code Act",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {
+      "NE_REF_COM": "Banking, Commerce and Insurance Committee",
+      "NE_REF_DATE": "February 03, 2025"
+    },
+    "created_at": "2025-01-21T18:32:38.834354+00:00",
+    "updated_at": "2025-02-08T00:42:50.351716+00:00",
+    "openstates_url": "https://openstates.org/ne/bills/109/LB504/",
+    "first_action_date": "2025-01-21",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Placed on General File with AM169",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/ab44c54a-d935-48e6-8c70-d6ec381f20f8",
+    "session": "109",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ne/government",
+      "name": "Nebraska",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/a0563aa3-1ab5-4e1e-afd1-643aca03b3b8",
+      "name": "Nebraska Legislature",
+      "classification": "legislature"
+    },
+    "identifier": "LB 693",
+    "title": "Prohibit as a deceptive trade practice certain conduct relating to assistance or referrals in veterans benefits matters",
+    "classification": [
+      "bill"
+    ],
+    "subject": [],
+    "extras": {
+      "NE_REF_COM": "Government, Military and Veterans Affairs Committee"
+    },
+    "created_at": "2025-01-22T18:37:12.782016+00:00",
+    "updated_at": "2025-02-08T00:42:01.534857+00:00",
+    "openstates_url": "https://openstates.org/ne/bills/109/LB693/",
+    "first_action_date": "2025-01-22",
+    "latest_action_date": "2025-02-07",
+    "latest_action_description": "Lonowski name added",
+    "latest_passage_date": ""
+  },
+  {
+    "id": "ocd-bill/de15cfb6-11a1-4bd5-878a-ec9540304834",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ms/government",
+      "name": "Mississippi",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/7e3c07c9-91ff-4445-8cef-57f85ab6ae9f",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 2075",
+    "title": "Board of Medical Licensure; revise licensure status, definitions, procedure, fines and temporary practice authority.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Public Health and Welfare"
+    ],
+    "extras": {
+      "summary": "AN ACT TO AMEND SECTIONS 73-25-1, 73-25-3, 73-25-5, 73-25-14, 73-25-17, 73-25-18, 73-25-21, 73-25-23, 73-25-27, 73-25-28, 73-25-29, 73-25-30, 73-25-31, 73-25-32, 73-25-33, 73-25-34, 73-25-53, 73-25-55, 73-25-57, 73-25-59, 73-25-61, 73-25-63, 73-25-65, 73-25-83, 73-25-87 AND 73-25-89, MISSISSIPPI CODE OF 1972, TO REVISE CERTAIN DEFINITIONS UNDER THE MEDICAL PRACTICE ACT AND TO IDENTIFY INDIVIDUALS FOR WHOM THE MEDICAL PRACTICE ACT DOES NOT APPLY; TO CLARIFY CERTAIN PROCEDURES TO OBTAIN A LICENSE TO PRACTICE MEDICINE; TO PROVIDE FOR ELECTRONIC NOTICE OF LICENSE RENEWAL; TO PROVIDE PROCEDURES FOR PHYSICIANS TO REQUEST RETIRED STATUS; TO CLARIFY PROCEDURES FOR THE ISSUANCE OF A TEMPORARY LICENSE TO PRACTICE MEDICINE; TO CLARIFY PROCEDURES FOR ISSUANCE OF A LICENSE BY RECIPROCITY; TO REVISE CERTAIN PROCEDURES FOR DISCIPLINARY ACTION AGAINST LICENSEES, THE EVIDENTIARY STANDARD TO BE APPLIED BY THE BOARD OF MEDICAL LICENSURE IN A DETERMINATION REGARDING DISCIPLINARY ACTION, THE ISSUANCE OF SUBPOENAS BY THE BOARD, THE GROUNDS FOR DISCIPLINARY ACTION, THE OPTIONS AVAILABLE TO THE BOARD FOLLOWING DISCIPLINARY HEARINGS AGAINST LICENSEES, AND PETITIONS FOR REINSTATEMENT OF LICENSES; TO CLARIFY THE ACTION OF THE UNLAWFUL PRACTICE OF MEDICINE AND THE AUTHORITY OF THE BOARD TO SEEK INJUNCTIVE RELIEF; TO DELETE A CERTAIN EXCEPTION TO LICENSURE; TO INCLUDE BEHAVIORAL CONDUCT THAT COULD BE ADDRESSED BY TREATMENT TO THE LIST OF REASONS A LICENSEE SHALL BE SUBJECT TO RESTRICTION OF THEIR LICENSE; TO CLARIFY CERTAIN PROCEDURES UNDER THE DISABLED PHYSICIAN LAW; TO CONFORM TO THE PROVISIONS OF THE ACT; TO REVISE DISCIPLINARY ACTION THAT THE BOARD IS AUTHORIZED TO TAKE, INCLUDING PLACING A LICENSEE ON PROBATION OR IMPOSING A PUNITIVE FINE; TO PROVIDE THAT A HEARING MUST BE HELD WITHIN 30 DAYS IF THE BOARD DETERMINES THAT A PHYSICIAN'S CONTINUATION OF PRACTICE IS AN IMMEDIATE DANGER; TO EXCLUDE INDIVIDUALS ENGAGED SOLELY IN THE PRACTICE OF MIDWIFERY FROM THE CHAPTER; TO CONFORM TO THE PROVISIONS OF THE ACT; TO CREATE NEW SECTION 73-43-19, MISSISSIPPI CODE OF 1972, TO REQUIRE THE MISSISSIPPI PHYSICIAN HEALTH PROGRAM TO PROVIDE PERFORMANCE STATISTICS TO THE STATE BOARD OF MEDICAL LICENSURE; TO AMEND SECTION 73-43-3, MISSISSIPPI CODE OF 1972, TO PROVIDE FOR ADDITIONAL MEMBERS OF THE BOARD WHO SHALL BE MEMBERS OF THE PUBLIC NOT RELATED TO THE HEALTHCARE INDUSTRY; TO REPEAL SECTIONS 73-25-7, 73-25-9, 73-25-15, 73-25-19, 73-25-25, 73-25-39 AND 73-25-81, MISSISSIPPI CODE OF 1972, WHICH REQUIRE THE STATE BOARD OF MEDICAL LICENSURE TO MEET AT THE CAPITOL AT LEAST ONCE EACH YEAR FOR THE PURPOSE OF EXAMINING APPLICANTS; WHICH PROVIDES FOR THE FEE CHARGED BY THE STATE BOARD OF MEDICAL LICENSURE TO APPLY FOR A LICENSE TO PRACTICE; WHICH PROVIDES FOR THE PROCEDURES FOR LOST MEDICAL LICENSES; WHICH PROVIDES FOR CERTAIN PROVISIONS RELATED TO NONRESIDENT PHYSICIANS; WHICH PROVIDES FOR CERTAIN PROCEDURES FOR THOSE DESIRING TO PRACTICE OSTEOPATHIC MEDICINE IN THE STATE; WHICH ALLOWS THE STATE BOARD OF MEDICAL LICENSURE TO CONTRACT FOR THE ACQUISITION OF BOOKS AND OTHER RECORDS; WHICH PROVIDES A TECHNICAL REFERENCE TO THE MISSISSIPPI STATE BOARD OF MEDICAL LICENSURE; AND FOR RELATED PURPOSES."
+    },
+    "created_at": "2025-01-17T21:19:03.713985+00:00",
+    "updated_at": "2025-02-07T23:53:59.934271+00:00",
+    "openstates_url": "https://openstates.org/ms/bills/2025/SB2075/",
+    "first_action_date": "2025-01-17T06:00:00+00:00",
+    "latest_action_date": "2025-02-07T06:00:00+00:00",
+    "latest_action_description": "Passed As Amended",
+    "latest_passage_date": "2025-02-07T06:00:00+00:00"
+  },
+  {
+    "id": "ocd-bill/9cabded5-83dd-4a8b-ba69-4d0beae4c188",
+    "session": "2025",
+    "jurisdiction": {
+      "id": "ocd-jurisdiction/country:us/state:ms/government",
+      "name": "Mississippi",
+      "classification": "state"
+    },
+    "from_organization": {
+      "id": "ocd-organization/7e3c07c9-91ff-4445-8cef-57f85ab6ae9f",
+      "name": "Senate",
+      "classification": "upper"
+    },
+    "identifier": "SB 2334",
+    "title": "Camping, soliciting contributions, loitering; prohibit certain instances of.",
+    "classification": [
+      "bill"
+    ],
+    "subject": [
+      "Judiciary, Division B"
+    ],
+    "extras": {
+      "summary": "AN ACT TO PROHIBIT A PERSON FROM CAMPING OR MAINTAINING OR PLACING PERSONAL PROPERTY UPON ANY STREET, SIDEWALK OR OTHER PUBLIC RIGHT-OF-WAY WITHIN 1,000 FEET OF A DEFINED SENSITIVE AREA OR A CRITICAL INFRASTRUCTURE AREA; TO PROVIDE THAT VIOLATION OF THIS PROHIBITION IS A PUBLIC NUISANCE THAT CAN BE ABATED AND PREVENTED; TO PROVIDE THAT A VIOLATION OF THIS PROHIBITION MAY BE CHARGED AS A MISDEMEANOR; TO REQUIRE AT LEAST 48 HOURS' NOTICE BEFORE COMMENCEMENT OF ANY ENFORCEMENT ACTION; TO PROVIDE THAT CONVICTIONS UNDER THIS SECTION SHALL NOT APPEAR ON A PERSON'S PUBLIC RECORD; TO AUTHORIZE THE REMOVAL OF ENCAMPMENTS ON PRIVATE PROPERTY IN A HUMANE MANNER AFTER 48 HOURS' NOTICE; TO PROHIBIT SOLICITING FOR A CONTRIBUTION OR DONATION WITHOUT A PERMIT FROM THE LOCAL GOVERNING AUTHORITY; TO CREATE THE CRIME OF LOITERING WHERE A PERSON LINGERS, REMAINS, OR PROWLS IN CERTAIN PLACES; TO ENUMERATE CERTAIN CIRCUMSTANCES THAT MAY BE CONSIDERED TO DETERMINE IF THAT PERSON IS LOITERING; TO REQUIRE A LAW ENFORCEMENT OFFICER TO AFFORD THE ACTOR AN OPPORTUNITY TO DISPEL ANY ALARM THAT WOULD OTHERWISE BE WARRANTED BY REQUESTING THE ACTOR TO IDENTIFY HIMSELF OR HERSELF AND EXPLAIN HIS OR HER PRESENCE AND CONDUCT; TO PROVIDE CERTAIN DEFENSES TO PROSECUTION; TO PROVIDE CRIMINAL PENALTIES FOR THE CRIME OF LOITERING; TO CREATE THE CRIME OF AGGRESSIVE PANHANDLING WHERE A PERSON SOLICITS A DONATION OF MONEY OR GOODS UNDER CERTAIN CIRCUMSTANCES; TO PROVIDE CRIMINAL PENALTIES FOR THE CRIME OF AGGRESSIVE PANHANDLING; TO BRING FORWARD SECTIONS 19-5-105 AND 21-19-11, MISSISSIPPI CODE OF 1972, WHICH ARE PROVISIONS THAT AUTHORIZE THE CLEANING OF PRIVATE PROPERTY, FOR THE PURPOSES OF POSSIBLE AMENDMENT; AND FOR RELATED PURPOSES."
+    },
+    "created_at": "2025-01-22T01:33:45.574718+00:00",
+    "updated_at": "2025-02-07T23:53:51.492232+00:00",
+    "openstates_url": "https://openstates.org/ms/bills/2025/SB2334/",
+    "first_action_date": "2025-01-20T06:00:00+00:00",
+    "latest_action_date": "2025-02-07T06:00:00+00:00",
+    "latest_action_description": "Motion to Reconsider Entered",
+    "latest_passage_date": "2025-02-07T06:00:00+00:00"
+  }
+]
