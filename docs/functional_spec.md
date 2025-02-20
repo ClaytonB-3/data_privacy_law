@@ -3,8 +3,8 @@
 ## Background
 In the United States, there is no comprehensive privacy law, and the existing laws are often indecipherable to the average person. This presents two key challenges:
 
-1. **Consolidating** all privacy-specific and privacy-related laws into a single platform by filtering them from the vast array of existing laws.  
-2. **Enabling** users to interact with these laws in a human-readable format through natural language queries.
+1. Consolidating all privacy-specific and privacy-related laws into a single platform by filtering them from the vast array of existing laws.  
+2. Enabling users to interact with these laws in a human-readable format through natural language queries.
 
 Our goal is to create a platform that addresses both challenges by providing easy access to privacy laws and related regulations in one place. Additionally, we aim to allow users to query this database in plain language, making legal information more accessible and understandable for the average person.
 
