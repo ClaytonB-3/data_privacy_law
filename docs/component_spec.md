@@ -1,7 +1,5 @@
 # Component Specification
 
----
-
 ## Visualization Manager-P1
 
 ### What it Does
