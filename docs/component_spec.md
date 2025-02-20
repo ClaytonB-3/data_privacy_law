@@ -1,11 +1,5 @@
 # Component Specification
 
-**Software components**. High level description of the software components such as:  
-- **Data Manager**: Provides a simplified interface to your data and application-specific features (e.g., querying data subsets).  
-- **Visualization Manager**: Displays data frames as a plot.  
-
-Describe at least 3 components specifying: what it does, the inputs it requires, and the outputs it provides. If you have more significant components in your system, it is highly suggested to document those as well.
-
 ---
 
 ## Visualization Manager-P1
@@ -96,7 +90,7 @@ Describe at least 3 components specifying: what it does, the inputs it requires,
 
 ---
 
-## Visualization Manager-P2
+## Visualization Manager-P2 (Stretch Feature)
 
 ### What it Does
 - Displays a color-coded map indicating the number of privacy-related laws in each state.
@@ -109,7 +103,7 @@ Describe at least 3 components specifying: what it does, the inputs it requires,
 
 ---
 
-## Visualization Manager-P3 (Potential Feature)
+## Visualization Manager-P3 (Stretch Feature)
 
 ### What it Does
 - A dedicated web page summarizing the 7 principles of GDPR.  
