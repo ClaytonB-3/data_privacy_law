@@ -306,6 +306,9 @@ def main(pdf_paths):
         # print(f"Metadata of chunk is \n\n{metadata_of_chunk}")
         
         # Step 5: Add the document and metadata to the FAISS index.
+        if not os.path.exists('./faiss_index'):
+            os.makedirs('./faiss_index')
+            
         add_to_faiss_index(chunk_texts, chunk_metadatas)
         # print("Bill added to FAISS index.")
 

@@ -1,5 +1,5 @@
 import streamlit as st
-from components.map import map_generator
+# from components.map import map_generator
 
 st.set_page_config(page_title="Privacy Laws Explorer", layout="wide")
 
