@@ -1,5 +1,7 @@
 # The Privacy Law Compass
 
+![example workflow](https://github.com/ClaytonB-3/data_privacy_law/actions/workflows/build_test.yml/badge.svg) [![Coverage Status](https://coveralls.io/repos/github/ClaytonB-3/data_privacy_law/badge.svg?branch=main)](https://coveralls.io/github/ClaytonB-3/data_privacy_law?branch=main)
+
 __The Questions of Interest__ <br/>
 Data privacy is one of the most widely discussed issues today, as users leave digital footprints everywhere. It is crucial for governments to safeguard users' information and prevent its misuse. 
 
