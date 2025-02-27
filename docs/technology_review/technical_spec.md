@@ -1,4 +1,6 @@
 # Technical Specification 
+
+[Link to demos of each library used](https://drive.google.com/drive/folders/189A5Rd2ii0tr5pdyWXlaqp83j2qZdOWM?usp=sharing)
        
 ## Problem 1
 We need a library to assist with coodinating the embedding of pdf text into vectors and storing to a vector database along with the metadata of the pdf text. This library will also be responsible for the retrieval of the most relevant vectors from the vector database based on a query and coordinating the retrieval of a summary of the most relevant vectors.
