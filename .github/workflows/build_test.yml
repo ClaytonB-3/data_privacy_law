@@ -12,7 +12,6 @@ on:
   push:
     branches:
       - main
-      - brady/CICD_test
   pull_request:
     # Configuring this means that your PRs will get a GitHub comment
     # from Coveralls with your coverage.
