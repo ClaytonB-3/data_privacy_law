@@ -1,4 +1,4 @@
-name: venv
+name: data_privacy_law
 channels:
   - defaults
 dependencies:
@@ -24,6 +24,7 @@ dependencies:
       - python-dotenv==1.0.1
       - plotly==6.0.0
       - pypdf==5.3.0
+      - pylint==3.3.4
       - PyPDF2==3.0.1
       - streamlit==1.42.2
       - fastapi==0.115.8
