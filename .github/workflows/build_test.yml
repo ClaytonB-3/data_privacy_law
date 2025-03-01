@@ -81,8 +81,13 @@ jobs:
         run: |
           conda install --yes coverage
       
-      # If there are any other steps in order for your tests to
-      # run successfully, you can add those steps here!
+      # Set up env vars
+      - name: Set up environment
+        run: |
+          echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}" >> $GITHUB_ENV
+          echo "LANGCHAIN_API_KEY=${{ secrets.LANGCHAIN_API_KEY }}" >> $GITHUB_ENV
+          echo "LANGSMITH_ENDPOINT=${{ secrets.LANGSMITH_ENDPOINT }}" >> $GITHUB_ENV
+          echo "LANGSMITH_TRACING=${{ secrets.LANGSMITH_TRACING }}" >> $GITHUB_ENV
 
       # Next step: run the unit tests with code coverage.
       - name: Unit tests
@@ -91,6 +96,11 @@ jobs:
           coverage run -m unittest discover
           coverage report
           coverage lcov
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          LANGCHAIN_API_KEY: ${{ secrets.LANGCHAIN_API_KEY }}
+          LANGSMITH_ENDPOINT: ${{ secrets.LANGSMITH_ENDPOINT }}
+          LANGSMITH_TRACING: ${{ secrets.LANGSMITH_TRACING }}
 
       # Next step: run pylint. Anything less than 10/10 will fail.
       #            Once we've covered pylint in lecture, uncomment
