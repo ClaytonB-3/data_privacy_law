@@ -30,29 +30,29 @@ class TestEnvironment(unittest.TestCase):
     def test_env_vars_google_api_key(self):
         ''' Test the google_api_key.
         '''
-        GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
-        length_of_the_key = len(GOOGLE_API_KEY)
+        google_api_key = os.environ.get("google_api_key")
+        length_of_the_key = len(google_api_key)
         self.assertGreater(length_of_the_key, 0)
 
     def test_env_vars_langchain_api_key(self):
         ''' Test the langchain_api_key.
         '''
-        LANGCHAIN_API_KEY = os.environ.get("LANGCHAIN_API_KEY")
-        length_of_the_key = len(LANGCHAIN_API_KEY)
+        langchain_api_key = os.environ.get("langchain_api_key")
+        length_of_the_key = len(langchain_api_key)
         self.assertGreater(length_of_the_key, 0)
-    
-    def test_env_vars_langchain_tracing(self):
-        ''' Test the langchain_tracing.
+
+    def test_env_vars_langsmith_tracing(self):
+        ''' Test the langsmith_tracing.
         '''
-        LANGSMITH_TRACING = os.environ.get("LANGSMITH_TRACING")
-        length_of_tracing = len(LANGSMITH_TRACING)
+        langsmith_tracing = os.environ.get("langsmith_tracing")
+        length_of_tracing = len(langsmith_tracing)
         self.assertGreater(length_of_tracing, 0)
-    
-    def test_env_vars_google_api_key(self):
+
+    def test_env_vars_langsmith_endpoint(self):
         ''' Test the google_api_key.
         '''
-        LANGSMITH_ENDPOINT = os.environ.get("LANGSMITH_ENDPOINT")
-        length_of_endpoint = len(LANGSMITH_ENDPOINT)
+        langsmith_endpoint = os.environ.get("langsmith_endpoint")
+        length_of_endpoint = len(langsmith_endpoint)
         self.assertGreater(length_of_endpoint, 0)
 
 if __name__ == '__main__':

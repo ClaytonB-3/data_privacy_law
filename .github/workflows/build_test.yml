@@ -84,10 +84,10 @@ jobs:
       # Set up env vars
       - name: Set up environment
         run: |
-          echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}" >> $GITHUB_ENV
-          echo "LANGCHAIN_API_KEY=${{ secrets.LANGCHAIN_API_KEY }}" >> $GITHUB_ENV
-          echo "LANGSMITH_ENDPOINT=${{ secrets.LANGSMITH_ENDPOINT }}" >> $GITHUB_ENV
-          echo "LANGSMITH_TRACING=${{ secrets.LANGSMITH_TRACING }}" >> $GITHUB_ENV
+          echo "google_api_key=${{ secrets.GOOGLE_API_KEY }}" >> $GITHUB_ENV
+          echo "langchain_api_key=${{ secrets.LANGCHAIN_API_KEY }}" >> $GITHUB_ENV
+          echo "langsmith_endpoint=${{ secrets.LANGSMITH_ENDPOINT }}" >> $GITHUB_ENV
+          echo "langsmith_tracing=${{ secrets.LANGSMITH_TRACING }}" >> $GITHUB_ENV
 
       # Next step: run the unit tests with code coverage.
       - name: Unit tests
