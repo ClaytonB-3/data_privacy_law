@@ -123,7 +123,7 @@ def run_state_privacy_page():
                 df.index = range(1, len(df) + 1)
                 st.table(df[['Document', 'Page Number', 'Relevant information']])
             else:
-                st.write("No relevant inforamtion found for the selected state based on your query.")
+                st.write("No relevant information found for the selected state based on your query.")
 
     with col2:
         if selected_state:
