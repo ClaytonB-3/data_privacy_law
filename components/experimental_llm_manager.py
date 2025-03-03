@@ -1,3 +1,6 @@
+"""
+Contains bulk functionality of the code
+"""
 import os
 import json
 import sys
@@ -16,9 +19,10 @@ load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 def extract_text_from_pdf(pdf_path):
-    
-    # Extracts text from a PDF file using PyPDF2.
-    
+    """
+    Extracts text from all pdf files, given a folder
+    Use PyPDF2 to get the page content
+    """
     text = []
     try:
         with open(pdf_path, "rb") as file:
@@ -27,11 +31,12 @@ def extract_text_from_pdf(pdf_path):
                 page = reader.pages[page_index]
                 page_text = page.extract_text() or ""
                 text.append(page_text)
-    
-    except Exception as e:
-        print("Error reading PDF:", e)
-    
-    
+    except FileNotFoundError:
+        print(f"Error: The file '{pdf_path}' was not found.")
+    except PermissionError:
+        print(f"Error: Permission denied for file '{pdf_path}'.")
+    except PyPDF2.errors.PdfReadError:
+        print(f"Error: Failed to read PDF file '{pdf_path}'. It might be corrupted.")
     return text
 
 def parse_bill_info(pdf_text):
@@ -39,6 +44,8 @@ def parse_bill_info(pdf_text):
     Feeds the extracted PDF text into the LLM to obtain bill details.
     The LLM is expected to return a JSON object with:
     { "Title": "", "Date": "", "Type": "", "Sector": "", "State": "" }
+    Using langchain libraries to create a chain (create_stuff_document_chain)
+    The chain is then used to call the LLM
     """
     prompt_template = """
         You are given the following bill text from a PDF file.
@@ -47,7 +54,7 @@ def parse_bill_info(pdf_text):
         2. If the bill is "State level sectoral", specify the sector (choose from: "Health", "Education", "Finance", "Telecommunications & Technology", "Government & Public Sector", "Retail & E-Commerce", "Employment & HR", "Media & Advertising", "Critical Infrastructure (Energy, Transportation, etc.)", "Children’s Data Protection"). Otherwise, set it to null.
         3. The latest date mentioned in the bill in MMDDYYYY format.
         4. For state-level laws ("State level sectoral" or "Comprehensive State level"), which state is it associated with (e.g., "Texas", "California")? Otherwise, null.
-        5. The title of the bill in 15 words or less.
+        5. The title of the bill in 20 words or less.
 
         Return the information as a JSON object exactly in the following format:
         {{"Title": "", "Date": "", "Type": "", "Sector": "", "State": ""}}
@@ -58,10 +65,10 @@ def parse_bill_info(pdf_text):
     model = ChatGoogleGenerativeAI(model="gemini-1.5-flash-8b", temperature=0.2)
     prompt = PromptTemplate(template=prompt_template, input_variables=["context"])
     chain = create_stuff_documents_chain(llm=model, prompt=prompt)
-    
     doc = Document(page_content=pdf_text)
 
     result = chain.invoke({"context": [doc]})
+    # Formatting the result of the LLM output and storing it in a JSON format
     try:
         # print("X"*50)
         # print(f"\nResult is \n{result}\n")
@@ -74,6 +81,9 @@ def parse_bill_info(pdf_text):
     except Exception as e:
         print("Error parsing LLM response:", e)
         bill_info = {}
+
+    # print("Generated JSON objects from the LLM are: \n")
+    # print(bill_info)
     return bill_info
 
 def calculate_updated_chunk_ids(chunk_metadatas):
@@ -90,7 +100,6 @@ def calculate_updated_chunk_ids(chunk_metadatas):
         source = source.replace(" ", "_")
         page = meta.get("page", "1")
         current_page_id = f"{source}_Page_{page}"
-        
         if current_page_id == last_page_id:
             current_chunk_index += 1
         else:
@@ -101,17 +110,18 @@ def calculate_updated_chunk_ids(chunk_metadatas):
 
     return chunk_metadatas
 
-
 def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder='./faiss_index'):
     """
     Create or load an existing FAISS index and add new document chunks.
     """
-
     chunk_metadatas = calculate_updated_chunk_ids(chunk_metadatas)
-   
     # Code for testing what the new chunk_ids are. These are the key to explabaility
-    # for items in chunk_metadatas:
-    #     print(f"\nThese are the updated chunk ID's\n: {items.get("chunk_id")}")
+    """
+    Code to see if we are actually getting the right chunk ID's --> 
+
+    for items in chunk_metadatas:
+         print(f"\nThese are the updated chunk ID's\n: {items.get("chunk_id")}")
+    """
 
     embeddings = GoogleGenerativeAIEmbeddings(model = "models/text-embedding-004")
     index_file = os.path.join(faiss_folder, "index.faiss")
@@ -143,8 +153,10 @@ def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder='./faiss_index
     # Add only new chunks to the existing index.
     existing_ids = set(faiss_store.docstore._dict.keys())
 
-    # print(f"Existing ID's are {existing_ids}")
-    
+    print(f"Existing ID's are {existing_ids}")
+    print("_________________________________________")
+    print("_________________________________________")
+
     new_texts = []
     new_metadatas = []
     new_ids = []
@@ -158,6 +170,14 @@ def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder='./faiss_index
 
     if new_texts:
         faiss_store.add_texts(texts=new_texts, metadatas=new_metadatas, ids=new_ids)
+
+        print(f"Added new text:{new_texts}")
+        print("------------------")
+        print(f"Added new metadata:{new_metadatas}")
+        print("------------------")
+        print(f"Added new ID:{new_ids}")
+        print("------------------")
+
         faiss_store.save_local(faiss_folder)
 
 def load_faiss_index(faiss_folder='./faiss_index'):
@@ -188,10 +208,11 @@ def get_conversational_chain():
         Answer:
     """
     model = ChatGoogleGenerativeAI(
-        model="gemini-2.0-flash-001", 
+        model="gemini-2.0-flash-001",
         temperature=0.2,
         system_prompt=(
-        "You are a helpful assistant that MUST write an introduction, bullet points, and a conclusion"
+        """You are a helpful assistant that MUST write an introduction, bullet points, 
+        and a conclusion"""
         )
     )
     prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
@@ -204,8 +225,8 @@ def chunk_pdf_pages(texts_per_page, pdf_path, chunk_size=800, chunk_overlap=200)
     chunks using RecursiveCharacterTextSplitter, and keeps track
     of the page number + source in metadata.
     """
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
-    
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size,
+                                                   chunk_overlap=chunk_overlap)
     chunk_texts = []
     chunk_metadatas = []
 
@@ -222,24 +243,18 @@ def chunk_pdf_pages(texts_per_page, pdf_path, chunk_size=800, chunk_overlap=200)
                 "source": pdf_path,
                 "page": str(page_num)
             })
-
     return chunk_texts, chunk_metadatas
-
 
 
 def obtain_text_of_chunk(chunk_id):
     faiss_store = load_faiss_index()
     all_docs = list(faiss_store.docstore._dict.values())
     text_to_send_to_llm = None
-    
     for idx, content in enumerate(all_docs):
         # print("\nProcessing document index:", idx)
-        
         metadata = content.metadata if hasattr(content, "metadata") else {}
-        
         current_chunk_id = metadata.get("chunk_id")
         # print("DEBUG: Document chunk_id:", current_chunk_id)
-        
         # Only extract page content if the chunk IDs match.
         if current_chunk_id == chunk_id:
             # print("DEBUG: Found matching chunk_id:", chunk_id)
@@ -253,9 +268,7 @@ def obtain_text_of_chunk(chunk_id):
         else:
             continue
             # print("DEBUG: Chunk id does not match, continuing...")
-    
     return text_to_send_to_llm
-
 
 def llm_simplify_chunk_text(text_for_llm):
     prompt_template = """
@@ -270,7 +283,7 @@ def llm_simplify_chunk_text(text_for_llm):
         Answer:
     """
     model = ChatGoogleGenerativeAI(
-        model="gemini-2.0-flash-001", 
+        model="gemini-2.0-flash-001",
         temperature=0.5,
     )
     prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
@@ -279,8 +292,6 @@ def llm_simplify_chunk_text(text_for_llm):
 def main(pdf_paths):
     for pdf_path in pdf_paths:
         print(f"\nProcessing: {pdf_path}\n")
-        
-        
         # Step 1: Extract text from the PDF.
         pages_of_pdf = extract_text_from_pdf(pdf_path)
 
@@ -298,47 +309,36 @@ def main(pdf_paths):
         # Step 3: Split the document into chunks and get the source and page number for each chunk
         chunk_texts, chunk_metadatas = chunk_pdf_pages(pages_of_pdf, pdf_path)
 
-        # Step 4: Combine the chunk metadata (Source and page number), with the document metadata (Source, title etc.)
+        # Step 4: Combine the chunk metadata (Source and page number),
+        # with the document metadata (Source, title etc.)
         for metadata_of_chunk in chunk_metadatas:
-
             metadata_of_chunk.update(bill_info)
-
         # print(f"Metadata of chunk is \n\n{metadata_of_chunk}")
-        
         # Step 5: Add the document and metadata to the FAISS index.
-        if not os.path.exists('./faiss_index'):
-            os.makedirs('./faiss_index')
-            
         add_to_faiss_index(chunk_texts, chunk_metadatas)
         # print("Bill added to FAISS index.")
 
 if __name__ == "__main__":
     # Ask the user for the state name.
     state_input = input("Enter state name (e.g., Texas): ").strip()
-    
     # Construct the path to the PDFs folder.
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
     pdfs_folder = os.path.join(parent_dir, "pdfs", state_input)
 
     # print(f"This is the PDF Folder\n:{pdfs_folder}")
-    
     if not os.path.exists(pdfs_folder):
         print(f"Folder not found: {pdfs_folder}")
         sys.exit(1)
-    
     # Gather all PDF file paths in the specified folder.
     pdf_paths = [
         os.path.join(pdfs_folder, filename)
         for filename in os.listdir(pdfs_folder)
         if filename.lower().endswith(".pdf")
     ]
-
     # print(pdf_paths)
-    
     if not pdf_paths:
         print(f"No PDF files found in folder: {pdfs_folder}")
         sys.exit(1)
-    
     # Process the list of PDF paths.
     main(pdf_paths)
