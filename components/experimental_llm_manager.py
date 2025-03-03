@@ -177,7 +177,8 @@ def get_conversational_chain():
     Sets up a QA chain using ChatGoogleGenerativeAI and a custom prompt template.
     """
     prompt_template = """
-        Answer the question based on provided context.  If the context does not contain the answer, then make a generic one line response based on your training data and state that the documents database does not contain documents related to the query so you are answering based on your knowledge. 
+        Answer the question based on provided context.  Please start with "Sorry! The document database does not contain documents related to the query." if the context does not contain the answer Or "According to the document database" if the context does contain the answer.
+        If the context does not contain the answer, make a generic one line response based on your training data and state that the documents database does not contain documents related to the query so you are answering based on your knowledge. 
 
         Context:
         {context}
@@ -197,6 +198,35 @@ def get_conversational_chain():
     prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
     return create_stuff_documents_chain(llm=model, prompt=prompt)
 
+def get_confirmation_result_chain():
+    """
+    Sets up a QA chain using ChatGoogleGenerativeAI and a custom prompt template.
+    """
+    prompt_template = """
+        I will provide your answer to a question I asked before based on the context. Please reassure your answer is correctly, concise, and coherent. You don't need to mention that I have asked you the question before.
+        Please start with "Sorry! The document database does not contain documents related to the query." if the context does not contain the answer Or "According to the document database" if the context does contain the answer.
+        If the context does not contain the answer, make a generic one line response based on your training data and state that the documents database does not contain documents related to the query so you are answering based on your knowledge. 
+
+        Context:
+        {context}
+
+        Question:
+        {question}
+
+        Previous Answer:
+        {answer}
+
+        Answer:
+    """
+    model = ChatGoogleGenerativeAI(
+        model="gemini-2.0-flash-001", 
+        temperature=0.2,
+        system_prompt=(
+        "You are a helpful assistant that MUST write an introduction, bullet points, and a conclusion"
+        )
+    )
+    prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question", "answer"])
+    return create_stuff_documents_chain(llm=model, prompt=prompt)
 
 def chunk_pdf_pages(texts_per_page, pdf_path, chunk_size=800, chunk_overlap=200):
     """

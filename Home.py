@@ -95,8 +95,8 @@ def main():
         st.write("No specific page selected yet.")
         st.write(selected_state)
 
-    with col2:
-        map_generator()
+    # with col2:
+    #     map_generator()
 
 if __name__ == "__main__":
     main()
