@@ -12,6 +12,7 @@ from components.experimental_llm_manager import (
     llm_simplify_chunk_text,
 )
 
+
 # List of US states.
 us_states = [
     "Alabama",
@@ -206,9 +207,11 @@ def run_state_privacy_page():
     """
     This function runs the state privacy law page.
     """
+    st.set_page_config(layout="wide")
     st.title("State Privacy Law Explorer")
 
     col1, col2 = st.columns([9, 3])
+
 
     with col1:
 
@@ -224,11 +227,15 @@ def run_state_privacy_page():
 
             # Use the similarity_search function with a filter to ensure that only documents
             # with metadata "State" equal to the selected state are returned.
-            filtered_results = faiss_store.similarity_search(
-                query=user_question, k=10, filter={"State": selected_state}
+
+            filtered_results = faiss_store.similarity_search_with_relevance_scores(
+                query=user_question, 
+                k=10, 
+                filter={"State": selected_state},
+                score_threshold=0.2
             )
 
-            # print(filtered_results)
+            # print(filtered_results[0])
 
             if not filtered_results:
                 st.write(
@@ -237,7 +244,7 @@ def run_state_privacy_page():
                 return None
 
             # Prepare documents for the conversational chain.
-            docs_for_chain = filtered_results
+            docs_for_chain =[doc for doc, score in filtered_results]
             chunk_ids = [doc.metadata.get("chunk_id") for doc in docs_for_chain]
 
             # Get the conversational chain and invoke it.
@@ -254,13 +261,12 @@ def run_state_privacy_page():
                 records = process_chunk_records(chunk_ids, user_question)
             else:
                 records = None
-
             if records:
                 df = pd.DataFrame(records)
                 df.index = range(1, len(df) + 1)
-                st.table(df)
+                st.table(df[['Document', 'Page Number', 'Relevant information']])
             else:
-                st.write("No chunk details to display.")
+                st.write("No relevant information found for the selected state based on your query.")
 
     with col2:
         if selected_state:
@@ -268,6 +274,7 @@ def run_state_privacy_page():
             # df_bills = display_state_bills(selected_state)
             st.table(display_state_bills(selected_state))
     return None
+
 
 
 def main():
