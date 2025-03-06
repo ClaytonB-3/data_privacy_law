@@ -220,7 +220,8 @@ def get_conversational_chain():
         model="gemini-2.0-flash-001",
         temperature=0.2,
         system_prompt=(
-            "You are a helpful assistant that MUST write an introduction, bullet points, and a conclusion"
+            """You are a helpful assistant that MUST write an introduction,
+            bullet points, and a conclusion"""
         ),
     )
     prompt = PromptTemplate(
@@ -253,7 +254,8 @@ def get_confirmation_result_chain():
         model="gemini-2.0-flash-001",
         temperature=0.2,
         system_prompt=(
-            "You are a helpful assistant that MUST write an introduction, bullet points, and a conclusion"
+            """You are a helpful assistant that MUST write an introduction,
+            bullet points, and a conclusion"""
         ),
     )
     prompt = PromptTemplate(
@@ -401,7 +403,7 @@ def main(pdf_paths):
             # Step 3: Split the document into chunks and get the source and page number for each chunk
             chunk_texts, chunk_metadatas = chunk_pdf_pages(pages_of_pdf, pdf_path)
 
-            # Step 4: Combine the chunk metadata (Source and page number), with the document metadata (Source, title etc.)
+            # Step 4: Combine the chunk metadata (Source and page number), with the doc metadata (Source, title etc.)
             for metadata_of_chunk in chunk_metadatas:
                 metadata_of_chunk.update(bill_info)
 
