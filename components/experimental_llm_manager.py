@@ -11,14 +11,16 @@ from langchain.prompts import PromptTemplate
 from langchain.docstore.document import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
+import csv
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
+
 def extract_text_from_pdf(pdf_path):
-    
+
     # Extracts text from a PDF file using PyPDF2.
-    
+
     text = []
     try:
         with open(pdf_path, "rb") as file:
@@ -27,12 +29,12 @@ def extract_text_from_pdf(pdf_path):
                 page = reader.pages[page_index]
                 page_text = page.extract_text() or ""
                 text.append(page_text)
-    
+
     except Exception as e:
         print("Error reading PDF:", e)
-    
-    
+
     return text
+
 
 def parse_bill_info(pdf_text):
     """
@@ -58,7 +60,7 @@ def parse_bill_info(pdf_text):
     model = ChatGoogleGenerativeAI(model="gemini-1.5-flash-8b", temperature=0.2)
     prompt = PromptTemplate(template=prompt_template, input_variables=["context"])
     chain = create_stuff_documents_chain(llm=model, prompt=prompt)
-    
+
     doc = Document(page_content=pdf_text)
 
     result = chain.invoke({"context": [doc]})
@@ -66,7 +68,7 @@ def parse_bill_info(pdf_text):
         # print("X"*50)
         # print(f"\nResult is \n{result}\n")
         if result.startswith("```json"):
-            result = result[len("```json"):].strip()
+            result = result[len("```json") :].strip()
         if result.endswith("```"):
             result = result[:-3].strip()
 
@@ -76,9 +78,10 @@ def parse_bill_info(pdf_text):
         bill_info = {}
     return bill_info
 
+
 def calculate_updated_chunk_ids(chunk_metadatas):
     """
-    Update each metadata dict with a unique 'chunk_id' that includes the PDF source, page number, 
+    Update each metadata dict with a unique 'chunk_id' that includes the PDF source, page number,
     and a chunk index that resets for each new page.
     Format: "source:page:chunk_index"
     """
@@ -90,7 +93,7 @@ def calculate_updated_chunk_ids(chunk_metadatas):
         source = source.replace(" ", "_")
         page = meta.get("page", "1")
         current_page_id = f"{source}_Page_{page}"
-        
+
         if current_page_id == last_page_id:
             current_chunk_index += 1
         else:
@@ -102,18 +105,18 @@ def calculate_updated_chunk_ids(chunk_metadatas):
     return chunk_metadatas
 
 
-def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder='./faiss_index'):
+def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder="./faiss_index"):
     """
     Create or load an existing FAISS index and add new document chunks.
     """
 
     chunk_metadatas = calculate_updated_chunk_ids(chunk_metadatas)
-   
+
     # Code for testing what the new chunk_ids are. These are the key to explabaility
     # for items in chunk_metadatas:
     #     print(f"\nThese are the updated chunk ID's\n: {items.get("chunk_id")}")
 
-    embeddings = GoogleGenerativeAIEmbeddings(model = "models/text-embedding-004")
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
     index_file = os.path.join(faiss_folder, "index.faiss")
     index_exists = os.path.exists(index_file)
 
@@ -122,7 +125,7 @@ def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder='./faiss_index
             faiss_store = FAISS.load_local(
                 folder_path=faiss_folder,
                 embeddings=embeddings,
-                allow_dangerous_deserialization=True
+                allow_dangerous_deserialization=True,
             )
         except Exception as e:
             print("Error loading existing FAISS index; creating new one. Error:", e)
@@ -133,9 +136,7 @@ def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder='./faiss_index
     if faiss_store is None:
         if chunk_texts:
             faiss_store = FAISS.from_texts(
-                texts=chunk_texts,
-                embedding=embeddings,
-                metadatas=chunk_metadatas
+                texts=chunk_texts, embedding=embeddings, metadatas=chunk_metadatas
             )
             faiss_store.save_local(faiss_folder)
         return
@@ -144,7 +145,7 @@ def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder='./faiss_index
     existing_ids = set(faiss_store.docstore._dict.keys())
 
     # print(f"Existing ID's are {existing_ids}")
-    
+
     new_texts = []
     new_metadatas = []
     new_ids = []
@@ -160,17 +161,19 @@ def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder='./faiss_index
         faiss_store.add_texts(texts=new_texts, metadatas=new_metadatas, ids=new_ids)
         faiss_store.save_local(faiss_folder)
 
-def load_faiss_index(faiss_folder='./faiss_index'):
+
+def load_faiss_index(faiss_folder="./faiss_index"):
     """
     Loads the FAISS index if it exists.
     """
-    embeddings = GoogleGenerativeAIEmbeddings(model = "models/text-embedding-004")
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
     faiss_store = FAISS.load_local(
         folder_path=faiss_folder,
         embeddings=embeddings,
-        allow_dangerous_deserialization=True
+        allow_dangerous_deserialization=True,
     )
     return faiss_store
+
 
 def get_conversational_chain():
     """
@@ -189,14 +192,17 @@ def get_conversational_chain():
         Answer:
     """
     model = ChatGoogleGenerativeAI(
-        model="gemini-2.0-flash-001", 
+        model="gemini-2.0-flash-001",
         temperature=0.2,
         system_prompt=(
-        "You are a helpful assistant that MUST write an introduction, bullet points, and a conclusion"
-        )
+            "You are a helpful assistant that MUST write an introduction, bullet points, and a conclusion"
+        ),
     )
-    prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
+    prompt = PromptTemplate(
+        template=prompt_template, input_variables=["context", "question"]
+    )
     return create_stuff_documents_chain(llm=model, prompt=prompt)
+
 
 def get_confirmation_result_chain():
     """
@@ -219,23 +225,28 @@ def get_confirmation_result_chain():
         Answer:
     """
     model = ChatGoogleGenerativeAI(
-        model="gemini-2.0-flash-001", 
+        model="gemini-2.0-flash-001",
         temperature=0.2,
         system_prompt=(
-        "You are a helpful assistant that MUST write an introduction, bullet points, and a conclusion"
-        )
+            "You are a helpful assistant that MUST write an introduction, bullet points, and a conclusion"
+        ),
     )
-    prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question", "answer"])
+    prompt = PromptTemplate(
+        template=prompt_template, input_variables=["context", "question", "answer"]
+    )
     return create_stuff_documents_chain(llm=model, prompt=prompt)
+
 
 def chunk_pdf_pages(texts_per_page, pdf_path, chunk_size=800, chunk_overlap=200):
     """
-    Takes a list of page texts, splits each page into smaller 
+    Takes a list of page texts, splits each page into smaller
     chunks using RecursiveCharacterTextSplitter, and keeps track
     of the page number + source in metadata.
     """
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
-    
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=chunk_size, chunk_overlap=chunk_overlap
+    )
+
     chunk_texts = []
     chunk_metadatas = []
 
@@ -248,42 +259,40 @@ def chunk_pdf_pages(texts_per_page, pdf_path, chunk_size=800, chunk_overlap=200)
             chunk_texts.append(doc.page_content)
             # We'll store the PDF path and page in metadata;
             # the final chunk_id gets built by calculate_pdf_chunk_ids()
-            chunk_metadatas.append({
-                "source": pdf_path,
-                "page": str(page_num)
-            })
+            chunk_metadatas.append({"source": pdf_path, "page": str(page_num)})
 
     return chunk_texts, chunk_metadatas
-
 
 
 def obtain_text_of_chunk(chunk_id):
     faiss_store = load_faiss_index()
     all_docs = list(faiss_store.docstore._dict.values())
     text_to_send_to_llm = None
-    
+
     for idx, content in enumerate(all_docs):
         # print("\nProcessing document index:", idx)
-        
+
         metadata = content.metadata if hasattr(content, "metadata") else {}
-        
+
         current_chunk_id = metadata.get("chunk_id")
         # print("DEBUG: Document chunk_id:", current_chunk_id)
-        
+
         # Only extract page content if the chunk IDs match.
         if current_chunk_id == chunk_id:
             # print("DEBUG: Found matching chunk_id:", chunk_id)
             if isinstance(content, tuple):
                 page_text = content[0]
             else:
-                page_text = content.page_content if hasattr(content, "page_content") else ""
+                page_text = (
+                    content.page_content if hasattr(content, "page_content") else ""
+                )
             # print("DEBUG: Extracted page text for chunk_id", chunk_id, ":\n", page_text)
             text_to_send_to_llm = page_text
             break
         else:
             continue
             # print("DEBUG: Chunk id does not match, continuing...")
-    
+
     return text_to_send_to_llm
 
 
@@ -300,63 +309,99 @@ def llm_simplify_chunk_text(text_for_llm):
         Answer:
     """
     model = ChatGoogleGenerativeAI(
-        model="gemini-2.0-flash-001", 
+        model="gemini-2.0-flash-001",
         temperature=0.5,
     )
-    prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
+    prompt = PromptTemplate(
+        template=prompt_template, input_variables=["context", "question"]
+    )
     return create_stuff_documents_chain(llm=model, prompt=prompt)
 
+
 def main(pdf_paths):
-    for pdf_path in pdf_paths:
-        print(f"\nProcessing: {pdf_path}\n")
-        
-        
-        # Step 1: Extract text from the PDF.
-        pages_of_pdf = extract_text_from_pdf(pdf_path)
+    # Create data directory if it doesn't exist
+    if not os.path.exists("../data"):
+        os.makedirs("../data")
 
-        if not pages_of_pdf:
-            print("No text extracted from the PDF.")
-            continue
-        # print("Extracted text from PDF.")
+    # Create or open CSV file for writing
+    csv_path = "../data/bill_info.csv"
+    csv_exists = os.path.exists(csv_path)
 
-        full_pdf_text = "\n".join(pages_of_pdf)
+    # First read existing CSV data if it exists
+    existing_data = {}
+    if csv_exists:
+        with open(csv_path, "r", newline="") as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                existing_data[row["Title"]] = row
 
-        # Step 2: Use the LLM to parse the bill details.
-        bill_info = parse_bill_info(full_pdf_text)
-        # print("Extracted Bill Info:", bill_info)
+    with open(csv_path, "w", newline="") as csvfile:
+        fieldnames = ["Title", "Date", "Type", "Sector", "State", "PDF_Path"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
 
-        # Step 3: Split the document into chunks and get the source and page number for each chunk
-        chunk_texts, chunk_metadatas = chunk_pdf_pages(pages_of_pdf, pdf_path)
+        # Write existing data first
+        for row in existing_data.values():
+            writer.writerow(row)
 
-        # Step 4: Combine the chunk metadata (Source and page number), with the document metadata (Source, title etc.)
-        for metadata_of_chunk in chunk_metadatas:
+        for pdf_path in pdf_paths:
+            print(f"\nProcessing: {pdf_path}\n")
 
-            metadata_of_chunk.update(bill_info)
+            # Step 1: Extract text from the PDF.
+            pages_of_pdf = extract_text_from_pdf(pdf_path)
 
-        # print(f"Metadata of chunk is \n\n{metadata_of_chunk}")
-        
-        # Step 5: Add the document and metadata to the FAISS index.
-        if not os.path.exists('./faiss_index'):
-            os.makedirs('./faiss_index')
-            
-        add_to_faiss_index(chunk_texts, chunk_metadatas)
-        # print("Bill added to FAISS index.")
+            if not pages_of_pdf:
+                print("No text extracted from the PDF.")
+                continue
+
+            full_pdf_text = "\n".join(pages_of_pdf)
+
+            # Step 2: Use the LLM to parse the bill details.
+            bill_info = parse_bill_info(full_pdf_text)
+
+            # Step 3: Split the document into chunks and get the source and page number for each chunk
+            chunk_texts, chunk_metadatas = chunk_pdf_pages(pages_of_pdf, pdf_path)
+
+            # Step 4: Combine the chunk metadata (Source and page number), with the document metadata (Source, title etc.)
+            for metadata_of_chunk in chunk_metadatas:
+                metadata_of_chunk.update(bill_info)
+
+            # Step 5: Add the document and metadata to the FAISS index.
+            if not os.path.exists("./faiss_index"):
+                os.makedirs("./faiss_index")
+
+            add_to_faiss_index(chunk_texts, chunk_metadatas)
+
+            # Add PDF path to bill info for CSV
+            bill_info["PDF_Path"] = pdf_path
+
+            # Check if this title already exists and if the data is different
+            title = bill_info["Title"]
+            if title in existing_data:
+                existing_row = existing_data[title]
+                if all(bill_info[k] == existing_row[k] for k in fieldnames):
+                    continue  # Skip if all values are the same
+                del existing_data[title]  # Remove old entry to be replaced
+
+            # Write new/updated entry to CSV
+            writer.writerow(bill_info)
+
 
 if __name__ == "__main__":
     # Ask the user for the state name.
     state_input = input("Enter state name (e.g., Texas): ").strip()
-    
+
     # Construct the path to the PDFs folder.
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
     pdfs_folder = os.path.join(parent_dir, "pdfs", state_input)
 
     # print(f"This is the PDF Folder\n:{pdfs_folder}")
-    
+
     if not os.path.exists(pdfs_folder):
         print(f"Folder not found: {pdfs_folder}")
         sys.exit(1)
-    
+
     # Gather all PDF file paths in the specified folder.
     pdf_paths = [
         os.path.join(pdfs_folder, filename)
@@ -365,10 +410,10 @@ if __name__ == "__main__":
     ]
 
     # print(pdf_paths)
-    
+
     if not pdf_paths:
         print(f"No PDF files found in folder: {pdfs_folder}")
         sys.exit(1)
-    
+
     # Process the list of PDF paths.
     main(pdf_paths)
