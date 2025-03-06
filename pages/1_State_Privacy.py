@@ -151,7 +151,7 @@ def process_chunk_records(chunk_ids, user_question):
                     "Document": document_name,
                     "Page Number": page_number,
                     "Chunk Number": chunk_number,
-                    "Relevant information in chunk": str(converted_text),
+                    "Relevant information": str(converted_text),
                 }
             )
         except Exception as e:
@@ -212,7 +212,6 @@ def run_state_privacy_page():
 
     col1, col2 = st.columns([9, 3])
 
-
     with col1:
 
         selected_state = create_state_selector()
@@ -229,10 +228,10 @@ def run_state_privacy_page():
             # with metadata "State" equal to the selected state are returned.
 
             filtered_results = faiss_store.similarity_search_with_relevance_scores(
-                query=user_question, 
-                k=10, 
+                query=user_question,
+                k=10,
                 filter={"State": selected_state},
-                score_threshold=0.2
+                score_threshold=0.2,
             )
 
             # print(filtered_results[0])
@@ -244,7 +243,7 @@ def run_state_privacy_page():
                 return None
 
             # Prepare documents for the conversational chain.
-            docs_for_chain =[doc for doc, score in filtered_results]
+            docs_for_chain = [doc for doc, score in filtered_results]
             chunk_ids = [doc.metadata.get("chunk_id") for doc in docs_for_chain]
 
             # Get the conversational chain and invoke it.
@@ -264,9 +263,11 @@ def run_state_privacy_page():
             if records:
                 df = pd.DataFrame(records)
                 df.index = range(1, len(df) + 1)
-                st.table(df[['Document', 'Page Number', 'Relevant information']])
+                st.table(df[["Document", "Page Number", "Relevant information"]])
             else:
-                st.write("No relevant information found for the selected state based on your query.")
+                st.write(
+                    "No relevant information found for the selected state based on your query."
+                )
 
     with col2:
         if selected_state:
@@ -274,7 +275,6 @@ def run_state_privacy_page():
             # df_bills = display_state_bills(selected_state)
             st.table(display_state_bills(selected_state))
     return None
-
 
 
 def main():

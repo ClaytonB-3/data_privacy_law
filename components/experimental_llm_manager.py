@@ -1,3 +1,21 @@
+"""
+
+This script is used to vectorize PDF files and add it to a FAISS index with metadata.
+
+The final metadata for each chunk is:
+{
+    "source": pdf_path,
+    "page": str(page_num),
+    "filename": pdf_filename,
+    "Title": "", 
+    "Date": "", 
+    "Type": "", 
+    "Sector": "", 
+    "State": "",
+    "chunk_id": f"{current_page_id}_ChunkNo_{current_chunk_index}"
+}
+"""
+
 import os
 import json
 import sys
@@ -18,8 +36,15 @@ genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 
 def extract_text_from_pdf(pdf_path):
+    """
+    Return text of a PDF file in a list of strings.
 
-    # Extracts text from a PDF file using PyPDF2.
+    Args:
+        pdf_path (str): The path to the PDF file.
+
+    Returns:
+        list: A list of strings, each representing a page of the PDF file.
+    """
 
     text = []
     try:
@@ -43,7 +68,7 @@ def parse_bill_info(pdf_text):
     { "Title": "", "Date": "", "Type": "", "Sector": "", "State": "" }
     """
     prompt_template = """
-        You are given the following bill text from a PDF file.
+        You are given the text of a bill from a PDF file and the filename of the PDF file.
         Extract the following details:
         1. Type of the bill (choose from: "State level sectoral", "Federal level", "Comprehensive State level", "GDPR").
         2. If the bill is "State level sectoral", specify the sector (choose from: "Health", "Education", "Finance", "Telecommunications & Technology", "Government & Public Sector", "Retail & E-Commerce", "Employment & HR", "Media & Advertising", "Critical Infrastructure (Energy, Transportation, etc.)", "Children’s Data Protection"). Otherwise, set it to null.
@@ -58,12 +83,14 @@ def parse_bill_info(pdf_text):
         {context}
     """
     model = ChatGoogleGenerativeAI(model="gemini-1.5-flash-8b", temperature=0.2)
-    prompt = PromptTemplate(template=prompt_template, input_variables=["context"])
+    prompt = PromptTemplate(
+        template=prompt_template, input_variables=["context", "pdf_filename"]
+    )
     chain = create_stuff_documents_chain(llm=model, prompt=prompt)
 
     doc = Document(page_content=pdf_text)
 
-    result = chain.invoke({"context": [doc]})
+    result = chain.invoke({"context": [doc], "pdf_filename": pdf_filename})
     try:
         # print("X"*50)
         # print(f"\nResult is \n{result}\n")
@@ -237,7 +264,9 @@ def get_confirmation_result_chain():
     return create_stuff_documents_chain(llm=model, prompt=prompt)
 
 
-def chunk_pdf_pages(texts_per_page, pdf_path, chunk_size=800, chunk_overlap=200):
+def chunk_pdf_pages(
+    texts_per_page, pdf_path, pdf_filename, chunk_size=800, chunk_overlap=200
+):
     """
     Takes a list of page texts, splits each page into smaller
     chunks using RecursiveCharacterTextSplitter, and keeps track
@@ -259,7 +288,9 @@ def chunk_pdf_pages(texts_per_page, pdf_path, chunk_size=800, chunk_overlap=200)
             chunk_texts.append(doc.page_content)
             # We'll store the PDF path and page in metadata;
             # the final chunk_id gets built by calculate_pdf_chunk_ids()
-            chunk_metadatas.append({"source": pdf_path, "page": str(page_num)})
+            chunk_metadatas.append(
+                {"source": pdf_path, "page": str(page_num), "filename": pdf_filename}
+            )
 
     return chunk_texts, chunk_metadatas
 
@@ -318,7 +349,7 @@ def llm_simplify_chunk_text(text_for_llm):
     return create_stuff_documents_chain(llm=model, prompt=prompt)
 
 
-def main(pdf_paths):
+def main(pdf_paths, pdf_filenames):
     # Create data directory if it doesn't exist
     if not os.path.exists("../data"):
         os.makedirs("../data")
@@ -344,7 +375,7 @@ def main(pdf_paths):
         for row in existing_data.values():
             writer.writerow(row)
 
-        for pdf_path in pdf_paths:
+        for pdf_path, pdf_filename in zip(pdf_paths, pdf_filenames):
             print(f"\nProcessing: {pdf_path}\n")
 
             # Step 1: Extract text from the PDF.
@@ -360,7 +391,9 @@ def main(pdf_paths):
             bill_info = parse_bill_info(full_pdf_text)
 
             # Step 3: Split the document into chunks and get the source and page number for each chunk
-            chunk_texts, chunk_metadatas = chunk_pdf_pages(pages_of_pdf, pdf_path)
+            chunk_texts, chunk_metadatas = chunk_pdf_pages(
+                pages_of_pdf, pdf_path, pdf_filename
+            )
 
             # Step 4: Combine the chunk metadata (Source and page number), with the document metadata (Source, title etc.)
             for metadata_of_chunk in chunk_metadatas:
@@ -373,7 +406,7 @@ def main(pdf_paths):
             add_to_faiss_index(chunk_texts, chunk_metadatas)
 
             # Add PDF path to bill info for CSV
-            bill_info["PDF_Path"] = pdf_path
+            bill_info["PDF_Path"] = pdf_filename
 
             # Check if this title already exists and if the data is different
             title = bill_info["Title"]
@@ -408,6 +441,11 @@ if __name__ == "__main__":
         for filename in os.listdir(pdfs_folder)
         if filename.lower().endswith(".pdf")
     ]
+    pdf_filenames = [
+        filename
+        for filename in os.listdir(pdfs_folder)
+        if filename.lower().endswith(".pdf")
+    ]
 
     # print(pdf_paths)
 
@@ -416,4 +454,4 @@ if __name__ == "__main__":
         sys.exit(1)
 
     # Process the list of PDF paths.
-    main(pdf_paths)
+    main(pdf_paths, pdf_filenames)
