@@ -27,4 +27,5 @@ dependencies:
       - pylint==3.3.4
       - PyPDF2==3.0.1
       - streamlit==1.42.2
+      - streamlit-pdf-viewer==0.0.21
       - fastapi==0.115.8

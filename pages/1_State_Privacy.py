@@ -3,6 +3,7 @@ This module creates and generates the state privacy law app for the streamlit ap
 """
 
 import streamlit as st
+from streamlit_pdf_viewer import pdf_viewer
 import pandas as pd
 from langchain.docstore.document import Document
 from components.experimental_llm_manager import (
@@ -98,9 +99,11 @@ def create_state_selector():
     return st.session_state["selected_state"]
 
 
-def process_chunk_records(chunk_ids, user_question):
+def process_chunk_records(chunk_ids_with_filenames, user_question):
     """
     This function creates a list of dictionies of document, page num, and chunk num to query LLM
+
+    1.
     Args:
         chunk_ids (list): List of chunk identifiers
         user_question (str): The question posed by the user to analyze the Documents
@@ -114,7 +117,7 @@ def process_chunk_records(chunk_ids, user_question):
     """
     # Parse the chunk_id to build a table of Document, Page Number, and Chunk Number.
     records = []
-    for cid in chunk_ids:
+    for cid, (pdf_filename, doc_title) in chunk_ids_with_filenames.items():
         if not cid:
             continue
         # Expected format: Texas_Data_Privacy_and_Security_Act_Page_35_ChunkNo_1
@@ -148,10 +151,11 @@ def process_chunk_records(chunk_ids, user_question):
 
             records.append(
                 {
-                    "Document": document_name,
+                    "Document": doc_title,
                     "Page Number": page_number,
                     "Chunk Number": chunk_number,
                     "Relevant information": str(converted_text),
+                    "File Path": pdf_filename,
                 }
             )
         except Exception as e:
@@ -210,7 +214,8 @@ def run_state_privacy_page():
     st.set_page_config(layout="wide")
     st.title("State Privacy Law Explorer")
 
-    col1, col2 = st.columns([9, 3])
+    col1, col2 = st.columns([5, 5])
+    pdf_path = False
 
     with col1:
 
@@ -245,6 +250,14 @@ def run_state_privacy_page():
             # Prepare documents for the conversational chain.
             docs_for_chain = [doc for doc, score in filtered_results]
             chunk_ids = [doc.metadata.get("chunk_id") for doc in docs_for_chain]
+            pdf_paths = [doc.metadata.get("source") for doc in docs_for_chain]
+            doc_titles = [doc.metadata.get("Title") for doc in docs_for_chain]
+            chunk_ids_w_filepaths_titles = {
+                chunk_id: (pdf_path, doc_title)
+                for chunk_id, pdf_path, doc_title in zip(
+                    chunk_ids, pdf_paths, doc_titles
+                )
+            }
 
             # Get the conversational chain and invoke it.
             chain = get_conversational_chain()
@@ -257,13 +270,17 @@ def run_state_privacy_page():
                 "Sorry! The document database does not contain documents related to the query."
                 not in result
             ):
-                records = process_chunk_records(chunk_ids, user_question)
+                records = process_chunk_records(
+                    chunk_ids_w_filepaths_titles, user_question
+                )
             else:
                 records = None
             if records:
                 df = pd.DataFrame(records)
                 df.index = range(1, len(df) + 1)
                 st.table(df[["Document", "Page Number", "Relevant information"]])
+                pdf_path = df["File Path"].iloc[0]
+                pdf_title = df["Document"].iloc[0]
             else:
                 st.write(
                     "No relevant information found for the selected state based on your query."
@@ -274,6 +291,12 @@ def run_state_privacy_page():
             st.subheader("Bills for " + selected_state)
             # df_bills = display_state_bills(selected_state)
             st.table(display_state_bills(selected_state))
+        container_pdf = st.container()
+        with container_pdf:
+            if pdf_path:
+                st.markdown(f"### Document: {pdf_title}")
+                pdf_viewer(pdf_path, height=600)
+
     return None
 
 
