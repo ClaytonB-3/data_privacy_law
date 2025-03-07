@@ -3,33 +3,36 @@
 This script is used to vectorize PDF files and add it to a FAISS index with metadata.
 
 The final metadata for each chunk is:
-{
-    "source": pdf_path,
-    "page": str(page_num),
-    "filename": pdf_path.split('/')[-1],
+
+    "Source": pdf_path,
+    "Page": str(page_num),
+    "Filename": pdf_path.split('/')[-1],
+    "Path": "./" + "/".join(pdf_path.split("/")[-3:]),
     "Title": "", 
     "Date": "", 
     "Type": "", 
     "Sector": "", 
     "State": "",
-    "chunk_id": f"{current_page_id}_ChunkNo_{current_chunk_index}"
+    "Chunk_id": f"{current_page_id}ChunkNo{current_chunk_index}"
 }
 """
 
 import os
 import json
 import sys
+
+import csv
+
 import PyPDF2
 import google.generativeai as genai
 from dotenv import load_dotenv
 from langchain_community.vectorstores import FAISS
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.prompts import PromptTemplate
 from langchain.docstore.document import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
-import csv
+
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
@@ -124,7 +127,7 @@ def calculate_updated_chunk_ids(chunk_metadatas):
         else:
             current_chunk_index = 0
 
-        meta["chunk_id"] = f"{current_page_id}_ChunkNo_{current_chunk_index}"
+        meta["Chunk_id"] = f"{current_page_id}_ChunkNo_{current_chunk_index}"
         last_page_id = current_page_id
 
     return chunk_metadatas
@@ -139,7 +142,7 @@ def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder="./faiss_index
 
     # Code for testing what the new chunk_ids are. These are the key to explabaility
     # for items in chunk_metadatas:
-    #     print(f"\nThese are the updated chunk ID's\n: {items.get("chunk_id")}")
+    #     print(f"\nThese are the updated chunk ID's\n: {items.get("Chunk_id")}")
 
     embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
     index_file = os.path.join(faiss_folder, "index.faiss")
@@ -176,7 +179,7 @@ def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder="./faiss_index
     new_ids = []
 
     for text, meta in zip(chunk_texts, chunk_metadatas):
-        this_id = meta.get("chunk_id")
+        this_id = meta.get("Chunk_id")
         if this_id and this_id not in existing_ids:
             new_texts.append(text)
             new_metadatas.append(meta)
@@ -288,12 +291,12 @@ def chunk_pdf_pages(texts_per_page, pdf_path, chunk_size=800, chunk_overlap=200)
             # the final chunk_id gets built by calculate_pdf_chunk_ids()
             chunk_metadatas.append(
                 {
-                    "source": pdf_path,
-                    "page": str(page_num),
-                    "filename": pdf_path.split("/")[-1],
+                    "Source": pdf_path,
+                    "Page": str(page_num),
+                    "Filename": pdf_path.split("/")[-1],
+                    "Path": "./" + "/".join(pdf_path.split("/")[-3:])
                 }
             )
-
     return chunk_texts, chunk_metadatas
 
 
@@ -307,7 +310,7 @@ def obtain_text_of_chunk(chunk_id):
 
         metadata = content.metadata if hasattr(content, "metadata") else {}
 
-        current_chunk_id = metadata.get("chunk_id")
+        current_chunk_id = metadata.get("Chunk_id")
         # print("DEBUG: Document chunk_id:", current_chunk_id)
 
         # Only extract page content if the chunk IDs match.
@@ -353,11 +356,44 @@ def llm_simplify_chunk_text(text_for_llm):
 
 def main(pdf_paths):
     # Create data directory if it doesn't exist
-    if not os.path.exists("../data"):
-        os.makedirs("../data")
+    if not os.path.exists("./data"):
+        os.makedirs("./data")
+
+    if not os.path.exists("./faiss_index"):
+        os.makedirs("./faiss_index")
+
+    bill_info_list=[]
+    # Write document into faiss index
+    for pdf_path in pdf_paths:
+        print(f"\nProcessing: {pdf_path}\n")
+
+        # Step 1: Extract text from the PDF.
+        pages_of_pdf = extract_text_from_pdf(pdf_path)
+
+        if not pages_of_pdf:
+            print("No text extracted from the PDF.")
+            continue
+
+        full_pdf_text = "\n".join(pages_of_pdf)
+
+        # Step 2: Use the LLM to parse the bill details.
+        bill_info = parse_bill_info(full_pdf_text)
+        # Add PDF path to bill info for CSV
+        bill_info["Path"] = "./" + "/".join(pdf_path.split("/")[-3:])
+        bill_info["Filename"] = pdf_path.split("/")[-1]
+        bill_info_list.append(bill_info)
+        # Step 3: Split the document into chunks and get the source and page number for each chunk
+        chunk_texts, chunk_metadatas = chunk_pdf_pages(pages_of_pdf, pdf_path)
+
+        # Step 4: Combine the chunk metadata (Source and page number), with the doc metadata (Source, title etc.)
+        for metadata_of_chunk in chunk_metadatas:
+            metadata_of_chunk.update(bill_info)
+
+        # Step 5: Add the document and metadata to the FAISS index.
+        add_to_faiss_index(chunk_texts, chunk_metadatas)
 
     # Create or open CSV file for writing
-    csv_path = "../data/bill_info.csv"
+    csv_path = "./data/bill_info.csv"
     csv_exists = os.path.exists(csv_path)
 
     # First read existing CSV data if it exists
@@ -375,8 +411,8 @@ def main(pdf_paths):
             "Type",
             "Sector",
             "State",
-            "PDF_Path",
-            "filename",
+            "Path",
+            "Filename",
         ]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
@@ -385,38 +421,7 @@ def main(pdf_paths):
         for row in existing_data.values():
             writer.writerow(row)
 
-        for pdf_path in pdf_paths:
-            print(f"\nProcessing: {pdf_path}\n")
-
-            # Step 1: Extract text from the PDF.
-            pages_of_pdf = extract_text_from_pdf(pdf_path)
-
-            if not pages_of_pdf:
-                print("No text extracted from the PDF.")
-                continue
-
-            full_pdf_text = "\n".join(pages_of_pdf)
-
-            # Step 2: Use the LLM to parse the bill details.
-            bill_info = parse_bill_info(full_pdf_text)
-
-            # Step 3: Split the document into chunks and get the source and page number for each chunk
-            chunk_texts, chunk_metadatas = chunk_pdf_pages(pages_of_pdf, pdf_path)
-
-            # Step 4: Combine the chunk metadata (Source and page number), with the doc metadata (Source, title etc.)
-            for metadata_of_chunk in chunk_metadatas:
-                metadata_of_chunk.update(bill_info)
-
-            # Step 5: Add the document and metadata to the FAISS index.
-            if not os.path.exists("./faiss_index"):
-                os.makedirs("./faiss_index")
-
-            add_to_faiss_index(chunk_texts, chunk_metadatas)
-
-            # Add PDF path to bill info for CSV
-            bill_info["PDF_Path"] = pdf_path
-            bill_info["filename"] = pdf_path.split("/")[-1]
-
+        for bill_info in bill_info_list:
             # Check if this title already exists and if the data is different
             title = bill_info["Title"]
             if title in existing_data:
@@ -424,7 +429,6 @@ def main(pdf_paths):
                 if all(bill_info[k] == existing_row[k] for k in fieldnames):
                     continue  # Skip if all values are the same
                 del existing_data[title]  # Remove old entry to be replaced
-
             # Write new/updated entry to CSV
             writer.writerow(bill_info)
 
