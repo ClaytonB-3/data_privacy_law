@@ -13,7 +13,7 @@ The final metadata for each chunk is:
     "Type": "", 
     "Sector": "", 
     "State": "",
-    "Chunk_id": f"{current_page_id}ChunkNo{current_chunk_index}"
+    "Chunk_id": f"{current_page_id}_ChunkNo_{current_chunk_index}"
 }
 """
 
