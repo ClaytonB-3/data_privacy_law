@@ -29,3 +29,4 @@ dependencies:
       - streamlit==1.42.2
       - streamlit-pdf-viewer==0.0.21
       - fastapi==0.115.8
+      - reportlab==4.0.4

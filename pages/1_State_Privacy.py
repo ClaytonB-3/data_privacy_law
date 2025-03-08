@@ -260,14 +260,17 @@ def run_state_privacy_page():
 
             # Get the conversational chain and invoke it.
             chain = get_conversational_chain()
-            result = chain.invoke(
+            firstresult = chain.invoke(
                 {"context": docs_for_chain, "question": user_question}
             )
+            # result.usage_metadata # To see how many tokens were used
+
             # Get the confirmation chain and invoke it.
             chain = get_confirmation_result_chain()
             result = chain.invoke(
-                {"context": docs_for_chain, "question": user_question, "answer": result}
+                {"context": docs_for_chain, "question": user_question, "answer": firstresult}
             )
+            # result.usage_metadata # To see how many tokens were used
             st.markdown("**Answer:**\n" + result, unsafe_allow_html=True)
             st.write("---")
             if (
