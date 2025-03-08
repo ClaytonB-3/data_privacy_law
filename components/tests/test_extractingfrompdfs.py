@@ -1,16 +1,19 @@
-import sys
+"""
+Testing the extract_text_from_pdf function which returns a list of strings
+"""
 import os
 
 import unittest
-import PyPDF2
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from components.experimental_llm_manager import extract_text_from_pdf
 
-class PDF_Extraction_Method(unittest.TestCase):
+class PdfExtractionMethod(unittest.TestCase):
     """
-    Testing whether the PDF's extraction function is working properly and giving response in the right format. 
+    Testing whether the PDF's extraction function is working properly 
+    and giving response in the right format. 
+
     Args for the function --> pdf_path (str): The path to the PDF file.
     Returns --> list: A list of strings, each representing a page of the PDF file.
     """
@@ -38,7 +41,8 @@ class PDF_Extraction_Method(unittest.TestCase):
 
     def test_pdf_extraction(self):
         """
-        Passing the created pdf file to the extract_pdf_function and then comparing the result vs expected
+        Passing the created pdf file to the extract_pdf_function 
+        and then comparing the result vs expected
         """
         pages = extract_text_from_pdf(self.temp_pdf_path)
 
@@ -53,8 +57,12 @@ class PDF_Extraction_Method(unittest.TestCase):
             self.assertIsInstance(page, str, "Each page should be a string.")
 
         # Verify that expected text appears on each page.
-        self.assertIn("This is the first page in the project TPLC", pages[0], "Page 1 text does not match.")
-        self.assertIn("Second page in the project TPLC", pages[1], "Page 2 text does not match.")
+        self.assertIn("This is the first page in the project TPLC",
+                      pages[0],
+                      "Page 1 text does not match.")
+        self.assertIn("Second page in the project TPLC",
+                      pages[1],
+                      "Page 2 text does not match.")
 
 if __name__ == '__main__':
     unittest.main()
