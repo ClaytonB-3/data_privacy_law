@@ -112,6 +112,8 @@ def calculate_updated_chunk_ids(chunk_metadatas):
     Update each metadata dict with a unique 'chunk_id' that includes the PDF source, page number,
     and a chunk index that resets for each new page.
     Format: "source:page:chunk_index"
+
+    This is used in various streamlit pages to display the tables
     """
     last_page_id = None
     current_chunk_index = 0
@@ -208,8 +210,8 @@ def get_conversational_chain():
     Sets up a QA chain using ChatGoogleGenerativeAI and a custom prompt template.
     """
     prompt_template = """
-        Answer the question based on provided context.  Please start with "Sorry! The document database does not contain documents related to the query." if the context does not contain the answer Or "According to the document database" if the context does contain the answer.
-        If the context does not contain the answer, make a generic one line response based on your training data and state that the documents database does not contain documents related to the query so you are answering based on your knowledge. 
+        If the context has documents related to the question, start your answer with "According to my database of information, ".
+        If the context does not have documents related to the question, start your answer with "Sorry, the database does not have specific information about your question". After this, say on the next line "According to my training data, this is the answer:", and then write the answer on the next line from your training data. 
 
         Context:
         {context}
@@ -224,7 +226,7 @@ def get_conversational_chain():
         temperature=0.2,
         system_prompt=(
             """You are a helpful assistant that MUST write an introduction,
-            bullet points, and a conclusion"""
+            bullet points for the main body of the response, and a conclusion"""
         ),
     )
     prompt = PromptTemplate(
@@ -238,9 +240,11 @@ def get_confirmation_result_chain():
     Sets up a QA chain using ChatGoogleGenerativeAI and a custom prompt template.
     """
     prompt_template = """
-        I will provide your answer to a question I asked before based on the context. Please reassure your answer is correctly, concise, and coherent. You don't need to mention that I have asked you the question before.
-        Please start with "Sorry! The document database does not contain documents related to the query." if the context does not contain the answer Or "According to the document database" if the context does contain the answer.
-        If the context does not contain the answer, make a generic one line response based on your training data and state that the documents database does not contain documents related to the query so you are answering based on your knowledge. 
+        I will provide you the answer to a question I asked an LLM model based on a given context. 
+        Look at the question and the answer, and make sure that the answer is correct and coherent. 
+        DO NOT MENTION THAT I HAVE ASKED YOU THIS QUESTION BEFORE.
+        If the answer does not make sense, state "Sorry, the document database doesn't provide enough information to answer your question accurately." Then on the next line you write "Based on my training data this is the answer -->". Provide a response based on the question, using your training data only thereafter.  
+        If the answer does make sense, state "According to the database of laws I have, your answer is -->", and then write an introduction, body and conclusion for the response, based on the question and answer and context you were provided. THERE MUST BE AN INTRODUCTION AND CONCLUSION.
 
         Context:
         {context}
