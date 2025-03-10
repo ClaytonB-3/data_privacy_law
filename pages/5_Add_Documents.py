@@ -1,7 +1,6 @@
+import datetime
 import streamlit as st
 import tempfile
-from components.pdf_utils import get_pdf_paths_for_state, parse_and_chunk_pdfs
-from components.interface_with_FAISS import add_to_faiss_index
 
 # List of US states for the dropdown
 us_states = [
@@ -16,80 +15,113 @@ us_states = [
     "Washington", "West Virginia", "Wisconsin", "Wyoming"
 ]
 
-def run_add_documents_page():
-    st.title("Add PDF Documents")
-    
-    # Basic input for subfolder
-    subfolder_name = st.text_input("Enter the subfolder name inside './pdfs/' where new PDFs reside:", "")
-    
-    # File uploader for individual PDFs
-    uploaded_pdf = st.file_uploader("Or, upload a PDF Document:", type=["pdf"], accept_multiple_files=False)
-    
-    # Jurisdiction options: Federal, State, or GDPR law
-    jurisdiction = st.selectbox("Select the jurisdiction of the law:", ["Federal", "State", "GDPR"])
-    additional_metadata = {"jurisdiction": jurisdiction}
-    
-    # For state-level laws, collect additional information
-    if jurisdiction == "State":
-        # Dropdown for state selection using the provided list
-        state_name = st.selectbox("Select the state the file belongs to:", us_states)
-        additional_metadata["state"] = state_name
-        
-        # Option to select if the file is comprehensive or topic specific
-        state_file_type = st.selectbox("Select the state-level file type:", ["Comprehensive", "Topic Specific"])
-        additional_metadata["state_file_type"] = state_file_type
-        
-        # If topic specific, choose one of the permitted sectors
-        if state_file_type == "Topic Specific":
-            topic_sector = st.selectbox("Select the topic sector:", [
-                "Financial Privacy", 
-                "Health Data Privacy",
-                "Digital Privacy",
-                "Workplace Privacy", 
-                "Consumer Privacy", 
-                "Biometric Privacy",
-                "Government Surveillance"
-            ])
-            additional_metadata["topic_sector"] = topic_sector
+sector_list = ["Health", "Education", "Finance", 
+        "Telecommunications & Technology", "Government & Public Sector", "Retail & E-Commerce", "Employment & HR", 
+        "Media & Advertising", "Critical Infrastructure (Energy, Transportation, etc.)", 
+        "Children’s Data Protection"]
 
-    if st.button("Process PDFs"):
-        pdf_paths = []
+st.set_page_config(page_title="Privacy Laws Explorer", layout="wide")
 
-        # Process PDFs from subfolder if provided
-        if subfolder_name.strip():
-            folder_pdf_paths = get_pdf_paths_for_state(subfolder_name)
-            if not folder_pdf_paths:
-                st.warning(f"No PDF files found in subfolder: {subfolder_name}")
-            else:
-                pdf_paths.extend(folder_pdf_paths)
-        
-        # Process uploaded PDF files if any
-        if uploaded_pdf:
-            for uploaded_file in uploaded_pdf:
-                # Save the uploaded file to a temporary file on disk
-                with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
-                    tmp_file.write(uploaded_file.read())
-                    pdf_paths.append(tmp_file.name)
-        
-        # Ensure that there is at least one PDF to process
-        if not pdf_paths:
-            st.error("Please provide a subfolder name with PDFs or upload at least one PDF file.")
-            return
-        
-        with st.spinner("Parsing and chunking PDFs..."):
-            chunk_texts, chunk_metadatas = parse_and_chunk_pdfs(pdf_paths)
-        
-        # Merge the additional metadata into each chunk's metadata
-        for metadata in chunk_metadatas:
-            metadata.update(additional_metadata)
-        
-        with st.spinner("Adding to FAISS index..."):
-            add_to_faiss_index(chunk_texts, chunk_metadatas)
-        
-        st.success("PDFs have been processed and added to the FAISS index.")
+styling_for_home_page = """
+<style>
+    [data-testid = "stAppViewContainer"]{
+    background-color: #fefae0;
+    opacity: 1;
+    background-image:  radial-gradient(#ccd5ae 1.1000000000000001px, transparent 1.1000000000000001px), 
+    radial-gradient(#ccd5ae 1.1000000000000001px, #fefae0 1.1000000000000001px);
+    background-size: 56px 56px;
+    background-position: 0 0,28px 28px;
+    color: #000;
+    }
+
+[data-testid="stSidebar"] * {
+    background-color: #dda15e;
+    opacity: 1;
+    color: #000 !important;
+    font-weight: bold;
+}
+
+[data-testid = "stSidebarNav"] * {
+    font-size: 18px;
+    padding-bottom:5px;
+    padding-top:5px;
+}
+
+[data-testid = "stRadio"] * {
+    color: #083b72;
+    font-weight:bold;
+}
+
+[data-testid = "stCaptionContainer"] * {
+    color: #111;
+}
+</style>
+"""
+
+st.markdown(styling_for_home_page, unsafe_allow_html=True)
 
 def main():
-    run_add_documents_page()
+
+    empty_column, logo_column, title_column = st.columns([0.01,0.05,0.94], gap="small", vertical_alignment="bottom")
+    with logo_column:
+        st.image("images/add.png", width=75)
+    with title_column:
+        st.title("Add a Document to our Database of Laws")
+
+    st.write("")
+    st.write("")
+    st.write("")
+
+    input_1, input_2, input_3, input_4 = st.columns([0.25,0.25,0.25,0.25])
+    with input_1:
+        st.subheader("Select the type of law", divider = True)
+        level_of_law = st.radio("", 
+                                ["State-level sectoral", "State-level Comprehensive", "Federal level", "GDPR"],
+                                captions=[
+                                    "Choose if the law is a state law focusing on one specific issue",
+                                    "Choose if the law is a state law focusing on a broad set of issues",
+                                    "Choose if the federal government created this law",
+                                    "Choose if your law is related to EU's GDPR"
+                                ],
+                                index = None,
+                            )
+        st.write("")
+        st.write("Type of law selection:", level_of_law)
+
+    with input_2:
+        st.subheader("Enter sector of this law / NA", divider = True)
+        sector = st.selectbox(
+                            "Select a state to explore their privacy law", sector_list, index=None
+                            )
+        st.write("")
+        st.write("State selection:", sector)
+    
+    with input_3:
+        st.subheader("Enter relevant US state / NA", divider = True)
+        selected_state = st.selectbox(
+                            "Select a state to explore their privacy law", us_states, index=None
+                            )
+        st.write("")
+        st.write("State selection:", selected_state)
+    
+    with input_4:
+        st.subheader("Date of law taking effect", divider = True)
+        effective_date = st.date_input(
+                            "When did this law take effect?", value=None
+                            )
+        st.write("")
+        st.write("Date entered:", effective_date)
+
+    st.write("")
+    st.write("")
+    st.write("")
+    empty_col, button_col, empty_col2 = st.columns([0.25, 0.5, 0.25])
+    with button_col:
+        if button_col.button("Validate and Submit Inputs", type = "primary", use_container_width = True,
+                             icon = ":material/place_item:"
+                             ):
+            button_col.markdown("Clicked the button")
+
 
 if __name__ == "__main__":
     main()
