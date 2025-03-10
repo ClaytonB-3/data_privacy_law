@@ -1,6 +1,7 @@
 """
 This module creates and generates the state privacy law app for the streamlit app
 """
+
 import os
 import time
 import streamlit as st
@@ -124,6 +125,7 @@ styling_for_state_page = """
 
 st.markdown(styling_for_state_page, unsafe_allow_html=True)
 
+
 def convert_date(date_str):
     """
     Convert a date in MMDDYYYY format to DD/MM/YYYY.
@@ -142,6 +144,7 @@ def convert_date(date_str):
         return f"{dd}/{mm}/{yyyy}"
     return date_str
 
+
 def create_state_selector():
     """
     This function creates the state selector.
@@ -151,6 +154,7 @@ def create_state_selector():
     )
     st.session_state["selected_state"] = selected_state
     return st.session_state["selected_state"]
+
 
 def process_chunk_records(chunk_ids_with_filenames, user_question):
     """
@@ -215,6 +219,7 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
             st.write(f"Error parsing chunk_id: {cid}. Error: {e}")
     return records
 
+
 def display_state_bills(selected_state):
     """
     Retrieve all docs for selected state and return df of title and date.
@@ -258,16 +263,20 @@ def display_state_bills(selected_state):
     df_bills.index = range(1, len(df_bills) + 1)
     return df_bills
 
+
 def stream_data(result_of_llm):
     for word in result_of_llm.split(" "):
         yield word + " "
         time.sleep(0.02)
 
+
 def run_state_privacy_page():
     """
     This function runs the state privacy law page.
     """
-    empty_column, logo_column, title_column = st.columns([0.01,0.05,0.94], gap="small", vertical_alignment="bottom")
+    empty_column, logo_column, title_column = st.columns(
+        [0.01, 0.05, 0.94], gap="small", vertical_alignment="bottom"
+    )
     with logo_column:
         st.image("images/map.png", width=75)
     with title_column:
@@ -301,18 +310,20 @@ def run_state_privacy_page():
             )
 
             if not filtered_results:
-                st.html("""<p style = "font-weight:bold; font-size:1.3rem;">
+                st.html(
+                    """<p style = "font-weight:bold; font-size:1.3rem;">
                     "No relevant documents found for the selected state based on your query."
                     </p>
-                """)
+                """
+                )
                 close_results = False
 
             if close_results:
-                 
+
                 # Prepare documents for the conversational chain.
                 # From various documents we retrieve their chunk id's, path, and title
                 # A dictionary of these values is then created
-                
+
                 docs_for_chain = [doc for doc, score in filtered_results]
                 chunk_ids = [doc.metadata.get("Chunk_id") for doc in docs_for_chain]
                 pdf_paths = [doc.metadata.get("Path") for doc in docs_for_chain]
@@ -324,39 +335,41 @@ def run_state_privacy_page():
                     )
                 }
 
-                
                 # Now we call the LLM in the first instance and pass it the user question as well as the documents
                 # that the similiarity search function returned above
-                
+
                 chain = get_conversational_chain()
                 firstresult = chain.invoke(
                     {"context": docs_for_chain, "question": user_question}
                 )
 
-                
-                
                 # Now we pass the LLM response, along with the user query and the same documents to verify if the first
-                # LLM response was coherent or not. Only upon a verification being done by this second LLM call will we 
-                # print things to screen. 
+                # LLM response was coherent or not. Only upon a verification being done by this second LLM call will we
+                # print things to screen.
 
-                # The get_confirmation_result_chain function below can return a structured response (with introduction, 
-                # body, and conclusion) if the first LLM call gave a good quality response. However, if the response of 
+                # The get_confirmation_result_chain function below can return a structured response (with introduction,
+                # body, and conclusion) if the first LLM call gave a good quality response. However, if the response of
                 # the first LLM call was not good, then a custom error message will be returned, which is then shown
                 # on the screen.
-                
+
                 chain = get_confirmation_result_chain()
                 result = chain.invoke(
-                    {"context": docs_for_chain, "question": user_question, "answer": firstresult}
+                    {
+                        "context": docs_for_chain,
+                        "question": user_question,
+                        "answer": firstresult,
+                    }
                 )
-                
-                st.write_stream(stream_data(result)) #Print outcome of the second LLM, word-by-word for stylistic effect
+
+                st.write_stream(
+                    stream_data(result)
+                )  # Print outcome of the second LLM, word-by-word for stylistic effect
                 st.write("---")
-                
-                
+
                 # On verifying that a structured LLM response (from the second LLM call) was obtained, we print a table
                 # of information below the response. This is for AI explanability, and it shows which text segments that
                 # were used to construct the LLM response
-                
+
                 if (
                     "Sorry, the LLM cannot currently generate a good enough response"
                     not in result

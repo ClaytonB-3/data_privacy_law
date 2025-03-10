@@ -8,10 +8,10 @@ The final metadata for each chunk is:
     "Page": str(page_num),
     "Filename": pdf_path.split('/')[-1],
     "Path": "./" + "/".join(pdf_path.split("/")[-3:]),
-    "Title": "", 
-    "Date": "", 
-    "Type": "", 
-    "Sector": "", 
+    "Title": "",
+    "Date": "",
+    "Type": "",
+    "Sector": "",
     "State": "",
     "Chunk_id": f"{current_page_id}_ChunkNo_{current_chunk_index}"
 }
@@ -53,10 +53,9 @@ def extract_text_from_pdf(pdf_path):
     try:
         with open(pdf_path, "rb") as file:
             reader = PyPDF2.PdfReader(file)
-            for page in enumerate(reader.pages):
+            for i, page in enumerate(reader.pages):
                 page_text = page.extract_text() or ""
                 text.append(page_text)
-
 
     except FileNotFoundError as e:
         print("Error reading PDF:", e)
@@ -168,7 +167,10 @@ def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder="./faiss_index
                 allow_dangerous_deserialization=True,
             )
         except (OSError, ValueError) as load_error:
-            print("Error loading existing FAISS index; creating new one. Error:", load_error)
+            print(
+                "Error loading existing FAISS index; creating new one. Error:",
+                load_error,
+            )
             faiss_store = None
     else:
         faiss_store = None
@@ -320,7 +322,7 @@ def chunk_pdf_pages(texts_per_page, pdf_path, chunk_size=800, chunk_overlap=200)
                     "Source": pdf_path,
                     "Page": str(page_num),
                     "Filename": pdf_path.split("/")[-1],
-                    "Path": "./" + "/".join(pdf_path.split("/")[-3:])
+                    "Path": "./" + "/".join(pdf_path.split("/")[-3:]),
                 }
             )
     return chunk_texts, chunk_metadatas
@@ -391,7 +393,7 @@ def main(pdf_paths):
     if not os.path.exists("./faiss_index"):
         os.makedirs("./faiss_index")
 
-    bill_info_list=[]
+    bill_info_list = []
     # Write document into faiss index
     for pdf_path in pdf_paths:
         print(f"\nProcessing: {pdf_path}\n")
@@ -465,7 +467,9 @@ def main(pdf_paths):
 
 if __name__ == "__main__":
     # Ask the user for the state name.
-    state_input = input("Enter folder name with PDF texts (e.g., Texas/Comprehensive/..): ").strip()
+    state_input = input(
+        "Enter folder name with PDF texts (e.g., Texas/Comprehensive/..): "
+    ).strip()
 
     # Construct the path to the PDFs folder.
     current_dir = os.path.dirname(os.path.abspath(__file__))
