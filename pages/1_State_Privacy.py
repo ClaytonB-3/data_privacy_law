@@ -2,6 +2,7 @@
 This module creates and generates the state privacy law app for the streamlit app
 """
 
+import base64
 import os
 import time
 import streamlit as st
@@ -270,6 +271,13 @@ def stream_data(result_of_llm):
         time.sleep(0.02)
 
 
+def show_pdf(file_path):
+    with open(file_path, "rb") as f:
+        base64_pdf = base64.b64encode(f.read()).decode("utf-8")
+    pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="800" height="800" type="application/pdf"></iframe>'
+    st.markdown(pdf_display, unsafe_allow_html=True)
+
+
 def run_state_privacy_page():
     """
     This function runs the state privacy law page.
@@ -282,7 +290,7 @@ def run_state_privacy_page():
     with title_column:
         st.header("Explore State Privacy Laws")
 
-    col1, col2 = st.columns([0.7, 0.3])
+    col1, col2 = st.columns([0.5, 0.5])
     pdf_path = False
 
     with col1:
@@ -382,8 +390,16 @@ def run_state_privacy_page():
 
                 if records:
                     df = pd.DataFrame(records)
-                    df.index = range(1, len(df) + 1)
-                    st.table(df[["Document", "Page", "Relevant information"]])
+                    st.dataframe(
+                        df[["Document", "Page", "Relevant information"]],
+                        hide_index=True,
+                        on_select=lambda row: (
+                            show_pdf(os.path.normpath(df["File Path"].iloc[0]))
+                            if not row.empty
+                            else None
+                        ),
+                        selection_mode="single-row",
+                    )
                     pdf_path = df["File Path"].iloc[0]
                     pdf_title = df["Document"].iloc[0]
                 else:
@@ -394,13 +410,18 @@ def run_state_privacy_page():
     with col2:
         if selected_state:
             st.subheader("Bills for " + selected_state)
-            st.table(display_state_bills(selected_state))
+            st.dataframe(display_state_bills(selected_state), hide_index=True)
         container_pdf = st.container()
         with container_pdf:
             if pdf_path:
                 st.markdown(f"### Document: {pdf_title}")
                 pdf_path = os.path.normpath(pdf_path)
-                pdf_viewer(pdf_path, height=600)
+                show_pdf(pdf_path)
+                # pdf_viewer(pdf_path, height=600)
+    # if pdf_path:
+    #     st.markdown(f"### Document test 2: {pdf_title}")
+    #     pdf_path = os.path.normpath(pdf_path)
+    #     show_pdf(pdf_path)
 
     return None
 
