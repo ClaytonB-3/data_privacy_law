@@ -57,7 +57,7 @@ class StateFederalPageSubheaderTest(unittest.TestCase):
         """
         Set up the test environment by loading the Federal Privacy Laws page.
         """
-        self.at = AppTest.from_file('./pages/2_Federal_Privacy.py').run(timeout=10)
+        self.at = AppTest.from_file('../pages/2_Federal_Privacy.py').run(timeout=10)
 
     def test_subheaders_presence(self):
         """

@@ -92,6 +92,7 @@ jobs:
       # Next step: run the unit tests with code coverage.
       - name: Unit tests
         run: |
+          cd components
           coverage run -m unittest discover
           coverage report
           coverage lcov
@@ -114,7 +115,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           base-path: components
-          path-to-lcov: coverage.lcov
+          path-to-lcov: components/coverage.lcov
           # The following two options are needed for "parallel"
           # runs - ie if you have a matrix of python versions.
           # This holds off on reporting code coverage to

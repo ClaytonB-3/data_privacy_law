@@ -60,7 +60,7 @@ class StatePrivacyLawAppTest(unittest.TestCase):
         """
         # Since your tests are run from the project root, the relative path to the page is:
         # "pages/1_State_Privacy.py"
-        self.at = AppTest.from_file("pages/1_State_Privacy.py").run(timeout=10)
+        self.at = AppTest.from_file("../pages/1_State_Privacy.py").run(timeout=10)
 
     def test_header_presence(self):
         """
