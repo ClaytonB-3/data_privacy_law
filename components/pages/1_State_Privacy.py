@@ -8,7 +8,7 @@ import streamlit as st
 from streamlit_pdf_viewer import pdf_viewer
 import pandas as pd
 from langchain.docstore.document import Document
-from components.experimental_llm_manager import (
+from experimental_llm_manager import (
     load_faiss_index,
     get_conversational_chain,
     get_confirmation_result_chain,

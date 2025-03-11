@@ -56,7 +56,7 @@ class StateComprehensivePageTest(unittest.TestCase):
         Set up the test environment by loading the State Comprehensive Laws page.
         Adjust the file path if necessary.
         """
-        self.at = AppTest.from_file('../pages/3_Comprehensive_State_Privacy.py').run(timeout=10)
+        self.at = AppTest.from_file('./pages/3_Comprehensive_State_Privacy.py').run(timeout=10)
 
     def test_title(self):
         """
