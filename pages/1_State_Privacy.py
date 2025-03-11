@@ -120,6 +120,19 @@ styling_for_state_page = """
     color: #111;
 }
 
+.stButton > button {
+    background-color: white !important;
+    color: black !important;
+    border: 1px solid black !important;
+    font-weight: bold !important;
+}
+
+.stButton > button:hover {
+    background-color: #f8f8f8 !important;
+    border: 1px solid black !important;
+}
+
+
 </style>
 """
 
@@ -444,7 +457,7 @@ def run_state_privacy_page():
     if len(st.session_state.df_no_duplicates) > 0:
         st.subheader("View Documents")
         for i, row in st.session_state.df_no_duplicates.iterrows():
-            col_doc, col_btn = st.columns([3, 1])
+            col_doc, col_btn = st.columns([1, 1])
             with col_doc:
                 st.write(row["Document"])
             with col_btn:
