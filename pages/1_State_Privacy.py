@@ -274,7 +274,7 @@ def stream_data(result_of_llm):
 def show_pdf(file_path):
     with open(file_path, "rb") as f:
         base64_pdf = base64.b64encode(f.read()).decode("utf-8")
-    pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="800" height="800" type="application/pdf"></iframe>'
+    pdf_display = f'<div style="text-align: center"><iframe src="data:application/pdf;base64,{base64_pdf}" width="1200" height="800" type="application/pdf"></iframe></div>'
     st.markdown(pdf_display, unsafe_allow_html=True)
 
 
@@ -282,6 +282,18 @@ def run_state_privacy_page():
     """
     This function runs the state privacy law page.
     """
+    # Initialize session state variables if they don't exist
+    if "df" not in st.session_state:
+        st.session_state.df = pd.DataFrame()
+    if "selected_pdf" not in st.session_state:
+        st.session_state.selected_pdf = None
+    if "pdf_title" not in st.session_state:
+        st.session_state.pdf_title = None
+    if "user_question" not in st.session_state:
+        st.session_state.user_question = ""
+    if "llm_result" not in st.session_state:
+        st.session_state.llm_result = None
+
     empty_column, logo_column, title_column = st.columns(
         [0.01, 0.05, 0.94], gap="small", vertical_alignment="bottom"
     )
@@ -291,25 +303,33 @@ def run_state_privacy_page():
         st.header("Explore State Privacy Laws")
 
     col1, col2 = st.columns([0.5, 0.5])
-    pdf_path = False
 
     with col1:
-
         selected_state = create_state_selector()
         st.write(f"You have chosen the state: {selected_state}")
 
-        # Get the user's question.
-        user_question = st.text_input("Ask a question about State Privacy Laws:")
+        # Get the user's question and store in session state
+        user_question = st.text_input(
+            "Ask a question about State Privacy Laws:", key="question_input"
+        )
 
-        if user_question:
-            # Load the FAISS index.
+        if user_question:  # Only process if a question is asked
+            if (user_question != st.session_state.user_question) or (
+                user_question not in st.session_state
+            ):
+                st.session_state.user_question = user_question
+                st.session_state.new_question = True
+                st.session_state.df = (
+                    pd.DataFrame()
+                )  # Reset results when question changes
+                st.session_state.llm_result = (
+                    None  # Reset LLM result when question changes
+                )
+            else:
+                st.session_state.new_question = False
+
             faiss_store = load_faiss_index()
-            # Use the similarity_search_with_relevance_scores function with a filter
-            # to ensure that only documents with metadata "State" equal to the
-            # selected state are returned.
-
             close_results = True
-
             filtered_results = faiss_store.similarity_search_with_relevance_scores(
                 query=user_question,
                 k=10,
@@ -369,10 +389,12 @@ def run_state_privacy_page():
                     }
                 )
 
-                st.write_stream(
-                    stream_data(result)
-                )  # Print outcome of the second LLM, word-by-word for stylistic effect
-                st.write("---")
+                if result != st.session_state.llm_result:
+                    st.write_stream(stream_data(result))
+                    st.write("---")
+                else:
+                    st.write(result)
+                st.session_state.llm_result = result
 
                 # On verifying that a structured LLM response (from the second LLM call) was obtained, we print a table
                 # of information below the response. This is for AI explanability, and it shows which text segments that
@@ -389,39 +411,52 @@ def run_state_privacy_page():
                     records = None
 
                 if records:
-                    df = pd.DataFrame(records)
-                    st.dataframe(
-                        df[["Document", "Page", "Relevant information"]],
-                        hide_index=True,
-                        on_select=lambda row: (
-                            show_pdf(os.path.normpath(df["File Path"].iloc[0]))
-                            if not row.empty
-                            else None
-                        ),
-                        selection_mode="single-row",
-                    )
-                    pdf_path = df["File Path"].iloc[0]
-                    pdf_title = df["Document"].iloc[0]
+                    st.session_state.df = pd.DataFrame(records)
                 else:
                     st.write(
                         "No relevant information found for the selected state based on your query."
                     )
+        else:
+            if st.session_state.llm_result:
+                st.write(st.session_state.llm_result)
+                st.write("---")
+
+    # Display dataframe below columns if it exists and is not empty
+    if user_question:
+        if records:
+            st.dataframe(
+                st.session_state.df[["Document", "Page", "Relevant information"]],
+                hide_index=True,
+                use_container_width=True,
+            )
 
     with col2:
         if selected_state:
             st.subheader("Bills for " + selected_state)
             st.dataframe(display_state_bills(selected_state), hide_index=True)
-        container_pdf = st.container()
-        with container_pdf:
-            if pdf_path:
-                st.markdown(f"### Document: {pdf_title}")
-                pdf_path = os.path.normpath(pdf_path)
-                show_pdf(pdf_path)
-                # pdf_viewer(pdf_path, height=600)
-    # if pdf_path:
-    #     st.markdown(f"### Document test 2: {pdf_title}")
-    #     pdf_path = os.path.normpath(pdf_path)
-    #     show_pdf(pdf_path)
+    st.session_state.df_no_duplicates = pd.DataFrame()
+    # Remove duplicate rows based on Document column if DataFrame exists and has rows
+    if len(st.session_state.df) > 0:
+        st.session_state.df_no_duplicates = st.session_state.df.drop_duplicates(
+            subset=["Document"], keep="first"
+        )
+    # Display PDFs section
+    if len(st.session_state.df_no_duplicates) > 0:
+        st.subheader("View Documents")
+        for i, row in st.session_state.df_no_duplicates.iterrows():
+            col_doc, col_btn = st.columns([3, 1])
+            with col_doc:
+                st.write(row["Document"])
+            with col_btn:
+                if st.button("View PDF", key=f"pdf_btn_{i}"):
+                    st.session_state.selected_pdf = row["File Path"]
+                    st.session_state.pdf_title = row["Document"]
+
+        # Display selected PDF
+        if st.session_state.selected_pdf:
+            st.markdown(f"### Document: {st.session_state.pdf_title}")
+            pdf_path = os.path.normpath(st.session_state.selected_pdf)
+            show_pdf(pdf_path)
 
     return None
 
