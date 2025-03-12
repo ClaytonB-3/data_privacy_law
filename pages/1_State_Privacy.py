@@ -6,7 +6,6 @@ import base64
 import os
 import time
 import streamlit as st
-from streamlit_pdf_viewer import pdf_viewer
 import pandas as pd
 from langchain.docstore.document import Document
 from components.experimental_llm_manager import (
@@ -74,7 +73,7 @@ us_states = [
 
 st.set_page_config(page_title="Explore State Privacy Laws", layout="wide")
 
-styling_for_state_page = """
+STYLING_FOR_STATE_PAGE = """
 <style>
     [data-testid = "stAppViewContainer"]{
     background-color: #fefae0;
@@ -137,7 +136,7 @@ styling_for_state_page = """
 """
 
 
-st.markdown(styling_for_state_page, unsafe_allow_html=True)
+st.markdown(STYLING_FOR_STATE_PAGE, unsafe_allow_html=True)
 
 
 def convert_date(date_str):
@@ -193,16 +192,12 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
             continue
         # Expected format: Texas_Data_Privacy_and_Security_Act_Page_35_ChunkNo_1
         try:
-
             text_of_chunk = obtain_text_of_chunk(cid)
             # st.write(f"\nText of Chunk is {text_of_chunk}")
-
             doc_for_processing_chunk = Document(page_content=text_of_chunk, metadata={})
             # st.write(f"\nDoc for processing Chunk is {doc_for_processing_chunk}")
-
             parsed_text_for_llm_input = llm_simplify_chunk_text(text_of_chunk)
             # st.write(f"\nDoc for processing Chunk is {parsed_text_for_llm_input}")
-
             converted_text = parsed_text_for_llm_input.invoke(
                 {
                     "context": [doc_for_processing_chunk],
@@ -210,21 +205,15 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
                 }
             )
             # st.write(f"\nConverted text is {converted_text}")
-
             parts = cid.split("_Page_")
             if len(parts) != 2:
                 continue
-
-            rest = parts[1]  # e.g. 35_ChunkNo_1
-            page_part, chunk_part = rest.split("_ChunkNo_")
-            page_number = int(page_part)
-            chunk_number = int(chunk_part)
-
+            page_part, chunk_part = parts[1].split("_ChunkNo_")
             records.append(
                 {
                     "Document": doc_title,
-                    "Page": page_number,
-                    "Chunk Number": chunk_number,
+                    "Page": int(page_part),
+                    "Chunk Number": int(chunk_part),
                     "Relevant information": str(converted_text),
                     "File Path": pdf_filename,
                 }
@@ -246,11 +235,9 @@ def display_state_bills(selected_state):
             - Date (DD/MM/YYYY): Date of the bill in DD/MM/YYYY format
         Returns None if no bills are found for the state.
     """
-    # Load the FAISS index. (Reuse if already loaded; here we load again for clarity.)
-    faiss_store = load_faiss_index()
     # I tried using as_retriever() with a filter, but I wasn't sure the right search type to use.
     # pylint: disable=protected-access
-    all_docs = list(faiss_store.docstore._dict.values())
+    all_docs = list(st.session_state.index.docstore._dict.values())
     # Filter for documents that have metadata "State" matching selected_state.
     state_docs = [
         doc for doc in all_docs if doc.metadata.get("State") == selected_state
@@ -279,24 +266,88 @@ def display_state_bills(selected_state):
 
 
 def stream_data(result_of_llm):
+    """
+    This function streams the LLM result to the screen.
+
+    Args:
+        result_of_llm (str): The result of the LLM
+
+    Returns:
+        None
+    """
     for word in result_of_llm.split(" "):
         yield word + " "
         time.sleep(0.02)
 
 
-# @st.dialog(title="PDF Viewer", width="large")
 def show_pdf(file_path):
+    """
+    This function displays the PDF in a new tab.
+
+    Args:
+        file_path (str): The path to the PDF file to display
+
+    Returns:
+        None
+
+    Output:
+        iframe of the pdf viewer
+    """
     with open(file_path, "rb") as f:
         base64_pdf = base64.b64encode(f.read()).decode("utf-8")
-    pdf_display = f'<div style="text-align: center"><iframe src="data:application/pdf;base64,{base64_pdf}" width="1100" height="800" type="application/pdf"></iframe></div>'
+    pdf_display = f"""<div style="text-align: center">
+                    <iframe src="data:application/pdf;base64,{base64_pdf}"
+                    width="1100" height="800" type="application/pdf"></iframe>
+                    </div>"""
     st.markdown(pdf_display, unsafe_allow_html=True)
 
 
-def run_state_privacy_page():
+def display_pdf_section():
     """
-    This function runs the state privacy law page.
+    Displays the PDF section of the app, including:
+    - Creating a DataFrame without duplicate documents
+    - Showing document titles with "View PDF" buttons
+    - Displaying the selected PDF when a button is clicked
+
+    The function uses session state variables:
+    - df: The main DataFrame containing document info
+    - df_no_duplicates: DataFrame with duplicate documents removed
+    - selected_pdf: Path to currently selected PDF
+    - pdf_title: Title of currently selected PDF
     """
-    # Initialize session state variables if they don't exist
+    st.session_state.df_no_duplicates = pd.DataFrame()
+
+    # Remove duplicate rows based on Document column if DataFrame exists and has rows
+    if len(st.session_state.df) > 0:
+        st.session_state.df_no_duplicates = st.session_state.df.drop_duplicates(
+            subset=["Document"], keep="first"
+        )
+
+    # Display PDFs section if we have documents
+    if len(st.session_state.df_no_duplicates) > 0:
+        st.subheader("View Documents")
+        for i, row in st.session_state.df_no_duplicates.iterrows():
+            col_doc, col_btn = st.columns([1, 1])
+            with col_doc:
+                st.write(row["Document"])
+            with col_btn:
+                if st.button("View PDF", key=f"pdf_btn_{i}"):
+                    st.session_state.selected_pdf = row["File Path"]
+                    st.session_state.pdf_title = row["Document"]
+
+        # Display selected PDF
+        if st.session_state.selected_pdf:
+            st.markdown(f"### Document: {st.session_state.pdf_title}")
+            pdf_path = os.path.normpath(st.session_state.selected_pdf)
+            show_pdf(pdf_path)
+
+
+def initialize_session_state():
+    """
+    This function initializes the session state variables.
+    """
+    if "index" not in st.session_state:
+        st.session_state.index = load_faiss_index()
     if "df" not in st.session_state:
         st.session_state.df = pd.DataFrame()
     if "selected_pdf" not in st.session_state:
@@ -307,12 +358,16 @@ def run_state_privacy_page():
         st.session_state.user_question = ""
     if "llm_result" not in st.session_state:
         st.session_state.llm_result = None
-    if "index" not in st.session_state:
-        st.session_state.index = load_faiss_index()
     if "new_question" not in st.session_state:
         st.session_state.new_question = True
 
-    empty_column, logo_column, title_column = st.columns(
+
+def run_state_privacy_page():
+    """
+    This function runs the state privacy law page.
+    """
+
+    _, logo_column, title_column = st.columns(
         [0.01, 0.05, 0.94], gap="small", vertical_alignment="bottom"
     )
     with logo_column:
@@ -346,8 +401,6 @@ def run_state_privacy_page():
 
             ## we don't need to load index if it is not a new question
             if st.session_state.new_question:
-                # faiss_store = load_faiss_index()
-                close_results = True
                 filtered_results = (
                     st.session_state.index.similarity_search_with_relevance_scores(
                         query=user_question,
@@ -364,9 +417,7 @@ def run_state_privacy_page():
                         </p>
                     """
                     )
-                    close_results = False
 
-                # if close_results:
                 else:
 
                     # Prepare documents for the conversational chain.
@@ -384,22 +435,14 @@ def run_state_privacy_page():
                         )
                     }
 
-                    # Now we call the LLM in the first instance and pass it the user question as well as the documents
-                    # that the similiarity search function returned above
+                    # Gen summary from llm of relevant context
 
                     chain = get_conversational_chain()
                     firstresult = chain.invoke(
                         {"context": docs_for_chain, "question": user_question}
                     )
 
-                    # Now we pass the LLM response, along with the user query and the same documents to verify if the first
-                    # LLM response was coherent or not. Only upon a verification being done by this second LLM call will we
-                    # print things to screen.
-
-                    # The get_confirmation_result_chain function below can return a structured response (with introduction,
-                    # body, and conclusion) if the first LLM call gave a good quality response. However, if the response of
-                    # the first LLM call was not good, then a custom error message will be returned, which is then shown
-                    # on the screen.
+                    # Verify if the first LLM response was coherent or not.
 
                     chain = get_confirmation_result_chain()
                     result = chain.invoke(
@@ -417,9 +460,7 @@ def run_state_privacy_page():
                         st.write(result)
                     st.session_state.llm_result = result
 
-                    # On verifying that a structured LLM response (from the second LLM call) was obtained, we print a table
-                    # of information below the response. This is for AI explanability, and it shows which text segments that
-                    # were used to construct the LLM response
+                    # generate table of contextual info for explainability
 
                     if (
                         "Sorry, the LLM cannot currently generate a good enough response"
@@ -435,15 +476,12 @@ def run_state_privacy_page():
                         st.session_state.df = pd.DataFrame(records)
                     else:
                         st.write(
-                            "No relevant information found for the selected state based on your query."
+                            """No relevant information found for
+                            the selected state based on your query."""
                         )
             else:
                 st.write(st.session_state.llm_result)
                 st.write("---")
-        # else:
-        #     if st.session_state.llm_result:
-        #         st.write(st.session_state.llm_result)
-        #         st.write("---")
 
     # Display dataframe below columns if it exists and is not empty
     if st.session_state.new_question:
@@ -464,37 +502,15 @@ def run_state_privacy_page():
         if selected_state:
             st.subheader("Bills for " + selected_state)
             st.dataframe(display_state_bills(selected_state), hide_index=True)
-    st.session_state.df_no_duplicates = pd.DataFrame()
-    # Remove duplicate rows based on Document column if DataFrame exists and has rows
-    if len(st.session_state.df) > 0:
-        st.session_state.df_no_duplicates = st.session_state.df.drop_duplicates(
-            subset=["Document"], keep="first"
-        )
-    # Display PDFs section
-    if len(st.session_state.df_no_duplicates) > 0:
-        st.subheader("View Documents")
-        for i, row in st.session_state.df_no_duplicates.iterrows():
-            col_doc, col_btn = st.columns([1, 1])
-            with col_doc:
-                st.write(row["Document"])
-            with col_btn:
-                if st.button("View PDF", key=f"pdf_btn_{i}"):
-                    st.session_state.selected_pdf = row["File Path"]
-                    st.session_state.pdf_title = row["Document"]
-
-        # Display selected PDF
-        if st.session_state.selected_pdf:
-            st.markdown(f"### Document: {st.session_state.pdf_title}")
-            pdf_path = os.path.normpath(st.session_state.selected_pdf)
-            show_pdf(pdf_path)
-
-    return None
+    # Call the function to display the PDF section
+    display_pdf_section()
 
 
 def main():
     """
-    This function runs the main function.
+    This function runs the main function and loads the FAISS index.
     """
+    initialize_session_state()
     run_state_privacy_page()
 
 
