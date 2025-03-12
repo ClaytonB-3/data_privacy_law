@@ -224,7 +224,7 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
     return records
 
 
-def display_state_bills(selected_state):
+def display_selected_state_bills():
     """
     Retrieve all docs for selected state and return df of title and date.
     Args:
@@ -269,8 +269,9 @@ def display_state_bills(selected_state):
         st.session_state.df_bills = df_bills
         st.subheader("Bills for " + st.session_state.selected_state)
         st.dataframe(st.session_state.df_bills, hide_index=True)
-    else:
-        return None
+        return st.session_state.df_bills
+
+    return None
 
     # return df_bills
 
@@ -506,15 +507,10 @@ def run_state_privacy_page():
                 st.write(st.session_state.llm_result)
                 st.write("---")
 
-    # Display dataframe below columns if it exists and is not empty
+    # non text summary components
     display_relevant_info_df()
     with col2:
-        display_state_bills(st.session_state.selected_state)
-
-        # if selected_state:
-        #     st.subheader("Bills for " + selected_state)
-        #     st.dataframe(display_state_bills(st.session_state.selected_state), hide_index=True)
-    # Call the function to display the PDF section
+        display_selected_state_bills()
     display_pdf_section()
 
 
