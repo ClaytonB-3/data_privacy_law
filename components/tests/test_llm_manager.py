@@ -9,6 +9,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from experimental_llm_manager import extract_text_from_pdf
 
+
 class PdfExtractionMethod(unittest.TestCase):
     """
     Testing whether the PDF's extraction function is working properly 

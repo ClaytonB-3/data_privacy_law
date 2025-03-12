@@ -8,10 +8,10 @@ The final metadata for each chunk is:
     "Page": str(page_num),
     "Filename": pdf_path.split('/')[-1],
     "Path": "./" + "/".join(pdf_path.split("/")[-3:]),
-    "Title": "", 
-    "Date": "", 
-    "Type": "", 
-    "Sector": "", 
+    "Title": "",
+    "Date": "",
+    "Type": "",
+    "Sector": "",
     "State": "",
     "Chunk_id": f"{current_page_id}_ChunkNo_{current_chunk_index}"
 }
@@ -53,12 +53,11 @@ def extract_text_from_pdf(pdf_path):
     try:
         with open(pdf_path, "rb") as file:
             reader = PyPDF2.PdfReader(file)
-            for page_index in range(len(reader.pages)):
-                page = reader.pages[page_index]
+            for i, page in enumerate(reader.pages):
                 page_text = page.extract_text() or ""
                 text.append(page_text)
 
-    except Exception as e:
+    except FileNotFoundError as e:
         print("Error reading PDF:", e)
 
     return text
@@ -71,15 +70,22 @@ def parse_bill_info(pdf_text):
     { "Title": "", "Date": "", "Type": "", "Sector": "", "State": "" }
     """
     prompt_template = """
-        You are given the text of a bill from a PDF file.
+        You are given the text of a legal document from a PDF file.
         Extract the following details:
         1. Type of the bill (choose from: "State level sectoral", "Federal level", "Comprehensive State level", "GDPR").
-        2. If the bill is "State level sectoral", specify the sector (choose from: "Health", "Education", "Finance", "Telecommunications & Technology", "Government & Public Sector", "Retail & E-Commerce", "Employment & HR", "Media & Advertising", "Critical Infrastructure (Energy, Transportation, etc.)", "Children’s Data Protection"). Otherwise, set it to null.
+        Choose Comprehensive State Level if it is a state legislation related to more than one sector. 
+        2. If the bill is "State level sectoral", specify the sector (choose from: "Health", "Education", "Finance", 
+        "Telecommunications & Technology", "Government & Public Sector", "Retail & E-Commerce", "Employment & HR", 
+        "Media & Advertising", "Critical Infrastructure (Energy, Transportation, etc.)", 
+        "Children’s Data Protection"). Otherwise, set it to null.
         3. The latest date mentioned in the bill in MMDDYYYY format.
-        4. For state-level laws ("State level sectoral" or "Comprehensive State level"), which state is it associated with (e.g., "Texas", "California")? Otherwise, null.
-        5. The title of the bill in 15 words or less.
+        4. For state-level laws ("State level sectoral" or "Comprehensive State level"), which state is it 
+        associated with (e.g., "Texas", "California").
+        5. The title of the bill in 15 words or less. Use format (State name as the first word if it is a 
+        State level sectoral bill or Comprehensive State level bill. If it is not in these categories, write Federal as
+        the first word. Then put a colon ":" and write the title of the bill after that)
 
-        Return the information as a JSON object exactly in the following format:
+        Return the information as a JSON object EXACTLY in the following format:
         {{"Title": "", "Date": "", "Type": "", "Sector": "", "State": ""}}
 
         Bill text:
@@ -93,17 +99,20 @@ def parse_bill_info(pdf_text):
 
     result = chain.invoke({"context": [doc]})
     try:
-        # print("X"*50)
-        # print(f"\nResult is \n{result}\n")
+
         if result.startswith("```json"):
             result = result[len("```json") :].strip()
+
         if result.endswith("```"):
             result = result[:-3].strip()
 
         bill_info = json.loads(result)
-    except Exception as e:
-        print("Error parsing LLM response:", e)
+
+    except json.JSONDecodeError as json_err:
+        print("Error parsing LLM response:", json_err)
         bill_info = {}
+
+    print(f"bill_info is {bill_info}")
     return bill_info
 
 
@@ -157,8 +166,11 @@ def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder="./faiss_index
                 embeddings=embeddings,
                 allow_dangerous_deserialization=True,
             )
-        except Exception as e:
-            print("Error loading existing FAISS index; creating new one. Error:", e)
+        except (OSError, ValueError) as load_error:
+            print(
+                "Error loading existing FAISS index; creating new one. Error:",
+                load_error,
+            )
             faiss_store = None
     else:
         faiss_store = None
@@ -210,8 +222,12 @@ def get_conversational_chain():
     Sets up a QA chain using ChatGoogleGenerativeAI and a custom prompt template.
     """
     prompt_template = """
-        If the context has documents related to the question, start your answer with "According to my database of information, ".
-        If the context does not have documents related to the question, start your answer with "Sorry, the database does not have specific information about your question". After this, say on the next line "According to my training data, this is the answer:", and then write the answer on the next line from your training data. 
+        If the context has documents related to the question, start your answer with 
+        "According to my database of information, ".
+        If the context does not have documents related to the question, start your answer with 
+        "Sorry, the database does not have specific information about your question". After this, 
+        say on the next line "According to my training data, the answer to your question is...", and then write 
+        the answer on the next line from your training data. 
 
         Context:
         {context}
@@ -243,8 +259,16 @@ def get_confirmation_result_chain():
         I will provide you the answer to a question I asked an LLM model based on a given context. 
         Look at the question and the answer, and make sure that the answer is correct and coherent. 
         DO NOT MENTION THAT I HAVE ASKED YOU THIS QUESTION BEFORE.
-        If the answer does not make sense, state "Sorry, the document database doesn't provide enough information to answer your question accurately." Then on the next line you write "Based on my training data this is the answer -->". Provide a response based on the question, using your training data only thereafter.  
-        If the answer does make sense, state "According to the database of laws I have, your answer is -->", and then write an introduction, body and conclusion for the response, based on the question and answer and context you were provided. THERE MUST BE AN INTRODUCTION AND CONCLUSION.
+
+        If the answer does not make sense, state "Sorry, the LLM cannot currently generate a good enough response for 
+        this question. Please refer to the side table and see if there is anything from those topics that you would like
+        to know about."   
+
+        If the answer does make sense, state "The document database has an answer to your question. Here is the 
+        structured response based on TPLC's database", and then write the answer with an introduction, body 
+        and conclusion for the response. , based on the question and answer and context you were provided. 
+        DO NOT USE THE WORDS INTRODUCTION, BODY, CONCLUSION, in your response. 
+        THERE MUST BE AN INTRODUCTION AND CONCLUSION part to your response no matter what. 
 
         Context:
         {context}
@@ -298,13 +322,17 @@ def chunk_pdf_pages(texts_per_page, pdf_path, chunk_size=800, chunk_overlap=200)
                     "Source": pdf_path,
                     "Page": str(page_num),
                     "Filename": pdf_path.split("/")[-1],
-                    "Path": "./" + "/".join(pdf_path.split("/")[-3:])
+                    "Path": "./" + "/".join(pdf_path.split("/")[-3:]),
                 }
             )
     return chunk_texts, chunk_metadatas
 
 
 def obtain_text_of_chunk(chunk_id):
+    """
+    This function takes a chunk id, and then searches the whole FAISS dataset for that chunkid
+    When that chunkid is found, the associated text of that chunk is returned
+    """
     faiss_store = load_faiss_index()
     all_docs = list(faiss_store.docstore._dict.values())
     text_to_send_to_llm = None
@@ -315,7 +343,6 @@ def obtain_text_of_chunk(chunk_id):
         metadata = content.metadata if hasattr(content, "metadata") else {}
 
         current_chunk_id = metadata.get("Chunk_id")
-        # print("DEBUG: Document chunk_id:", current_chunk_id)
 
         # Only extract page content if the chunk IDs match.
         if current_chunk_id == chunk_id:
@@ -366,7 +393,7 @@ def main(pdf_paths):
     if not os.path.exists("./faiss_index"):
         os.makedirs("./faiss_index")
 
-    bill_info_list=[]
+    bill_info_list = []
     # Write document into faiss index
     for pdf_path in pdf_paths:
         print(f"\nProcessing: {pdf_path}\n")
@@ -389,7 +416,8 @@ def main(pdf_paths):
         # Step 3: Split the document into chunks and get the source and page number for each chunk
         chunk_texts, chunk_metadatas = chunk_pdf_pages(pages_of_pdf, pdf_path)
 
-        # Step 4: Combine the chunk metadata (Source and page number), with the doc metadata (Source, title etc.)
+        # Step 4: Combine the chunk metadata (Source and page number),
+        # with the doc metadata (Source, title etc.)
         for metadata_of_chunk in chunk_metadatas:
             metadata_of_chunk.update(bill_info)
 
@@ -439,7 +467,9 @@ def main(pdf_paths):
 
 if __name__ == "__main__":
     # Ask the user for the state name.
-    state_input = input("Enter state name (e.g., Texas): ").strip()
+    state_input = input(
+        "Enter folder name with PDF texts (e.g., Texas/Comprehensive/..): "
+    ).strip()
 
     # Construct the path to the PDFs folder.
     current_dir = os.path.dirname(os.path.abspath(__file__))

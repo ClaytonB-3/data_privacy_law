@@ -2,11 +2,13 @@
 This module creates and generates the state privacy law app for the streamlit app
 """
 
+import os
+import time
 import streamlit as st
 from streamlit_pdf_viewer import pdf_viewer
 import pandas as pd
 from langchain.docstore.document import Document
-from components.experimental_llm_manager import (
+from experimental_llm_manager import (
     load_faiss_index,
     get_conversational_chain,
     get_confirmation_result_chain,
@@ -68,6 +70,60 @@ us_states = [
     "Wisconsin",
     "Wyoming",
 ]
+
+st.set_page_config(page_title="Explore State Privacy Laws", layout="wide")
+
+styling_for_state_page = """
+<style>
+    [data-testid = "stAppViewContainer"]{
+    background-color: #fefae0;
+    opacity: 1;
+    background-image:  radial-gradient(#ccd5ae 1.1000000000000001px, transparent 1.1000000000000001px), 
+    radial-gradient(#ccd5ae 1.1000000000000001px, #fefae0 1.1000000000000001px);
+    background-size: 56px 56px;
+    background-position: 0 0,28px 28px;
+    color: #000;
+    }
+
+[data-testid="stSidebar"] * {
+    background-color: #dda15e;
+    opacity: 1;
+    color: #000 !important;
+    font-weight: bold;
+}
+
+[data-testid = "stSidebarNav"] * {
+    font-size: 18px;
+    padding-bottom:5px;
+    padding-top:5px;
+}
+
+[data-testid = "stExpander"] * {
+    background-color: #eece9f;
+    color: #000;
+    font-weight: bold;
+    font-size: 1.5 em;
+}
+
+[data-testid = "stElementContainer"] {
+    color: #000;
+    border-color: black;
+}
+
+[data-testid = "stTable"] * {
+    border-color: black;
+    color: #000;
+}
+
+[data-testid = "stMarkdownContainer"] {
+    color: #111;
+}
+
+</style>
+"""
+
+
+st.markdown(styling_for_state_page, unsafe_allow_html=True)
 
 
 def convert_date(date_str):
@@ -153,7 +209,7 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
             records.append(
                 {
                     "Document": doc_title,
-                    "Page Number": page_number,
+                    "Page": page_number,
                     "Chunk Number": chunk_number,
                     "Relevant information": str(converted_text),
                     "File Path": pdf_filename,
@@ -208,14 +264,25 @@ def display_state_bills(selected_state):
     return df_bills
 
 
+def stream_data(result_of_llm):
+    for word in result_of_llm.split(" "):
+        yield word + " "
+        time.sleep(0.02)
+
+
 def run_state_privacy_page():
     """
     This function runs the state privacy law page.
     """
-    st.set_page_config(layout="wide")
-    st.title("State Privacy Law Explorer")
+    empty_column, logo_column, title_column = st.columns(
+        [0.01, 0.05, 0.94], gap="small", vertical_alignment="bottom"
+    )
+    with logo_column:
+        st.image("images/map.png", width=75)
+    with title_column:
+        st.header("Explore State Privacy Laws")
 
-    col1, col2 = st.columns([5, 5])
+    col1, col2 = st.columns([0.7, 0.3])
     pdf_path = False
 
     with col1:
@@ -233,6 +300,8 @@ def run_state_privacy_page():
             # to ensure that only documents with metadata "State" equal to the
             # selected state are returned.
 
+            close_results = True
+
             filtered_results = faiss_store.similarity_search_with_relevance_scores(
                 query=user_question,
                 k=10,
@@ -241,58 +310,86 @@ def run_state_privacy_page():
             )
 
             if not filtered_results:
-                st.write(
+                st.html(
+                    """<p style = "font-weight:bold; font-size:1.3rem;">
                     "No relevant documents found for the selected state based on your query."
+                    </p>
+                """
                 )
-                return None
+                close_results = False
 
-            # Prepare documents for the conversational chain.
-            docs_for_chain = [doc for doc, score in filtered_results]
-            chunk_ids = [doc.metadata.get("Chunk_id") for doc in docs_for_chain]
-            pdf_paths = [doc.metadata.get("Path") for doc in docs_for_chain]
-            doc_titles = [doc.metadata.get("Title") for doc in docs_for_chain]
-            chunk_ids_w_filepaths_titles = {
-                chunk_id: (pdf_path, doc_title)
-                for chunk_id, pdf_path, doc_title in zip(
-                    chunk_ids, pdf_paths, doc_titles
+            if close_results:
+
+                # Prepare documents for the conversational chain.
+                # From various documents we retrieve their chunk id's, path, and title
+                # A dictionary of these values is then created
+
+                docs_for_chain = [doc for doc, score in filtered_results]
+                chunk_ids = [doc.metadata.get("Chunk_id") for doc in docs_for_chain]
+                pdf_paths = [doc.metadata.get("Path") for doc in docs_for_chain]
+                doc_titles = [doc.metadata.get("Title") for doc in docs_for_chain]
+                chunk_ids_w_filepaths_titles = {
+                    chunk_id: (pdf_path, doc_title)
+                    for chunk_id, pdf_path, doc_title in zip(
+                        chunk_ids, pdf_paths, doc_titles
+                    )
+                }
+
+                # Now we call the LLM in the first instance and pass it the user question as well as the documents
+                # that the similiarity search function returned above
+
+                chain = get_conversational_chain()
+                firstresult = chain.invoke(
+                    {"context": docs_for_chain, "question": user_question}
                 )
-            }
 
-            # Get the conversational chain and invoke it.
-            chain = get_conversational_chain()
-            firstresult = chain.invoke(
-                {"context": docs_for_chain, "question": user_question}
-            )
-            # result.usage_metadata # To see how many tokens were used
+                # Now we pass the LLM response, along with the user query and the same documents to verify if the first
+                # LLM response was coherent or not. Only upon a verification being done by this second LLM call will we
+                # print things to screen.
 
-            # Get the confirmation chain and invoke it.
-            chain = get_confirmation_result_chain()
-            result = chain.invoke(
-                {"context": docs_for_chain, "question": user_question, "answer": firstresult}
-            )
-            # result.usage_metadata # To see how many tokens were used
-            st.markdown("**Answer:**\n" + result, unsafe_allow_html=True)
-            st.write("---")
-            if (
-                "Sorry! The document database does not contain documents related to the query."
-                not in result
-            ):
-                records = process_chunk_records(
-                    chunk_ids_w_filepaths_titles, user_question
+                # The get_confirmation_result_chain function below can return a structured response (with introduction,
+                # body, and conclusion) if the first LLM call gave a good quality response. However, if the response of
+                # the first LLM call was not good, then a custom error message will be returned, which is then shown
+                # on the screen.
+
+                chain = get_confirmation_result_chain()
+                result = chain.invoke(
+                    {
+                        "context": docs_for_chain,
+                        "question": user_question,
+                        "answer": firstresult,
+                    }
                 )
-            else:
-                records = None
 
-            if records:
-                df = pd.DataFrame(records)
-                df.index = range(1, len(df) + 1)
-                st.table(df[["Document", "Page Number", "Relevant information"]])
-                pdf_path = df["File Path"].iloc[0]
-                pdf_title = df["Document"].iloc[0]
-            else:
-                st.write(
-                    "No relevant information found for the selected state based on your query."
-                )
+                st.write_stream(
+                    stream_data(result)
+                )  # Print outcome of the second LLM, word-by-word for stylistic effect
+                st.write("---")
+
+                # On verifying that a structured LLM response (from the second LLM call) was obtained, we print a table
+                # of information below the response. This is for AI explanability, and it shows which text segments that
+                # were used to construct the LLM response
+
+                if (
+                    "Sorry, the LLM cannot currently generate a good enough response"
+                    not in result
+                ):
+                    records = process_chunk_records(
+                        chunk_ids_w_filepaths_titles, user_question
+                    )
+                else:
+                    records = None
+
+                if records:
+                    df = pd.DataFrame(records)
+                    df.index = range(1, len(df) + 1)
+                    st.table(df[["Document", "Page", "Relevant information"]])
+                    pdf_path = df["File Path"].iloc[0]
+                    pdf_title = df["Document"].iloc[0]
+                else:
+                    st.write(
+                        "No relevant information found for the selected state based on your query."
+                    )
 
     with col2:
         if selected_state:
@@ -302,6 +399,7 @@ def run_state_privacy_page():
         with container_pdf:
             if pdf_path:
                 st.markdown(f"### Document: {pdf_title}")
+                pdf_path = os.path.normpath(pdf_path)
                 pdf_viewer(pdf_path, height=600)
 
     return None
