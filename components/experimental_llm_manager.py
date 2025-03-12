@@ -112,7 +112,7 @@ def parse_bill_info(pdf_text):
         print("Error parsing LLM response:", json_err)
         bill_info = {}
 
-    print(f"bill_info is {bill_info}")
+    # print(f"bill_info is {bill_info}")
     return bill_info
 
 
