@@ -284,10 +284,11 @@ def stream_data(result_of_llm):
         time.sleep(0.02)
 
 
+# @st.dialog(title="PDF Viewer", width="large")
 def show_pdf(file_path):
     with open(file_path, "rb") as f:
         base64_pdf = base64.b64encode(f.read()).decode("utf-8")
-    pdf_display = f'<div style="text-align: center"><iframe src="data:application/pdf;base64,{base64_pdf}" width="1200" height="800" type="application/pdf"></iframe></div>'
+    pdf_display = f'<div style="text-align: center"><iframe src="data:application/pdf;base64,{base64_pdf}" width="1100" height="800" type="application/pdf"></iframe></div>'
     st.markdown(pdf_display, unsafe_allow_html=True)
 
 
@@ -306,6 +307,10 @@ def run_state_privacy_page():
         st.session_state.user_question = ""
     if "llm_result" not in st.session_state:
         st.session_state.llm_result = None
+    if "index" not in st.session_state:
+        st.session_state.index = load_faiss_index()
+    if "new_question" not in st.session_state:
+        st.session_state.new_question = True
 
     empty_column, logo_column, title_column = st.columns(
         [0.01, 0.05, 0.94], gap="small", vertical_alignment="bottom"
@@ -327,9 +332,7 @@ def run_state_privacy_page():
         )
 
         if user_question:  # Only process if a question is asked
-            if (user_question != st.session_state.user_question) or (
-                user_question not in st.session_state
-            ):
+            if user_question != st.session_state.user_question:
                 st.session_state.user_question = user_question
                 st.session_state.new_question = True
                 st.session_state.df = (
@@ -341,107 +344,121 @@ def run_state_privacy_page():
             else:
                 st.session_state.new_question = False
 
-            faiss_store = load_faiss_index()
-            close_results = True
-            filtered_results = faiss_store.similarity_search_with_relevance_scores(
-                query=user_question,
-                k=10,
-                filter={"State": selected_state},
-                score_threshold=0.2,
-            )
-
-            if not filtered_results:
-                st.html(
-                    """<p style = "font-weight:bold; font-size:1.3rem;">
-                    "No relevant documents found for the selected state based on your query."
-                    </p>
-                """
-                )
-                close_results = False
-
-            if close_results:
-
-                # Prepare documents for the conversational chain.
-                # From various documents we retrieve their chunk id's, path, and title
-                # A dictionary of these values is then created
-
-                docs_for_chain = [doc for doc, score in filtered_results]
-                chunk_ids = [doc.metadata.get("Chunk_id") for doc in docs_for_chain]
-                pdf_paths = [doc.metadata.get("Path") for doc in docs_for_chain]
-                doc_titles = [doc.metadata.get("Title") for doc in docs_for_chain]
-                chunk_ids_w_filepaths_titles = {
-                    chunk_id: (pdf_path, doc_title)
-                    for chunk_id, pdf_path, doc_title in zip(
-                        chunk_ids, pdf_paths, doc_titles
+            ## we don't need to load index if it is not a new question
+            if st.session_state.new_question:
+                # faiss_store = load_faiss_index()
+                close_results = True
+                filtered_results = (
+                    st.session_state.index.similarity_search_with_relevance_scores(
+                        query=user_question,
+                        k=10,
+                        filter={"State": selected_state},
+                        score_threshold=0.2,
                     )
-                }
-
-                # Now we call the LLM in the first instance and pass it the user question as well as the documents
-                # that the similiarity search function returned above
-
-                chain = get_conversational_chain()
-                firstresult = chain.invoke(
-                    {"context": docs_for_chain, "question": user_question}
                 )
 
-                # Now we pass the LLM response, along with the user query and the same documents to verify if the first
-                # LLM response was coherent or not. Only upon a verification being done by this second LLM call will we
-                # print things to screen.
+                if not filtered_results:
+                    st.html(
+                        """<p style = "font-weight:bold; font-size:1.3rem;">
+                        "No relevant documents found for the selected state based on your query."
+                        </p>
+                    """
+                    )
+                    close_results = False
 
-                # The get_confirmation_result_chain function below can return a structured response (with introduction,
-                # body, and conclusion) if the first LLM call gave a good quality response. However, if the response of
-                # the first LLM call was not good, then a custom error message will be returned, which is then shown
-                # on the screen.
+                # if close_results:
+                else:
 
-                chain = get_confirmation_result_chain()
-                result = chain.invoke(
-                    {
-                        "context": docs_for_chain,
-                        "question": user_question,
-                        "answer": firstresult,
+                    # Prepare documents for the conversational chain.
+                    # From various documents we retrieve their chunk id's, path, and title
+                    # A dictionary of these values is then created
+
+                    docs_for_chain = [doc for doc, score in filtered_results]
+                    chunk_ids = [doc.metadata.get("Chunk_id") for doc in docs_for_chain]
+                    pdf_paths = [doc.metadata.get("Path") for doc in docs_for_chain]
+                    doc_titles = [doc.metadata.get("Title") for doc in docs_for_chain]
+                    chunk_ids_w_filepaths_titles = {
+                        chunk_id: (pdf_path, doc_title)
+                        for chunk_id, pdf_path, doc_title in zip(
+                            chunk_ids, pdf_paths, doc_titles
+                        )
                     }
-                )
 
-                if result != st.session_state.llm_result:
-                    st.write_stream(stream_data(result))
-                    st.write("---")
-                else:
-                    st.write(result)
-                st.session_state.llm_result = result
+                    # Now we call the LLM in the first instance and pass it the user question as well as the documents
+                    # that the similiarity search function returned above
 
-                # On verifying that a structured LLM response (from the second LLM call) was obtained, we print a table
-                # of information below the response. This is for AI explanability, and it shows which text segments that
-                # were used to construct the LLM response
-
-                if (
-                    "Sorry, the LLM cannot currently generate a good enough response"
-                    not in result
-                ):
-                    records = process_chunk_records(
-                        chunk_ids_w_filepaths_titles, user_question
+                    chain = get_conversational_chain()
+                    firstresult = chain.invoke(
+                        {"context": docs_for_chain, "question": user_question}
                     )
-                else:
-                    records = None
 
-                if records:
-                    st.session_state.df = pd.DataFrame(records)
-                else:
-                    st.write(
-                        "No relevant information found for the selected state based on your query."
+                    # Now we pass the LLM response, along with the user query and the same documents to verify if the first
+                    # LLM response was coherent or not. Only upon a verification being done by this second LLM call will we
+                    # print things to screen.
+
+                    # The get_confirmation_result_chain function below can return a structured response (with introduction,
+                    # body, and conclusion) if the first LLM call gave a good quality response. However, if the response of
+                    # the first LLM call was not good, then a custom error message will be returned, which is then shown
+                    # on the screen.
+
+                    chain = get_confirmation_result_chain()
+                    result = chain.invoke(
+                        {
+                            "context": docs_for_chain,
+                            "question": user_question,
+                            "answer": firstresult,
+                        }
                     )
-        else:
-            if st.session_state.llm_result:
+
+                    if result != st.session_state.llm_result:
+                        st.write_stream(stream_data(result))
+                        st.write("---")
+                    else:
+                        st.write(result)
+                    st.session_state.llm_result = result
+
+                    # On verifying that a structured LLM response (from the second LLM call) was obtained, we print a table
+                    # of information below the response. This is for AI explanability, and it shows which text segments that
+                    # were used to construct the LLM response
+
+                    if (
+                        "Sorry, the LLM cannot currently generate a good enough response"
+                        not in result
+                    ):
+                        records = process_chunk_records(
+                            chunk_ids_w_filepaths_titles, user_question
+                        )
+                    else:
+                        records = False  # None
+
+                    if records:
+                        st.session_state.df = pd.DataFrame(records)
+                    else:
+                        st.write(
+                            "No relevant information found for the selected state based on your query."
+                        )
+            else:
                 st.write(st.session_state.llm_result)
                 st.write("---")
+        # else:
+        #     if st.session_state.llm_result:
+        #         st.write(st.session_state.llm_result)
+        #         st.write("---")
 
     # Display dataframe below columns if it exists and is not empty
-    if user_question:
-        if records:
+    if st.session_state.new_question:
+        if len(st.session_state.df) > 0:
             st.dataframe(
                 st.session_state.df[["Document", "Page", "Relevant information"]],
                 hide_index=True,
                 use_container_width=True,
             )
+    else:
+        st.dataframe(
+            st.session_state.df[["Document", "Page", "Relevant information"]],
+            hide_index=True,
+            use_container_width=True,
+        )
 
     with col2:
         if selected_state:
