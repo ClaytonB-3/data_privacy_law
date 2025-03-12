@@ -72,14 +72,14 @@ us_states = [
 ]
 
 st.set_page_config(page_title="Explore State Privacy Laws", layout="wide")
-
+# fefae0 original color
 STYLING_FOR_STATE_PAGE = """
 <style>
     [data-testid = "stAppViewContainer"]{
-    background-color: #fefae0;
+    background-color: #f5f5f5;
     opacity: 1;
     background-image:  radial-gradient(#ccd5ae 1.1000000000000001px, transparent 1.1000000000000001px), 
-    radial-gradient(#ccd5ae 1.1000000000000001px, #fefae0 1.1000000000000001px);
+    radial-gradient(#ccd5ae 1.1000000000000001px, #f5f5f5 1.1000000000000001px);
     background-size: 56px 56px;
     background-position: 0 0,28px 28px;
     color: #000;
@@ -166,6 +166,7 @@ def create_state_selector():
         "Select a state to explore their privacy law", us_states, index=None
     )
     st.session_state["selected_state"] = selected_state
+    st.write(f"Selected state: {st.session_state['selected_state']}")
     return st.session_state["selected_state"]
 
 
@@ -237,32 +238,41 @@ def display_state_bills(selected_state):
     """
     # I tried using as_retriever() with a filter, but I wasn't sure the right search type to use.
     # pylint: disable=protected-access
-    all_docs = list(st.session_state.index.docstore._dict.values())
-    # Filter for documents that have metadata "State" matching selected_state.
-    state_docs = [
-        doc for doc in all_docs if doc.metadata.get("State") == selected_state
-    ]
-    if not state_docs:
-        st.write("No bills found for this state.")
+    if st.session_state.selected_state is not None:
+        all_docs = list(st.session_state.index.docstore._dict.values())
+        # Filter for documents that have metadata "State" matching selected_state.
+        state_docs = [
+            doc
+            for doc in all_docs
+            if doc.metadata.get("State") == st.session_state.selected_state
+        ]
+        if not state_docs:
+            st.write("No bills found for this state.")
+            return None
+
+        # Deduplicate bills based on Title and convert date format.
+        bills = {}
+        for doc in state_docs:
+            title = doc.metadata.get("Title", "No Title")
+            date = doc.metadata.get("Date", "No Date")
+
+            # Convert date from MMDDYYYY to DD/MM/YYYY.
+            date_converted = convert_date(date)
+            if title not in bills:
+                bills[title] = {
+                    "Title": title,
+                    "Effective Date (DD/MM/YYYY)": date_converted,
+                }
+        df_bills = pd.DataFrame(list(bills.values()))
+        # Reset index so it starts from 1.
+        # df_bills.index = range(1, len(df_bills) + 1)
+        st.session_state.df_bills = df_bills
+        st.subheader("Bills for " + st.session_state.selected_state)
+        st.dataframe(st.session_state.df_bills, hide_index=True)
+    else:
         return None
 
-    # Deduplicate bills based on Title and convert date format.
-    bills = {}
-    for doc in state_docs:
-        title = doc.metadata.get("Title", "No Title")
-        date = doc.metadata.get("Date", "No Date")
-
-        # Convert date from MMDDYYYY to DD/MM/YYYY.
-        date_converted = convert_date(date)
-        if title not in bills:
-            bills[title] = {
-                "Title": title,
-                "Effective Date (DD/MM/YYYY)": date_converted,
-            }
-    df_bills = pd.DataFrame(list(bills.values()))
-    # Reset index so it starts from 1.
-    df_bills.index = range(1, len(df_bills) + 1)
-    return df_bills
+    # return df_bills
 
 
 def stream_data(result_of_llm):
@@ -300,6 +310,18 @@ def show_pdf(file_path):
                     width="1100" height="800" type="application/pdf"></iframe>
                     </div>"""
     st.markdown(pdf_display, unsafe_allow_html=True)
+
+
+def display_relevant_info_df():
+    """
+    Displays the relevant information dataframe.
+    """
+    if len(st.session_state.df) > 0:
+        st.dataframe(
+            st.session_state.relevant_df,
+            hide_index=True,
+            use_container_width=True,
+        )
 
 
 def display_pdf_section():
@@ -342,6 +364,27 @@ def display_pdf_section():
             show_pdf(pdf_path)
 
 
+def map_chunk_to_metadata(filtered_results):
+    """
+    This function maps the filtered results to the metadata.
+
+    Args:
+        filtered_results (List[Tuple[Document, float]]): A list of tuples of Document and score
+
+    Returns:
+        tuple: A tuple of (list of documents, dictionary of chunk_id to (pdf_path, doc_title))
+    """
+    docs_for_chain = [doc for doc, score in filtered_results]
+    chunk_ids = [doc.metadata.get("Chunk_id") for doc in docs_for_chain]
+    pdf_paths = [doc.metadata.get("Path") for doc in docs_for_chain]
+    doc_titles = [doc.metadata.get("Title") for doc in docs_for_chain]
+    chunk_ids_w_filepaths_titles = {
+        chunk_id: (pdf_path, doc_title)
+        for chunk_id, pdf_path, doc_title in zip(chunk_ids, pdf_paths, doc_titles)
+    }
+    return docs_for_chain, chunk_ids_w_filepaths_titles
+
+
 def initialize_session_state():
     """
     This function initializes the session state variables.
@@ -378,8 +421,8 @@ def run_state_privacy_page():
     col1, col2 = st.columns([0.5, 0.5])
 
     with col1:
-        selected_state = create_state_selector()
-        st.write(f"You have chosen the state: {selected_state}")
+        st.session_state.selected_state = create_state_selector()
+        # st.write(f"You have chosen the state: {selected_state}")
 
         # Get the user's question and store in session state
         user_question = st.text_input(
@@ -399,13 +442,12 @@ def run_state_privacy_page():
             else:
                 st.session_state.new_question = False
 
-            ## we don't need to load index if it is not a new question
             if st.session_state.new_question:
                 filtered_results = (
                     st.session_state.index.similarity_search_with_relevance_scores(
                         query=user_question,
                         k=10,
-                        filter={"State": selected_state},
+                        filter={"State": st.session_state.selected_state},
                         score_threshold=0.2,
                     )
                 )
@@ -419,31 +461,16 @@ def run_state_privacy_page():
                     )
 
                 else:
-
                     # Prepare documents for the conversational chain.
-                    # From various documents we retrieve their chunk id's, path, and title
-                    # A dictionary of these values is then created
-
-                    docs_for_chain = [doc for doc, score in filtered_results]
-                    chunk_ids = [doc.metadata.get("Chunk_id") for doc in docs_for_chain]
-                    pdf_paths = [doc.metadata.get("Path") for doc in docs_for_chain]
-                    doc_titles = [doc.metadata.get("Title") for doc in docs_for_chain]
-                    chunk_ids_w_filepaths_titles = {
-                        chunk_id: (pdf_path, doc_title)
-                        for chunk_id, pdf_path, doc_title in zip(
-                            chunk_ids, pdf_paths, doc_titles
-                        )
-                    }
-
+                    docs_for_chain, chunk_ids_w_filepaths_titles = (
+                        map_chunk_to_metadata(filtered_results)
+                    )
                     # Gen summary from llm of relevant context
-
                     chain = get_conversational_chain()
                     firstresult = chain.invoke(
                         {"context": docs_for_chain, "question": user_question}
                     )
-
                     # Verify if the first LLM response was coherent or not.
-
                     chain = get_confirmation_result_chain()
                     result = chain.invoke(
                         {
@@ -452,7 +479,6 @@ def run_state_privacy_page():
                             "answer": firstresult,
                         }
                     )
-
                     if result != st.session_state.llm_result:
                         st.write_stream(stream_data(result))
                         st.write("---")
@@ -469,39 +495,25 @@ def run_state_privacy_page():
                         records = process_chunk_records(
                             chunk_ids_w_filepaths_titles, user_question
                         )
+                        st.session_state.df = pd.DataFrame(records)
+                        st.session_state.relevant_df = st.session_state.df[
+                            ["Document", "Page", "Relevant information"]
+                        ]
                     else:
                         records = False  # None
 
-                    if records:
-                        st.session_state.df = pd.DataFrame(records)
-                    else:
-                        st.write(
-                            """No relevant information found for
-                            the selected state based on your query."""
-                        )
             else:
                 st.write(st.session_state.llm_result)
                 st.write("---")
 
     # Display dataframe below columns if it exists and is not empty
-    if st.session_state.new_question:
-        if len(st.session_state.df) > 0:
-            st.dataframe(
-                st.session_state.df[["Document", "Page", "Relevant information"]],
-                hide_index=True,
-                use_container_width=True,
-            )
-    else:
-        st.dataframe(
-            st.session_state.df[["Document", "Page", "Relevant information"]],
-            hide_index=True,
-            use_container_width=True,
-        )
-
+    display_relevant_info_df()
     with col2:
-        if selected_state:
-            st.subheader("Bills for " + selected_state)
-            st.dataframe(display_state_bills(selected_state), hide_index=True)
+        display_state_bills(st.session_state.selected_state)
+
+        # if selected_state:
+        #     st.subheader("Bills for " + selected_state)
+        #     st.dataframe(display_state_bills(st.session_state.selected_state), hide_index=True)
     # Call the function to display the PDF section
     display_pdf_section()
 
