@@ -9,9 +9,16 @@ from unittest.mock import patch, MagicMock
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 
-from experimental_llm_manager import (add_to_faiss_index, parse_bill_info,
-                                      extract_text_from_pdf, chunk_pdf_pages,
-                                      load_faiss_index, calculate_updated_chunk_ids)
+from experimental_llm_manager import (add_to_faiss_index,
+                                      parse_bill_info,
+                                      extract_text_from_pdf,
+                                      chunk_pdf_pages,
+                                      load_faiss_index,
+                                      calculate_updated_chunk_ids,
+                                      obtain_text_of_chunk,
+                                      llm_simplify_chunk_text,
+                                      get_conversational_chain,
+                                      get_confirmation_result_chain)
 
 class TestPDFExtraction(unittest.TestCase):
     """
@@ -154,6 +161,173 @@ class TestLLMManager(unittest.TestCase):
         for ind in range(len(test_case_2)):
             self.assertEqual(expected_2[ind], test_case_2_result[ind]['Chunk_id'])
 
+    @patch("experimental_llm_manager.load_faiss_index")
+    def test_obtain_text_of_chunk(self, mock_load_faiss):
+        """
+        Test whether obtain_text_of_chunk works properly
+        """
+        mock_faiss_instance = MagicMock()
+        mock_load_faiss.return_value = mock_faiss_instance
+
+        # test1 - general situation
+        mock_doc1 = MagicMock(spec=[])
+        mock_doc1.page_content = 'text123'
+
+        mock_doc2 = MagicMock(spec=[])
+        mock_doc2.metadata = {'Chunk_id' : 1}
+        mock_doc2.page_content = 'text123'
+
+        mock_doc3 = MagicMock(spec=[])
+        mock_doc3.metadata = {'Chunk_id' : 1}
+        mock_doc3.page_content = 'text456'
+
+        mock_faiss_instance.docstore._dict = {'Chunk_id_1' : mock_doc1,
+                                              'Chunk_id_2' : mock_doc2,
+                                              'Chunk_id_3' : mock_doc3}
+        self.assertEqual(obtain_text_of_chunk(1), 'text123')
+        self.assertEqual(obtain_text_of_chunk(2), None)
+
+        # test2 - No page_content
+        mock_doc1 = MagicMock(spec=[])
+        mock_doc1.metadata = {'Chunk_id' : 1}
+        mock_faiss_instance.docstore._dict = {'Chunk_id_1' : mock_doc1}
+        self.assertEqual(obtain_text_of_chunk(1), '')
+
+
+class TestLLMResponse(unittest.TestCase):
+    """
+    Test whether LLM Model related funcitons work properly
+    """
+
+    @patch("experimental_llm_manager.create_stuff_documents_chain")
+    @patch("experimental_llm_manager.ChatGoogleGenerativeAI")
+    @patch("experimental_llm_manager.PromptTemplate")
+    def test_llm_simplify_chunk_text(self, mock_prompt, mock_genai, mock_chain):
+        """
+        Test llm_simplify_chunk_text runs properly
+        
+        Args:
+            mock_prompt: mock patch for PromptTemplate
+            mock_genai: mock genai for ChatGoogleGenerativeAI
+            mock_chain: mock chain for create_stuff_documents_chain
+        """
+        _ = mock_prompt, mock_genai
+        text_of_chunk = "TestTestTest"
+        llm_simplify_chunk_text(text_of_chunk)
+        mock_chain.assert_called_once()
+
+    @patch("experimental_llm_manager.create_stuff_documents_chain")
+    @patch("experimental_llm_manager.ChatGoogleGenerativeAI")
+    @patch("experimental_llm_manager.PromptTemplate")
+    def test_get_confirmation_result_chain(self, mock_prompt, mock_genai, mock_chain):
+        """
+        Test get_confirmation_result_chai runs properly
+        
+        Args:
+            mock_prompt: mock patch for PromptTemplate
+            mock_genai: mock genai for ChatGoogleGenerativeAI
+            mock_chain: mock chain for create_stuff_documents_chain
+        """
+        _ = mock_prompt, mock_genai
+        get_confirmation_result_chain()
+        mock_chain.assert_called_once()
+
+    @patch("experimental_llm_manager.create_stuff_documents_chain")
+    @patch("experimental_llm_manager.ChatGoogleGenerativeAI")
+    @patch("experimental_llm_manager.PromptTemplate")
+    def test_get_conversational_chain(self, mock_prompt, mock_genai, mock_chain):
+        """
+        Test get_conversational_chain runs properly
+        
+        Args:
+            mock_prompt: mock patch for PromptTemplate
+            mock_genai: mock genai for ChatGoogleGenerativeAI
+            mock_chain: mock chain for create_stuff_documents_chain
+        """
+        _ = mock_prompt, mock_genai
+        get_conversational_chain()
+        mock_chain.assert_called_once()
+
+    def test_llm_response_str(self):
+        """
+        Test sample inputs and confirm whether the LLM responses are as expected.
+        """
+        mock_doc1 = MagicMock()
+        mock_doc1.page_content = """A BILL TO BE ENTITLED\n
+AN ACT\n
+relating to prohibiting use of social media platforms by children.\n \
+BE IT ENACTED BY THE LEGISLATURE OF THE STATE OF TEXAS:\n \
+SECTION 1. Chapter 120, Business & Commerce Code, is\n \
+amended by adding Subchapter C-1 to read as follows:\n \
+SUBCHAPTER C-1. USER AGE LIMITATION\n \
+Sec. 120.111. DEFINITIONS. In this subchapter:"""
+        mock_doc2 = MagicMock()
+        mock_doc2.page_content = """(1) "Account holder" means a resident of this state\n \
+who opens an account or creates a profile or is identified by the\n \
+social media platform by a unique identifier while using or\n \
+accessing a social media platform.\n \
+(2) "Child" means an individual who is younger than 18\n \
+years of age.\n \
+Sec. 120.112. USE BY CHILDREN PROHIBITED. To the extent\n \
+permitted by federal law, including the Children's Online Privacy\n \
+Protection Act (15 U.S.C. Section 6501 et seq.), a child may not use\n \
+a social media platform.\n \
+Sec. 120.113. ACCOUNT AND VERIFICATION REQUIREMENTS. (a)\n \
+A social media platform shall:"""
+        mock_doc3 = MagicMock()
+        mock_doc3.page_content = """(1) prohibit a child from entering into a contract\n \
+with the social media platform to become an account holder; and\n \
+(2) verify that a person seeking to become an account\n \
+holder is 18 years of age or older before accepting the person as an\n \
+account holder.\n \
+(b) A social media platform must use a commercially\n \
+reasonable method that relies on public or private transactional\n \
+data to verify the age of an individual as required under Subsection\n \
+(a).\n \
+(c) Personal information obtained under Subsection (b) may\n \
+only be used for age verification purposes and may not be retained,\n \
+used, transmitted, or otherwise conveyed, regardless of whether\n \
+consideration is given for the information. The social media\n \
+company must delete personal information immediately upon\n \
+completion of the age verification process."""
+        docs_for_chain = [mock_doc1, mock_doc2, mock_doc3]
+
+        user_question1 = "Tell me about social media data"
+        chain1 = get_conversational_chain()
+        firstresult1 = chain1.invoke(
+            {"context": docs_for_chain, "question": user_question1}
+        )
+
+        chain2 = get_confirmation_result_chain()
+        result1 = chain2.invoke(
+            {
+                "context": docs_for_chain,
+                "question": user_question1,
+                "answer": firstresult1,
+            }
+        )
+        self.assertGreater(len(firstresult1), 0)
+        self.assertGreater(len(result1), 0)
+        self.assertTrue("""The document database has an answer to your \
+question. Here is the structured response based \
+on TPLC's database""" in result1)
+
+        user_question2 = "Who is the president of USA?"
+        chain1 = get_conversational_chain()
+        firstresult2 = chain1.invoke(
+            {"context": docs_for_chain, "question": user_question2}
+        )
+
+        chain2 = get_confirmation_result_chain()
+        result2 = chain2.invoke(
+            {
+                "context": docs_for_chain,
+                "question": user_question2,
+                "answer": firstresult2,
+            }
+        )
+        self.assertTrue("""Sorry, the LLM cannot currently generate \
+a good enough response""" in result2)
 
 class TestFAISSIndex(unittest.TestCase):
     """
@@ -220,7 +394,7 @@ class TestFAISSIndex(unittest.TestCase):
 
         # Mock FAISS load
         mock_faiss_instance = MagicMock()
-        mock_faiss_instance.docstore._dict.keys.return_value = {"123"}
+        mock_faiss_instance.docstore._dict = {"123":"123"}
         mock_faiss.load_local.return_value = mock_faiss_instance
 
         add_to_faiss_index(["new chunk"], [{"Chunk_id": "456"}])  # New ID
