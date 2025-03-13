@@ -2,10 +2,10 @@
 This module creates and generates the state privacy law app for the streamlit app
 """
 
+import base64
 import os
 import time
 import streamlit as st
-from streamlit_pdf_viewer import pdf_viewer
 import pandas as pd
 from langchain.docstore.document import Document
 from experimental_llm_manager import (
@@ -72,14 +72,14 @@ us_states = [
 ]
 
 st.set_page_config(page_title="Explore State Privacy Laws", layout="wide")
-
-styling_for_state_page = """
+# fefae0 original color
+STYLING_FOR_STATE_PAGE = """
 <style>
     [data-testid = "stAppViewContainer"]{
-    background-color: #fefae0;
+    background-color: #f5f5f5;
     opacity: 1;
     background-image:  radial-gradient(#ccd5ae 1.1000000000000001px, transparent 1.1000000000000001px), 
-    radial-gradient(#ccd5ae 1.1000000000000001px, #fefae0 1.1000000000000001px);
+    radial-gradient(#ccd5ae 1.1000000000000001px, #f5f5f5 1.1000000000000001px);
     background-size: 56px 56px;
     background-position: 0 0,28px 28px;
     color: #000;
@@ -119,11 +119,24 @@ styling_for_state_page = """
     color: #111;
 }
 
+.stButton > button {
+    background-color: white !important;
+    color: black !important;
+    border: 1px solid black !important;
+    font-weight: bold !important;
+}
+
+.stButton > button:hover {
+    background-color: #f8f8f8 !important;
+    border: 1px solid black !important;
+}
+
+
 </style>
 """
 
 
-st.markdown(styling_for_state_page, unsafe_allow_html=True)
+st.markdown(STYLING_FOR_STATE_PAGE, unsafe_allow_html=True)
 
 
 def convert_date(date_str):
@@ -153,6 +166,7 @@ def create_state_selector():
         "Select a state to explore their privacy law", us_states, index=None
     )
     st.session_state["selected_state"] = selected_state
+    st.write(f"Selected state: {st.session_state['selected_state']}")
     return st.session_state["selected_state"]
 
 
@@ -179,16 +193,12 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
             continue
         # Expected format: Texas_Data_Privacy_and_Security_Act_Page_35_ChunkNo_1
         try:
-
             text_of_chunk = obtain_text_of_chunk(cid)
             # st.write(f"\nText of Chunk is {text_of_chunk}")
-
             doc_for_processing_chunk = Document(page_content=text_of_chunk, metadata={})
             # st.write(f"\nDoc for processing Chunk is {doc_for_processing_chunk}")
-
             parsed_text_for_llm_input = llm_simplify_chunk_text(text_of_chunk)
             # st.write(f"\nDoc for processing Chunk is {parsed_text_for_llm_input}")
-
             converted_text = parsed_text_for_llm_input.invoke(
                 {
                     "context": [doc_for_processing_chunk],
@@ -196,21 +206,15 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
                 }
             )
             # st.write(f"\nConverted text is {converted_text}")
-
             parts = cid.split("_Page_")
             if len(parts) != 2:
                 continue
-
-            rest = parts[1]  # e.g. 35_ChunkNo_1
-            page_part, chunk_part = rest.split("_ChunkNo_")
-            page_number = int(page_part)
-            chunk_number = int(chunk_part)
-
+            page_part, chunk_part = parts[1].split("_ChunkNo_")
             records.append(
                 {
                     "Document": doc_title,
-                    "Page": page_number,
-                    "Chunk Number": chunk_number,
+                    "Page": int(page_part),
+                    "Chunk Number": int(chunk_part),
                     "Relevant information": str(converted_text),
                     "File Path": pdf_filename,
                 }
@@ -220,7 +224,7 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
     return records
 
 
-def display_state_bills(selected_state):
+def display_selected_state_bills():
     """
     Retrieve all docs for selected state and return df of title and date.
     Args:
@@ -232,49 +236,182 @@ def display_state_bills(selected_state):
             - Date (DD/MM/YYYY): Date of the bill in DD/MM/YYYY format
         Returns None if no bills are found for the state.
     """
-    # Load the FAISS index. (Reuse if already loaded; here we load again for clarity.)
-    faiss_store = load_faiss_index()
     # I tried using as_retriever() with a filter, but I wasn't sure the right search type to use.
     # pylint: disable=protected-access
-    all_docs = list(faiss_store.docstore._dict.values())
-    # Filter for documents that have metadata "State" matching selected_state.
-    state_docs = [
-        doc for doc in all_docs if doc.metadata.get("State") == selected_state
-    ]
-    if not state_docs:
-        st.write("No bills found for this state.")
-        return None
+    if st.session_state.selected_state is not None:
+        all_docs = list(st.session_state.index.docstore._dict.values())
+        # Filter for documents that have metadata "State" matching selected_state.
+        state_docs = [
+            doc
+            for doc in all_docs
+            if doc.metadata.get("State") == st.session_state.selected_state
+        ]
+        if not state_docs:
+            st.write("No bills found for this state.")
+            return None
 
-    # Deduplicate bills based on Title and convert date format.
-    bills = {}
-    for doc in state_docs:
-        title = doc.metadata.get("Title", "No Title")
-        date = doc.metadata.get("Date", "No Date")
+        # Deduplicate bills based on Title and convert date format.
+        bills = {}
+        for doc in state_docs:
+            title = doc.metadata.get("Title", "No Title")
+            date = doc.metadata.get("Date", "No Date")
 
-        # Convert date from MMDDYYYY to DD/MM/YYYY.
-        date_converted = convert_date(date)
-        if title not in bills:
-            bills[title] = {
-                "Title": title,
-                "Effective Date (DD/MM/YYYY)": date_converted,
-            }
-    df_bills = pd.DataFrame(list(bills.values()))
-    # Reset index so it starts from 1.
-    df_bills.index = range(1, len(df_bills) + 1)
-    return df_bills
+            # Convert date from MMDDYYYY to DD/MM/YYYY.
+            date_converted = convert_date(date)
+            if title not in bills:
+                bills[title] = {
+                    "Title": title,
+                    "Effective Date (DD/MM/YYYY)": date_converted,
+                }
+        df_bills = pd.DataFrame(list(bills.values()))
+        # Reset index so it starts from 1.
+        # df_bills.index = range(1, len(df_bills) + 1)
+        st.session_state.df_bills = df_bills
+        st.subheader("Bills for " + st.session_state.selected_state)
+        st.dataframe(st.session_state.df_bills, hide_index=True)
+        return st.session_state.df_bills
+
+    return None
+
+    # return df_bills
 
 
 def stream_data(result_of_llm):
+    """
+    This function streams the LLM result to the screen.
+
+    Args:
+        result_of_llm (str): The result of the LLM
+
+    Returns:
+        None
+    """
     for word in result_of_llm.split(" "):
         yield word + " "
         time.sleep(0.02)
+
+
+def show_pdf(file_path):
+    """
+    This function displays the PDF in a new tab.
+
+    Args:
+        file_path (str): The path to the PDF file to display
+
+    Returns:
+        None
+
+    Output:
+        iframe of the pdf viewer
+    """
+    with open(file_path, "rb") as f:
+        base64_pdf = base64.b64encode(f.read()).decode("utf-8")
+    pdf_display = f"""<div style="text-align: center">
+                    <iframe src="data:application/pdf;base64,{base64_pdf}"
+                    width="1100" height="800" type="application/pdf"></iframe>
+                    </div>"""
+    st.markdown(pdf_display, unsafe_allow_html=True)
+
+
+def display_relevant_info_df():
+    """
+    Displays the relevant information dataframe.
+    """
+    if len(st.session_state.df) > 0:
+        st.dataframe(
+            st.session_state.relevant_df,
+            hide_index=True,
+            use_container_width=True,
+        )
+
+
+def display_pdf_section():
+    """
+    Displays the PDF section of the app, including:
+    - Creating a DataFrame without duplicate documents
+    - Showing document titles with "View PDF" buttons
+    - Displaying the selected PDF when a button is clicked
+
+    The function uses session state variables:
+    - df: The main DataFrame containing document info
+    - df_no_duplicates: DataFrame with duplicate documents removed
+    - selected_pdf: Path to currently selected PDF
+    - pdf_title: Title of currently selected PDF
+    """
+    st.session_state.df_no_duplicates = pd.DataFrame()
+
+    # Remove duplicate rows based on Document column if DataFrame exists and has rows
+    if len(st.session_state.df) > 0:
+        st.session_state.df_no_duplicates = st.session_state.df.drop_duplicates(
+            subset=["Document"], keep="first"
+        )
+
+    # Display PDFs section if we have documents
+    if len(st.session_state.df_no_duplicates) > 0:
+        st.subheader("View Documents")
+        for i, row in st.session_state.df_no_duplicates.iterrows():
+            col_doc, col_btn = st.columns([1, 1])
+            with col_doc:
+                st.write(row["Document"])
+            with col_btn:
+                if st.button("View PDF", key=f"pdf_btn_{i}"):
+                    st.session_state.selected_pdf = row["File Path"]
+                    st.session_state.pdf_title = row["Document"]
+
+        # Display selected PDF
+        if st.session_state.selected_pdf:
+            st.markdown(f"### Document: {st.session_state.pdf_title}")
+            pdf_path = os.path.normpath(st.session_state.selected_pdf)
+            show_pdf(pdf_path)
+
+
+def map_chunk_to_metadata(filtered_results):
+    """
+    This function maps the filtered results to the metadata.
+
+    Args:
+        filtered_results (List[Tuple[Document, float]]): A list of tuples of Document and score
+
+    Returns:
+        tuple: A tuple of (list of documents, dictionary of chunk_id to (pdf_path, doc_title))
+    """
+    docs_for_chain = [doc for doc, score in filtered_results]
+    chunk_ids = [doc.metadata.get("Chunk_id") for doc in docs_for_chain]
+    pdf_paths = [doc.metadata.get("Path") for doc in docs_for_chain]
+    doc_titles = [doc.metadata.get("Title") for doc in docs_for_chain]
+    chunk_ids_w_filepaths_titles = {
+        chunk_id: (pdf_path, doc_title)
+        for chunk_id, pdf_path, doc_title in zip(chunk_ids, pdf_paths, doc_titles)
+    }
+    return docs_for_chain, chunk_ids_w_filepaths_titles
+
+
+def initialize_session_state():
+    """
+    This function initializes the session state variables.
+    """
+    if "index" not in st.session_state:
+        st.session_state.index = load_faiss_index()
+    if "df" not in st.session_state:
+        st.session_state.df = pd.DataFrame()
+    if "selected_pdf" not in st.session_state:
+        st.session_state.selected_pdf = None
+    if "pdf_title" not in st.session_state:
+        st.session_state.pdf_title = None
+    if "user_question" not in st.session_state:
+        st.session_state.user_question = ""
+    if "llm_result" not in st.session_state:
+        st.session_state.llm_result = None
+    if "new_question" not in st.session_state:
+        st.session_state.new_question = True
 
 
 def run_state_privacy_page():
     """
     This function runs the state privacy law page.
     """
-    empty_column, logo_column, title_column = st.columns(
+
+    _, logo_column, title_column = st.columns(
         [0.01, 0.05, 0.94], gap="small", vertical_alignment="bottom"
     )
     with logo_column:
@@ -282,133 +419,106 @@ def run_state_privacy_page():
     with title_column:
         st.header("Explore State Privacy Laws")
 
-    col1, col2 = st.columns([0.7, 0.3])
-    pdf_path = False
+    col1, col2 = st.columns([0.5, 0.5])
 
     with col1:
+        st.session_state.selected_state = create_state_selector()
+        # st.write(f"You have chosen the state: {selected_state}")
 
-        selected_state = create_state_selector()
-        st.write(f"You have chosen the state: {selected_state}")
+        # Get the user's question and store in session state
+        user_question = st.text_input(
+            "Ask a question about State Privacy Laws:", key="question_input"
+        )
 
-        # Get the user's question.
-        user_question = st.text_input("Ask a question about State Privacy Laws:")
-
-        if user_question:
-            # Load the FAISS index.
-            faiss_store = load_faiss_index()
-            # Use the similarity_search_with_relevance_scores function with a filter
-            # to ensure that only documents with metadata "State" equal to the
-            # selected state are returned.
-
-            close_results = True
-
-            filtered_results = faiss_store.similarity_search_with_relevance_scores(
-                query=user_question,
-                k=10,
-                filter={"State": selected_state},
-                score_threshold=0.2,
-            )
-
-            if not filtered_results:
-                st.html(
-                    """<p style = "font-weight:bold; font-size:1.3rem;">
-                    "No relevant documents found for the selected state based on your query."
-                    </p>
-                """
+        if user_question:  # Only process if a question is asked
+            if user_question != st.session_state.user_question:
+                st.session_state.user_question = user_question
+                st.session_state.new_question = True
+                st.session_state.df = (
+                    pd.DataFrame()
+                )  # Reset results when question changes
+                st.session_state.llm_result = (
+                    None  # Reset LLM result when question changes
                 )
-                close_results = False
+            else:
+                st.session_state.new_question = False
 
-            if close_results:
-
-                # Prepare documents for the conversational chain.
-                # From various documents we retrieve their chunk id's, path, and title
-                # A dictionary of these values is then created
-
-                docs_for_chain = [doc for doc, score in filtered_results]
-                chunk_ids = [doc.metadata.get("Chunk_id") for doc in docs_for_chain]
-                pdf_paths = [doc.metadata.get("Path") for doc in docs_for_chain]
-                doc_titles = [doc.metadata.get("Title") for doc in docs_for_chain]
-                chunk_ids_w_filepaths_titles = {
-                    chunk_id: (pdf_path, doc_title)
-                    for chunk_id, pdf_path, doc_title in zip(
-                        chunk_ids, pdf_paths, doc_titles
+            if st.session_state.new_question:
+                filtered_results = (
+                    st.session_state.index.similarity_search_with_relevance_scores(
+                        query=user_question,
+                        k=10,
+                        filter={"State": st.session_state.selected_state},
+                        score_threshold=0.2,
                     )
-                }
-
-                # Now we call the LLM in the first instance and pass it the user question as well as the documents
-                # that the similiarity search function returned above
-
-                chain = get_conversational_chain()
-                firstresult = chain.invoke(
-                    {"context": docs_for_chain, "question": user_question}
                 )
 
-                # Now we pass the LLM response, along with the user query and the same documents to verify if the first
-                # LLM response was coherent or not. Only upon a verification being done by this second LLM call will we
-                # print things to screen.
+                if not filtered_results:
+                    st.html(
+                        """<p style = "font-weight:bold; font-size:1.3rem;">
+                        "No relevant documents found for the selected state based on your query."
+                        </p>
+                    """
+                    )
 
-                # The get_confirmation_result_chain function below can return a structured response (with introduction,
-                # body, and conclusion) if the first LLM call gave a good quality response. However, if the response of
-                # the first LLM call was not good, then a custom error message will be returned, which is then shown
-                # on the screen.
+                else:
+                    # Prepare documents for the conversational chain.
+                    docs_for_chain, chunk_ids_w_filepaths_titles = (
+                        map_chunk_to_metadata(filtered_results)
+                    )
+                    # Gen summary from llm of relevant context
+                    chain = get_conversational_chain()
+                    firstresult = chain.invoke(
+                        {"context": docs_for_chain, "question": user_question}
+                    )
+                    # Verify if the first LLM response was coherent or not.
+                    chain = get_confirmation_result_chain()
+                    result = chain.invoke(
+                        {
+                            "context": docs_for_chain,
+                            "question": user_question,
+                            "answer": firstresult,
+                        }
+                    )
+                    if result != st.session_state.llm_result:
+                        st.write_stream(stream_data(result))
+                        st.write("---")
+                    else:
+                        st.write(result)
+                    st.session_state.llm_result = result
 
-                chain = get_confirmation_result_chain()
-                result = chain.invoke(
-                    {
-                        "context": docs_for_chain,
-                        "question": user_question,
-                        "answer": firstresult,
-                    }
-                )
+                    # generate table of contextual info for explainability
 
-                st.write_stream(
-                    stream_data(result)
-                )  # Print outcome of the second LLM, word-by-word for stylistic effect
+                    if (
+                        "Sorry, the LLM cannot currently generate a good enough response"
+                        not in result
+                    ):
+                        records = process_chunk_records(
+                            chunk_ids_w_filepaths_titles, user_question
+                        )
+                        st.session_state.df = pd.DataFrame(records)
+                        st.session_state.relevant_df = st.session_state.df[
+                            ["Document", "Page", "Relevant information"]
+                        ]
+                    else:
+                        records = False  # None
+
+            else:
+                st.write(st.session_state.llm_result)
                 st.write("---")
 
-                # On verifying that a structured LLM response (from the second LLM call) was obtained, we print a table
-                # of information below the response. This is for AI explanability, and it shows which text segments that
-                # were used to construct the LLM response
-
-                if (
-                    "Sorry, the LLM cannot currently generate a good enough response"
-                    not in result
-                ):
-                    records = process_chunk_records(
-                        chunk_ids_w_filepaths_titles, user_question
-                    )
-                else:
-                    records = None
-
-                if records:
-                    df = pd.DataFrame(records)
-                    df.index = range(1, len(df) + 1)
-                    st.table(df[["Document", "Page", "Relevant information"]])
-                    pdf_path = df["File Path"].iloc[0]
-                    pdf_title = df["Document"].iloc[0]
-                else:
-                    st.write(
-                        "No relevant information found for the selected state based on your query."
-                    )
-
+    # non text summary components
+    display_relevant_info_df()
     with col2:
-        if selected_state:
-            st.subheader("Bills for " + selected_state)
-            st.table(display_state_bills(selected_state))
-        container_pdf = st.container()
-        with container_pdf:
-            if pdf_path:
-                st.markdown(f"### Document: {pdf_title}")
-                pdf_path = os.path.normpath(pdf_path)
-                pdf_viewer(pdf_path, height=600)
-
-    return None
+        display_selected_state_bills()
+    display_pdf_section()
 
 
 def main():
     """
-    This function runs the main function.
+    This function runs the main function and loads the FAISS index.
     """
+    initialize_session_state()
     run_state_privacy_page()
 
 
