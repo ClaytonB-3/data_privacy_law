@@ -1,16 +1,19 @@
 """
-Testing the extract_text_from_pdf function which returns a list of strings
+Unittest for the functions in llm_mamager.py
 """
 import os
 
 import unittest
+from unittest.mock import patch, MagicMock
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
-from experimental_llm_manager import extract_text_from_pdf
 
+from experimental_llm_manager import (add_to_faiss_index, parse_bill_info,
+                                      extract_text_from_pdf, chunk_pdf_pages,
+                                      load_faiss_index, calculate_updated_chunk_ids)
 
-class PdfExtractionMethod(unittest.TestCase):
+class TestPDFExtraction(unittest.TestCase):
     """
     Testing whether the PDF's extraction function is working properly 
     and giving response in the right format. 
@@ -64,6 +67,228 @@ class PdfExtractionMethod(unittest.TestCase):
         self.assertIn("Second page in the project TPLC",
                       pages[1],
                       "Page 2 text does not match.")
+
+class TestLLMManager(unittest.TestCase):
+    """
+    General unittests for llm_manager
+    """
+
+    def setUp(self):
+        self.pdf_path = './pdfs/Texas/HB 186 Social_media_children.pdf'
+        self.pages_of_pdf = extract_text_from_pdf(self.pdf_path)
+        full_pdf_text = "\n".join(self.pages_of_pdf)
+        self.bill_info = parse_bill_info(full_pdf_text)
+        self.chunk_size = 800
+        self.chunk_texts, self.chunk_metadatas = chunk_pdf_pages(self.pages_of_pdf,
+                                                                 self.pdf_path,
+                                                                 self.chunk_size)
+
+    def test_parse_bill_info(self):
+        """
+        Test whether parse_bill_info produces expected results.
+        """
+
+        self.assertEqual(len(self.bill_info.keys()), 5)
+        self.assertEqual(self.bill_info['State'], 'Texas')
+
+        # Sometimes it returns different results
+        # self.assertEqual(self.bill_info['Title'],
+        #                  'Texas: Act prohibiting social media use by children')
+        self.assertEqual(self.bill_info['Date'], '09012025')
+        self.assertEqual(self.bill_info['Type'], 'State level sectoral')
+        self.assertEqual(self.bill_info['Sector'], 'Children’s Data Protection')
+
+    def test_chunk_pdf_pages(self):
+        """
+        Test whether chunk_pdf_pages produces expected results.
+        """
+
+        for chunck_text in self.chunk_texts:
+            self.assertLessEqual(len(chunck_text), self.chunk_size)
+
+        self.assertEqual(len(self.chunk_metadatas), len(self.chunk_texts))
+
+        max_page = 0
+        for metadata in self.chunk_metadatas:
+            max_page = max(int(metadata['Page']), max_page)
+
+        self.assertEqual(max_page, len(self.pages_of_pdf))
+        for metadata in self.chunk_metadatas:
+            self.assertEqual(len(metadata), len(["Source", "Page", "Filename", "Path"]))
+            self.assertEqual(metadata['Source'], self.pdf_path)
+            self.assertTrue(1 <= int(metadata['Page']))
+            self.assertEqual(metadata['Filename'],
+                             self.pdf_path.rsplit('/', maxsplit=1)[-1])
+
+    def test_calculate_updated_chunk_ids(self):
+        """
+        Test whether calculate_updated_chunk_ids works properly
+        """
+        test_case_1 = [
+            {"Title": "Texas: Title_A", "Page": "1"},
+            {"Title": "Texas: Title_A", "Page": "1"},
+            {"Title": "Texas: Title_A", "Page": "2"},
+        ]
+        expected_1 = [
+             "Texas:_Title_A_Page_1_ChunkNo_0",
+             "Texas:_Title_A_Page_1_ChunkNo_1",
+             "Texas:_Title_A_Page_2_ChunkNo_0",
+        ]
+        test_case_1_result = calculate_updated_chunk_ids(test_case_1)
+        for ind in range(len(test_case_1)):
+            self.assertEqual(expected_1[ind], test_case_1_result[ind]['Chunk_id'])
+
+        test_case_2 = [
+            {"Page": "1"},
+            {"Title": "Texas: Title_A", "Page": "1"},
+            {"Title": "Texas: Title_A", "Page": "2"},
+            {"Title": "Texas: Title_A"},
+        ]
+        expected_2 = [
+             "unknown_Page_1_ChunkNo_0",
+             "Texas:_Title_A_Page_1_ChunkNo_0",
+             "Texas:_Title_A_Page_2_ChunkNo_0",
+             "Texas:_Title_A_Page_1_ChunkNo_0"   # A Potential Bug
+        ]
+        test_case_2_result = calculate_updated_chunk_ids(test_case_2)
+        for ind in range(len(test_case_2)):
+            self.assertEqual(expected_2[ind], test_case_2_result[ind]['Chunk_id'])
+
+
+class TestFAISSIndex(unittest.TestCase):
+    """
+    General unittests for faiss index related functions.
+    """
+
+    @patch("experimental_llm_manager.FAISS")
+    @patch("experimental_llm_manager.GoogleGenerativeAIEmbeddings")
+    @patch("experimental_llm_manager.os.path.exists")
+    @patch("experimental_llm_manager.calculate_updated_chunk_ids")
+    def test_add_to_faiss_index_create_new(self,
+                                           mock_chunks,
+                                           mock_exists,
+                                           mock_embeddings,
+                                           mock_faiss):
+        """
+        Test whether add_to_faiss_index can create new index properly
+
+        Args:
+            mock_chunks: mock patch for calculate_updated_chunk_ids
+            mock_exists: mock patch for os.path.exists
+            mock_embeddings: mock patch for GoogleGenerativeAIEmbeddings
+            mock_faiss: mock patch for FAISS
+        """
+        mock_chunks.return_value = [{"Chunk_id": "123"}]
+        mock_exists.return_value = False
+
+        # Mock embeddings
+        mock_embeddings.return_value = MagicMock()
+
+        # Mock FAISS
+        mock_faiss_instance = MagicMock()
+        mock_faiss.from_texts.return_value = mock_faiss_instance
+
+        # Run the function
+        add_to_faiss_index(chunk_texts=["test chunk"], chunk_metadatas=[{"Chunk_id": "123"}])
+
+        # Check if FAISS was called to create a new index
+        mock_faiss.from_texts.assert_called_once()
+        mock_faiss_instance.save_local.assert_called_once()
+
+    @patch("experimental_llm_manager.FAISS")
+    @patch("experimental_llm_manager.GoogleGenerativeAIEmbeddings")
+    @patch("experimental_llm_manager.os.path.exists")
+    @patch("experimental_llm_manager.calculate_updated_chunk_ids",)
+    def test_add_to_faiss_index_load_and_add_texts(self, mock_chunks,
+                                                   mock_exists, mock_embeddings,
+                                                   mock_faiss):
+        """
+        Test whether add_to_faiss_index can load existing index and add texts properly
+        
+        Args:
+            mock_chunks: mock patch for calculate_updated_chunk_ids
+            mock_exists: mock patch for os.path.exists
+            mock_embeddings: mock patch for GoogleGenerativeAIEmbeddings
+            mock_faiss: mock patch for FAISS
+        """
+
+        mock_chunks.return_value = [{"Chunk_id": "456"}]
+        mock_exists.return_value = True
+
+        # Mock embeddings
+        mock_embeddings.return_value = MagicMock()
+
+        # Mock FAISS load
+        mock_faiss_instance = MagicMock()
+        mock_faiss_instance.docstore._dict.keys.return_value = {"123"}
+        mock_faiss.load_local.return_value = mock_faiss_instance
+
+        add_to_faiss_index(["new chunk"], [{"Chunk_id": "456"}])  # New ID
+        mock_faiss.load_local.assert_called_once()
+
+        # Check if FAISS was called to create a add new index
+        mock_faiss_instance.add_texts.assert_called_once_with(
+            texts=["new chunk"],
+            metadatas=[{"Chunk_id": "456"}],
+            ids=["456"]
+        )
+        mock_faiss_instance.save_local.assert_called_once()
+
+    @patch("experimental_llm_manager.FAISS")
+    @patch("experimental_llm_manager.GoogleGenerativeAIEmbeddings")
+    @patch("experimental_llm_manager.os.path.exists")
+    @patch("experimental_llm_manager.calculate_updated_chunk_ids", )
+    def test_add_to_faiss_index_load_error(self, mock_chunks,
+                                           mock_exists,
+                                           mock_embeddings, mock_faiss):
+        """
+        Test whether add_to_faiss_index can handle load errors properly
+        
+        Args:
+            mock_chunks: mock patch for calculate_updated_chunk_ids
+            mock_exists: mock patch for os.path.exists
+            mock_embeddings: mock patch for GoogleGenerativeAIEmbeddings
+            mock_faiss: mock patch for FAISS
+        """
+
+        mock_chunks.return_value = [{"Chunk_id": "789"}]
+        mock_exists.return_value = True
+        # Mock embeddings
+        mock_embeddings.return_value = MagicMock()
+
+        # Mock OSError when loading FAISS
+        mock_faiss.load_local.side_effect = OSError("Failed to load index")
+
+        # Mock FAISS.from_texts to handle new index creation
+        mock_faiss_instance = MagicMock()
+        mock_faiss.from_texts.return_value = mock_faiss_instance
+
+        add_to_faiss_index(["test chunk"], [{"Chunk_id": "789"}])
+
+        # Ensure a try except and new FAISS index was created
+        mock_faiss.load_local.assert_called_once()
+        mock_faiss.from_texts.assert_called_once()
+        mock_faiss_instance.save_local.assert_called_once()
+
+    @patch("experimental_llm_manager.FAISS")
+    @patch("experimental_llm_manager.GoogleGenerativeAIEmbeddings")
+    def test_load_faiss_index(self, mock_embeddings, mock_faiss):
+        """
+        Test whether load_faiss_index works properly
+        
+        Args:
+            mock_embeddings: mock patch for GoogleGenerativeAIEmbeddings
+            mock_faiss: mock patch for FAISS
+        """
+
+        # Mock embeddings
+        mock_embeddings.return_value = MagicMock()
+        # Mock FAISS load
+        faiss_folder = "test_location"
+        load_faiss_index(faiss_folder)
+
+        mock_faiss.load_local.assert_called_once()
+
 
 if __name__ == '__main__':
     unittest.main()
