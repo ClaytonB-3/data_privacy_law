@@ -130,7 +130,7 @@ def calculate_updated_chunk_ids(chunk_metadatas):
     for meta in chunk_metadatas:
         source = meta.get("Title", "unknown")
         source = source.replace(" ", "_")
-        page = meta.get("page", "1")
+        page = meta.get("Page", "1")
         current_page_id = f"{source}_Page_{page}"
 
         if current_page_id == last_page_id:
@@ -295,6 +295,32 @@ def get_confirmation_result_chain():
     return create_stuff_documents_chain(llm=model, prompt=prompt)
 
 
+def get_document_specific_summary():
+    """
+    Sets up a QA chain using ChatGoogleGenerativeAI and a custom prompt template.
+    """
+    prompt_template = """
+    I will provide text that is concatinated responses from an LLM model in response
+    to a question about data privacy bills. I need you summarize the text in a way
+    that is easy to read and understand without adding any additional information. 
+    The summary should be in short paragraphs or bullet points.
+
+    Text:
+    {text}
+
+    Summary:
+    """
+    model = ChatGoogleGenerativeAI(
+        model="gemini-2.0-flash-001",
+        temperature=0.2,
+        system_prompt=(
+            """You are a helpful assistant that summarizes text without adding any additional information. """
+        ),
+    )
+    prompt = PromptTemplate(template=prompt_template, input_variables=["text"])
+    return create_stuff_documents_chain(llm=model, prompt=prompt)
+
+
 def chunk_pdf_pages(texts_per_page, pdf_path, chunk_size=800, chunk_overlap=200):
     """
     Takes a list of page texts, splits each page into smaller
@@ -412,6 +438,7 @@ def main(pdf_paths):
         # Add PDF path to bill info for CSV
         bill_info["Path"] = "./" + "/".join(pdf_path.split("/")[-3:])
         bill_info["Filename"] = pdf_path.split("/")[-1]
+        bill_info["Title"] = bill_info["Title"]
         bill_info_list.append(bill_info)
         # Step 3: Split the document into chunks and get the source and page number for each chunk
         chunk_texts, chunk_metadatas = chunk_pdf_pages(pages_of_pdf, pdf_path)
@@ -474,7 +501,8 @@ if __name__ == "__main__":
     # Construct the path to the PDFs folder.
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
-    pdfs_folder = os.path.join(parent_dir, "pdfs", state_input)
+    # pdfs_folder = os.path.join(parent_dir, "pdfs", state_input)
+    pdfs_folder = os.path.join(current_dir, "pdfs", state_input)
 
     # print(f"This is the PDF Folder\n:{pdfs_folder}")
 
