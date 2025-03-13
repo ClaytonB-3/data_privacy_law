@@ -12,6 +12,7 @@ from experimental_llm_manager import (
     load_faiss_index,
     get_conversational_chain,
     get_confirmation_result_chain,
+    get_document_specific_summary,
     obtain_text_of_chunk,
     llm_simplify_chunk_text,
 )
@@ -75,6 +76,11 @@ st.set_page_config(page_title="Explore State Privacy Laws", layout="wide")
 # fefae0 original color
 STYLING_FOR_STATE_PAGE = """
 <style>
+    /* Set default text color for all elements */
+    * {
+        color: #000;
+    }
+
     [data-testid = "stAppViewContainer"]{
     background-color: #f5f5f5;
     opacity: 1;
@@ -84,54 +90,78 @@ STYLING_FOR_STATE_PAGE = """
     background-position: 0 0,28px 28px;
     color: #000;
     }
+    [data-testid="stSelectbox"] {
+        color: white !important;
+    }
+    
+    div[data-baseweb="select"] > div {
+    background-color: light grey;
+    }
 
-[data-testid="stSidebar"] * {
-    background-color: #dda15e;
-    opacity: 1;
-    color: #000 !important;
-    font-weight: bold;
-}
+    [data-testid="stSelectbox"] > div[role="button"] {
+        color: white !important;
+    }
 
-[data-testid = "stSidebarNav"] * {
-    font-size: 18px;
-    padding-bottom:5px;
-    padding-top:5px;
-}
+    [data-testid="stSelectbox"] div[role="listbox"] * {
+        color: white !important;
+    }
 
-[data-testid = "stExpander"] * {
-    background-color: #eece9f;
-    color: #000;
-    font-weight: bold;
-    font-size: 1.5 em;
-}
+    [data-testid="stSidebar"] {
+        background-color: #dda15e;
+        opacity: 1;
+    }
 
-[data-testid = "stElementContainer"] {
-    color: #000;
-    border-color: black;
-}
+    [data-testid="stSidebar"] * {
+        color: #000 !important;
+        font-weight: bold;
+    }
 
-[data-testid = "stTable"] * {
-    border-color: black;
-    color: #000;
-}
+    [data-testid = "stSidebarNav"] * {
+        font-size: 18px;
+        padding-bottom:5px;
+        padding-top:5px;
+    }
 
-[data-testid = "stMarkdownContainer"] {
-    color: #111;
-}
+    [data-testid = "stExpander"] {
+        background-color: #eece9f;
+    }
 
-.stButton > button {
-    background-color: white !important;
-    color: black !important;
-    border: 1px solid black !important;
-    font-weight: bold !important;
-}
+    [data-testid = "stExpander"] * {
+        color: #000 !important;
+        font-weight: bold;
+    }
 
-.stButton > button:hover {
-    background-color: #f8f8f8 !important;
-    border: 1px solid black !important;
-}
+    /* Fix for dataframes and tables */
+    [data-testid = "stDataFrame"] * {
+        color: #000 !important;
+        background-color: transparent !important;
+    }
 
+    /* Fix for error messages */
+    .stException, .stError {
+        color: red !important;
+        background-color: transparent !important;
+    }
 
+    [data-testid = "stElementContainer"] {
+        border-color: black;
+    }
+
+    [data-testid = "stTable"] * {
+        border-color: black;
+    }
+
+    .stButton > button {
+        background-color: white !important;
+        color: black !important;
+        border: 1px solid black !important;
+        font-weight: bold !important;
+    }
+
+    .stButton > button:hover {
+        background-color: #f8f8f8 !important;
+        border: 1px solid black !important;
+    }
 </style>
 """
 
@@ -215,7 +245,7 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
                     "Document": doc_title,
                     "Page": int(page_part),
                     "Chunk Number": int(chunk_part),
-                    "Relevant information": str(converted_text),
+                    "Relevant Information": str(converted_text),
                     "File Path": pdf_filename,
                 }
             )
@@ -318,11 +348,25 @@ def display_relevant_info_df():
     Displays the relevant information dataframe.
     """
     if len(st.session_state.df) > 0:
+        # st.dataframe(
+        #     st.session_state.df,
+        #     hide_index=True,
+        #     use_container_width=True,
+        # )
         st.dataframe(
-            st.session_state.relevant_df,
+            st.session_state.relevant_df.groupby(["Document", "Page"], as_index=False)
+            .agg({"Relevant Information": lambda x: "\n".join(x)})
+            .sort_values(["Document", "Page"]),
             hide_index=True,
-            use_container_width=True,
+            # height=2000,
         )
+    # if len(st.session_state.df) > 0:
+    #     st.dataframe(
+    #         st.session_state.relevant_df,
+    #         hide_index=True,
+    #         use_container_width=True,
+    #         row_height=400,
+    #     )
 
 
 def display_pdf_section():
@@ -342,21 +386,29 @@ def display_pdf_section():
 
     # Remove duplicate rows based on Document column if DataFrame exists and has rows
     if len(st.session_state.df) > 0:
-        st.session_state.df_no_duplicates = st.session_state.df.drop_duplicates(
-            subset=["Document"], keep="first"
-        )
+        # Group by Document first to organize data per document
+        documents_grouped = st.session_state.df.groupby("Document")
+        # Add section header for sources and relevant information
+        st.markdown("### Sources and Relevant Information")
 
-    # Display PDFs section if we have documents
-    if len(st.session_state.df_no_duplicates) > 0:
-        st.subheader("View Documents")
-        for i, row in st.session_state.df_no_duplicates.iterrows():
-            col_doc, col_btn = st.columns([1, 1])
-            with col_doc:
-                st.write(row["Document"])
-            with col_btn:
-                if st.button("View PDF", key=f"pdf_btn_{i}"):
-                    st.session_state.selected_pdf = row["File Path"]
-                    st.session_state.pdf_title = row["Document"]
+        # Create collapsers for each document
+        for doc_name, doc_group in documents_grouped:
+            with st.expander(f"## 📄 {doc_name}"):
+                # Group the document's data by page and create a table
+                page_data = (
+                    doc_group.groupby(["Page", "File Path"], as_index=False)
+                    .agg({"Relevant Information": lambda x: "\n".join(x)})
+                    .sort_values("Page")
+                )
+                page_data["Page"] = page_data["Page"].astype(int)
+
+                for index, row in page_data.iterrows():
+                    st.write(f"Page {row['Page']}:")
+                    st.write(row["Relevant Information"])
+                # Add View PDF button for this document
+                if st.button("View PDF", key=f"pdf_btn_{doc_name}"):
+                    st.session_state.selected_pdf = page_data["File Path"].iloc[0]
+                    st.session_state.pdf_title = doc_name
 
         # Display selected PDF
         if st.session_state.selected_pdf:
@@ -498,7 +550,7 @@ def run_state_privacy_page():
                         )
                         st.session_state.df = pd.DataFrame(records)
                         st.session_state.relevant_df = st.session_state.df[
-                            ["Document", "Page", "Relevant information"]
+                            ["Document", "Page", "Relevant Information"]
                         ]
                     else:
                         records = False  # None
@@ -508,7 +560,7 @@ def run_state_privacy_page():
                 st.write("---")
 
     # non text summary components
-    display_relevant_info_df()
+    # display_relevant_info_df()
     with col2:
         display_selected_state_bills()
     display_pdf_section()
