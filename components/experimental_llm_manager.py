@@ -393,8 +393,7 @@ def llm_simplify_chunk_text(text_for_llm):
     prompt_template = """
         Provide any information from the provided context that is relevant to the question.
         Only use the information from the context to answer the question.
-        Answer in points. Dont give any introductions and get straight to the point. 
-        Summarize in the context of the question
+        Be brief, answer in points. Dont give any introductions and get straight to the point. 
 
         Context:
         {context}
@@ -407,6 +406,11 @@ def llm_simplify_chunk_text(text_for_llm):
     model = ChatGoogleGenerativeAI(
         model="gemini-2.0-flash-001",
         temperature=0.1,
+        system_prompt=(
+            """
+            Your knowledge is only limited to the information in the provided context.
+            Be brief and answer in points without introduction or context."""
+        ),
     )
     prompt = PromptTemplate(
         template=prompt_template, input_variables=["context", "question"]

@@ -229,7 +229,7 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
         # Expected format: Texas_Data_Privacy_and_Security_Act_Page_35_ChunkNo_1
         try:
             text_of_chunk = obtain_text_of_chunk(cid)
-            # st.write(f"\nText of Chunk is {text_of_chunk}")
+            st.write(f"\nText of Chunk is {text_of_chunk}")
             doc_for_processing_chunk = Document(page_content=text_of_chunk, metadata={})
             # st.write(f"\nDoc for processing Chunk is {doc_for_processing_chunk}")
             # st.html(f"""<p style="font-weight:bold; font-size:.5rem;">{cid}</p>""")
@@ -244,7 +244,7 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
                     "question": user_question,
                 }
             )
-            # st.write(f"\nConverted text is {converted_text}")
+            st.write(f"\nConverted text is {converted_text}")
 
             parts = cid.split("_Page_")
             if len(parts) != 2:
