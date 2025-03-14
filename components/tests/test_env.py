@@ -34,7 +34,8 @@ class TestEnvironment(unittest.TestCase):
     def test_env_vars_google_api_key(self):
         ''' Test the google_api_key.
         '''
-        google_api_key = os.environ.get("google_api_key")
+        load_dotenv()
+        google_api_key = os.environ.get("GOOGLE_API_KEY")
         length_of_the_key = len(google_api_key)
         self.assertEqual(length_of_the_key, 39)
 
@@ -67,7 +68,8 @@ class TestEnvironment(unittest.TestCase):
         # genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
         
         # Test in github
-        genai.configure(api_key=os.environ.get("google_api_key"))
+        load_dotenv()
+        genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
         
         models_list = genai.list_models()
         TestResult = False
