@@ -8,6 +8,7 @@ from unittest.mock import patch, MagicMock
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
+import google.generativeai as genai
 
 from experimental_llm_manager import (add_to_faiss_index,
                                       parse_bill_info,
@@ -19,6 +20,8 @@ from experimental_llm_manager import (add_to_faiss_index,
                                       llm_simplify_chunk_text,
                                       get_conversational_chain,
                                       get_confirmation_result_chain)
+
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 class TestPDFExtraction(unittest.TestCase):
     """
