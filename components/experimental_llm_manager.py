@@ -143,7 +143,10 @@ def calculate_updated_chunk_ids(chunk_metadatas):
 
     return chunk_metadatas
 
-def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder="./faiss_index", index_name= "index.faiss"):
+
+def add_to_faiss_index(
+    chunk_texts, chunk_metadatas, faiss_folder="./faiss_index", index_name="index.faiss"
+):
     """
     Create or load an existing FAISS index and add new document chunks.
     """
@@ -295,13 +298,16 @@ def get_document_specific_summary():
     Sets up a QA chain using ChatGoogleGenerativeAI and a custom prompt template.
     """
     prompt_template = """
-    I will provide text that is concatinated responses from an LLM model in response
-    to a question about data privacy bills. I need you summarize the text in a way
-    that is easy to read and understand without adding any additional information. 
-    The summary should be in short paragraphs or bullet points.
+    I will provide a single page from a bill and a question or topic. Using only information from 
+    that page, provide a brief summary of the key points from the page that relate to the bill.
+    Respond in bullet points. Only use information from the page provided and the question or topic. 
 
-    Text:
-    {text}
+    context:
+    {context}
+
+    Question: {question}
+
+
 
     Summary:
     """
@@ -309,7 +315,7 @@ def get_document_specific_summary():
         model="gemini-2.0-flash-001",
         temperature=0.2,
         system_prompt=(
-            """You are a helpful assistant that summarizes text without adding any additional information. """
+            """You only have knowledge based on the provided text and question or topic."""
         ),
     )
     prompt = PromptTemplate(template=prompt_template, input_variables=["text"])

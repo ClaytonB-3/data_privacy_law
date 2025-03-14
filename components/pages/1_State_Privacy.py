@@ -5,8 +5,10 @@ This module creates and generates the state privacy law app for the streamlit ap
 import base64
 import os
 import time
-import streamlit as st
+
 import pandas as pd
+import PyPDF2
+import streamlit as st
 from langchain.docstore.document import Document
 from experimental_llm_manager import (
     load_faiss_index,
@@ -205,7 +207,7 @@ def create_state_selector():
     return st.session_state["selected_state"]
 
 
-def process_chunk_records(chunk_ids_with_filenames, user_question):
+def process_chunk_records(chunk_ids_with_metadata, user_question):
     """
     This function creates a list of dictionies of document, page num, and chunk num to query LLM
 
@@ -222,14 +224,16 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
             - Relevant information in chunk (str): LLM-processed text relevant to user question
     """
     # Parse the chunk_id to build a table of Document, Page Number, and Chunk Number.
+    st.write("Chunks found:", [chunk for chunk in chunk_ids_with_metadata.keys()])
     records = []
-    for cid, (pdf_filename, doc_title) in chunk_ids_with_filenames.items():
+    for cid, (pdf_filename, doc_title, doc_page) in chunk_ids_with_metadata.items():
         if not cid:
             continue
         # Expected format: Texas_Data_Privacy_and_Security_Act_Page_35_ChunkNo_1
         try:
             text_of_chunk = obtain_text_of_chunk(cid)
             st.write(f"\nText of Chunk is {text_of_chunk}")
+            st.write(f"Chunk Id is {cid}")
             doc_for_processing_chunk = Document(page_content=text_of_chunk, metadata={})
             # st.write(f"\nDoc for processing Chunk is {doc_for_processing_chunk}")
             # st.html(f"""<p style="font-weight:bold; font-size:.5rem;">{cid}</p>""")
@@ -262,6 +266,56 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
 
         except Exception as e:
             st.write(f"Error parsing chunk_id: {cid}. Error: {e}")
+    return records
+
+
+def generate_page_summary(chunk_ids_with_metadata, user_question):
+    """
+    This function generates a summary of the page based on the user's question.
+    """
+    records = []
+    st.write(f"chunk_ids_with_metadata: {chunk_ids_with_metadata}")
+    unique_pdf_paths = set(pdf_path for pdf_path, _, _ in chunk_ids_with_metadata)
+    unique_pdf_paths_list = list(unique_pdf_paths)
+    for pdf_path in unique_pdf_paths_list:
+        st.write(f"Processing PDF: {pdf_path}")
+        # Get all chunks for this PDF path
+        chunk_pdf_pages = []
+        all_pdf_pages = []
+        with open(pdf_path, "rb") as file:
+            reader = PyPDF2.PdfReader(file)
+            for i, page in enumerate(reader.pages):
+                page_text = page.extract_text() or ""
+                all_pdf_pages.append(page_text)
+        for path, title, page_num in chunk_ids_with_metadata:
+            for i, page_text in enumerate(all_pdf_pages):
+                # st.write(f"Comparison details:")
+                # st.write(f"Path equality: {path == pdf_path}")
+                # st.write(f"Path repr: {repr(path)}")
+                # st.write(f"PDF path repr: {repr(pdf_path)}")
+                # st.write(f"Page num equality: {i + 1 == page_num}")
+                # st.write(f"i + 1: {i + 1}, page_num: {page_num}")
+                if (i + 1 == int(page_num)) and (path == pdf_path):
+                    chunk_pdf_pages.append(title)
+                    chunk_pdf_pages.append(page_text)
+                    chunk_pdf_pages.append(page_num)
+                    st.text(chunk_pdf_pages)
+
+        chain = get_document_specific_summary()
+        doc = Document(page_content=chunk_pdf_pages[2])
+        page_information = chain.invoke({"context": [doc], "question": user_question})
+        if page_information:
+            chunk_pdf_pages.append(page_information)
+        else:
+            chunk_pdf_pages.append("")
+        records.append(
+            {
+                "Document": chunk_pdf_pages[0],
+                "Page": chunk_pdf_pages[2],
+                "Relevant Information": chunk_pdf_pages[3],
+                "File Path": pdf_path,
+            }
+        )
     return records
 
 
@@ -359,25 +413,13 @@ def display_relevant_info_df():
     Displays the relevant information dataframe.
     """
     if len(st.session_state.df) > 0:
-        # st.dataframe(
-        #     st.session_state.df,
-        #     hide_index=True,
-        #     use_container_width=True,
-        # )
+
         st.dataframe(
             st.session_state.relevant_df.groupby(["Document", "Page"], as_index=False)
             .agg({"Relevant Information": lambda x: "\n".join(x)})
             .sort_values(["Document", "Page"]),
             hide_index=True,
-            # height=2000,
         )
-    # if len(st.session_state.df) > 0:
-    #     st.dataframe(
-    #         st.session_state.relevant_df,
-    #         hide_index=True,
-    #         use_container_width=True,
-    #         row_height=400,
-    #     )
 
 
 def display_pdf_section():
@@ -437,16 +479,26 @@ def map_chunk_to_metadata(filtered_results):
 
     Returns:
         tuple: A tuple of (list of documents, dictionary of chunk_id to (pdf_path, doc_title))
+        list of unique (pdf_path, doc_page) tuples
     """
     docs_for_chain = [doc for doc, score in filtered_results]
-    chunk_ids = [doc.metadata.get("Chunk_id") for doc in docs_for_chain]
-    pdf_paths = [doc.metadata.get("Path") for doc in docs_for_chain]
-    doc_titles = [doc.metadata.get("Title") for doc in docs_for_chain]
-    chunk_ids_w_filepaths_titles = {
-        chunk_id: (pdf_path, doc_title)
-        for chunk_id, pdf_path, doc_title in zip(chunk_ids, pdf_paths, doc_titles)
+    chunk_ids = [doc.metadata.get("Chunk_id", "Unknown") for doc in docs_for_chain]
+    pdf_paths = [doc.metadata.get("Path", "Unknown") for doc in docs_for_chain]
+    doc_titles = [doc.metadata.get("Title", "Unknown") for doc in docs_for_chain]
+    doc_pages = [doc.metadata.get("Page", "Unknown") for doc in docs_for_chain]
+    chunk_id_page_tuples = list(zip(chunk_ids, doc_titles, pdf_paths, doc_pages))
+    unique_pairs = set(
+        (pdf_path, doc_title, doc_page)
+        for _, doc_title, pdf_path, doc_page in chunk_id_page_tuples
+    )
+    unique_path_page_tuples = list(unique_pairs)
+    chunk_ids_w_metadata = {
+        chunk_id: (pdf_path, doc_title, doc_page)
+        for chunk_id, pdf_path, doc_title, doc_page in zip(
+            chunk_ids, pdf_paths, doc_titles, doc_pages
+        )
     }
-    return docs_for_chain, chunk_ids_w_filepaths_titles
+    return docs_for_chain, unique_path_page_tuples  # chunk_ids_w_metadata
 
 
 def initialize_session_state():
@@ -526,8 +578,8 @@ def run_state_privacy_page():
 
                 else:
                     # Prepare documents for the conversational chain.
-                    docs_for_chain, chunk_ids_w_filepaths_titles = (
-                        map_chunk_to_metadata(filtered_results)
+                    docs_for_chain, chunk_ids_w_metadata = map_chunk_to_metadata(
+                        filtered_results
                     )
                     # Gen summary from llm of relevant context
                     chain = get_conversational_chain()
@@ -556,8 +608,11 @@ def run_state_privacy_page():
                         "Sorry, the LLM cannot currently generate a good enough response"
                         not in result
                     ):
-                        records = process_chunk_records(
-                            chunk_ids_w_filepaths_titles, user_question
+                        # records = process_chunk_records(
+                        #     chunk_ids_w_metadata, user_question
+                        # )
+                        records = generate_page_summary(
+                            chunk_ids_w_metadata, user_question
                         )
                         st.session_state.df = pd.DataFrame(records)
                         st.session_state.relevant_df = st.session_state.df[
