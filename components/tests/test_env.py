@@ -42,6 +42,7 @@ class TestEnvironment(unittest.TestCase):
     def test_env_vars_langchain_api_key(self):
         ''' Test the langchain_api_key.
         '''
+        load_dotenv()
         langchain_api_key = os.environ.get("LANGCHAIN_API_KEY")
         length_of_the_key = len(langchain_api_key)
         self.assertGreater(length_of_the_key, 0)
@@ -49,6 +50,7 @@ class TestEnvironment(unittest.TestCase):
     def test_env_vars_langsmith_tracing(self):
         ''' Test the langsmith_tracing.
         '''
+        load_dotenv()
         langsmith_tracing = os.environ.get("LANGSMITH_TRACING")
         length_of_tracing = len(langsmith_tracing)
         self.assertGreater(length_of_tracing, 0)
@@ -56,6 +58,7 @@ class TestEnvironment(unittest.TestCase):
     def test_env_vars_langsmith_endpoint(self):
         ''' Test the google_api_key.
         '''
+        load_dotenv()
         langsmith_endpoint = os.environ.get("LANGSMITH_ENDPOINT")
         length_of_endpoint = len(langsmith_endpoint)
         self.assertGreater(length_of_endpoint, 0)
@@ -63,11 +66,6 @@ class TestEnvironment(unittest.TestCase):
     def test_gen_ai_connection(self):
         ''' Test whether we connect to the google genai
         '''
-        # Test under local
-        # load_dotenv()
-        # genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
-        
-        # Test in github
         load_dotenv()
         genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
         
