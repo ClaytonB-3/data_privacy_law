@@ -68,13 +68,13 @@ class TestEnvironment(unittest.TestCase):
         '''
         load_dotenv()
         genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
-        
+
         models_list = genai.list_models()
-        TestResult = False
+        test_result = False
         for model in models_list:
             if model.name == "models/gemini-2.0-flash-001":
-                TestResult = True
-        self.assertTrue(TestResult)
-       
+                test_result = True
+        self.assertTrue(test_result)
+
 if __name__ == '__main__':
     unittest.main()

@@ -94,7 +94,7 @@ class TestLLMManager(unittest.TestCase):
         self.chunk_texts, self.chunk_metadatas = chunk_pdf_pages(self.pages_of_pdf,
                                                                  self.pdf_path,
                                                                  self.chunk_size)
-        
+
     def test_parse_bill_info(self):
         """
         Test whether parse_bill_info produces expected results.
