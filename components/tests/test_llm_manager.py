@@ -84,6 +84,7 @@ class TestLLMManager(unittest.TestCase):
     """
 
     def setUp(self):
+        genai.configure(api_key=os.environ.get("google_api_key"))
         self.pdf_path = './pdfs/Texas/HB 186 Social_media_children.pdf'
         self.pages_of_pdf = extract_text_from_pdf(self.pdf_path)
         full_pdf_text = "\n".join(self.pages_of_pdf)
@@ -92,8 +93,7 @@ class TestLLMManager(unittest.TestCase):
         self.chunk_texts, self.chunk_metadatas = chunk_pdf_pages(self.pages_of_pdf,
                                                                  self.pdf_path,
                                                                  self.chunk_size)
-        genai.configure(api_key=os.environ.get("google_api_key"))
-
+        
     def test_parse_bill_info(self):
         """
         Test whether parse_bill_info produces expected results.
