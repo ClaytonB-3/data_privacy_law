@@ -4,8 +4,12 @@ import sys
 import os
 
 import unittest
+
 import numpy as np
 import pandas as pd
+# from dotenv import load_dotenv
+import google.generativeai as genai
+
 
 class TestEnvironment(unittest.TestCase):
     ''' Test the environment for the project.
@@ -55,5 +59,20 @@ class TestEnvironment(unittest.TestCase):
         length_of_endpoint = len(langsmith_endpoint)
         self.assertGreater(length_of_endpoint, 0)
 
+    def test_gen_ai_connection(self):
+        ''' Test whether we connect to the google genai
+        '''
+        # Test under local
+        # load_dotenv()
+        # genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+        
+        # Test in github
+        genai.configure(api_key=os.environ.get("google_api_key"))
+        
+        models_list = list(genai.list_models())
+        self.assertGreater(len(models_list), 0)
+       
+# Load API key
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 if __name__ == '__main__':
     unittest.main()

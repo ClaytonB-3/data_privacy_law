@@ -21,7 +21,7 @@ from experimental_llm_manager import (add_to_faiss_index,
                                       get_conversational_chain,
                                       get_confirmation_result_chain)
 
-genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
+genai.configure(api_key=os.environ.get("google_api_key"))
 
 class TestPDFExtraction(unittest.TestCase):
     """
