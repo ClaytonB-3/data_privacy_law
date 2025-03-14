@@ -130,7 +130,7 @@ def calculate_updated_chunk_ids(chunk_metadatas):
     for meta in chunk_metadatas:
         source = meta.get("Title", "unknown")
         source = source.replace(" ", "_")
-        page = meta.get("page", "1")
+        page = meta.get("Page", "1")
         current_page_id = f"{source}_Page_{page}"
 
         if current_page_id == last_page_id:
@@ -143,20 +143,17 @@ def calculate_updated_chunk_ids(chunk_metadatas):
 
     return chunk_metadatas
 
-
-def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder="./faiss_index"):
+def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder="./faiss_index", index_name= "index.faiss"):
     """
     Create or load an existing FAISS index and add new document chunks.
     """
-
     chunk_metadatas = calculate_updated_chunk_ids(chunk_metadatas)
-
     # Code for testing what the new chunk_ids are. These are the key to explabaility
     # for items in chunk_metadatas:
     #     print(f"\nThese are the updated chunk ID's\n: {items.get("Chunk_id")}")
 
     embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
-    index_file = os.path.join(faiss_folder, "index.faiss")
+    index_file = os.path.join(faiss_folder, index_name)
     index_exists = os.path.exists(index_file)
 
     if index_exists:
@@ -185,13 +182,11 @@ def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder="./faiss_index
 
     # Add only new chunks to the existing index.
     existing_ids = set(faiss_store.docstore._dict.keys())
-
     # print(f"Existing ID's are {existing_ids}")
 
     new_texts = []
     new_metadatas = []
     new_ids = []
-
     for text, meta in zip(chunk_texts, chunk_metadatas):
         this_id = meta.get("Chunk_id")
         if this_id and this_id not in existing_ids:
@@ -295,6 +290,32 @@ def get_confirmation_result_chain():
     return create_stuff_documents_chain(llm=model, prompt=prompt)
 
 
+def get_document_specific_summary():
+    """
+    Sets up a QA chain using ChatGoogleGenerativeAI and a custom prompt template.
+    """
+    prompt_template = """
+    I will provide text that is concatinated responses from an LLM model in response
+    to a question about data privacy bills. I need you summarize the text in a way
+    that is easy to read and understand without adding any additional information. 
+    The summary should be in short paragraphs or bullet points.
+
+    Text:
+    {text}
+
+    Summary:
+    """
+    model = ChatGoogleGenerativeAI(
+        model="gemini-2.0-flash-001",
+        temperature=0.2,
+        system_prompt=(
+            """You are a helpful assistant that summarizes text without adding any additional information. """
+        ),
+    )
+    prompt = PromptTemplate(template=prompt_template, input_variables=["text"])
+    return create_stuff_documents_chain(llm=model, prompt=prompt)
+
+
 def chunk_pdf_pages(texts_per_page, pdf_path, chunk_size=800, chunk_overlap=200):
     """
     Takes a list of page texts, splits each page into smaller
@@ -365,7 +386,10 @@ def obtain_text_of_chunk(chunk_id):
 
 def llm_simplify_chunk_text(text_for_llm):
     prompt_template = """
-        Give me a more readable version of the given text (a quotable summary). Be brief. Answer in points. Dont give any introductions and get straight to the point. Summarize in the context of the question
+        Provide any information from the provided context that is relevant to the question.
+        Only use the information from the context to answer the question.
+        Answer in points. Dont give any introductions and get straight to the point. 
+        Summarize in the context of the question
 
         Context:
         {context}
@@ -377,7 +401,7 @@ def llm_simplify_chunk_text(text_for_llm):
     """
     model = ChatGoogleGenerativeAI(
         model="gemini-2.0-flash-001",
-        temperature=0.5,
+        temperature=0.1,
     )
     prompt = PromptTemplate(
         template=prompt_template, input_variables=["context", "question"]
@@ -474,7 +498,8 @@ if __name__ == "__main__":
     # Construct the path to the PDFs folder.
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
-    pdfs_folder = os.path.join(parent_dir, "pdfs", state_input)
+    # pdfs_folder = os.path.join(parent_dir, "pdfs", state_input)
+    pdfs_folder = os.path.join(current_dir, "pdfs", state_input)
 
     # print(f"This is the PDF Folder\n:{pdfs_folder}")
 
