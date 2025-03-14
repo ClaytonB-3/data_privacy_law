@@ -36,7 +36,7 @@ class TestEnvironment(unittest.TestCase):
         '''
         google_api_key = os.environ.get("google_api_key")
         length_of_the_key = len(google_api_key)
-        self.assertGreater(length_of_the_key, 0)
+        self.assertEqual(length_of_the_key, 39)
 
     def test_env_vars_langchain_api_key(self):
         ''' Test the langchain_api_key.
@@ -69,8 +69,12 @@ class TestEnvironment(unittest.TestCase):
         # Test in github
         genai.configure(api_key=os.environ.get("google_api_key"))
         
-        models_list = list(genai.list_models())
-        self.assertGreater(len(models_list), 0)
+        models_list = genai.list_models()
+        TestResult = False
+        for model in models_list:
+            if model.name == "models/gemini-2.0-flash-001":
+                TestResult = True
+        self.assertTrue(TestResult)
        
 if __name__ == '__main__':
     unittest.main()
