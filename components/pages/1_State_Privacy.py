@@ -227,6 +227,10 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
             # st.write(f"\nText of Chunk is {text_of_chunk}")
             doc_for_processing_chunk = Document(page_content=text_of_chunk, metadata={})
             # st.write(f"\nDoc for processing Chunk is {doc_for_processing_chunk}")
+            # st.html(f"""<p style="font-weight:bold; font-size:.5rem;">{cid}</p>""")
+            # st.html(
+            #     f"""<p style="font-weight:bold; font-size:.5rem;">{text_of_chunk}</p>"""
+            # )
             parsed_text_for_llm_input = llm_simplify_chunk_text(text_of_chunk)
             # st.write(f"\nDoc for processing Chunk is {parsed_text_for_llm_input}")
             converted_text = parsed_text_for_llm_input.invoke(
@@ -236,6 +240,7 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
                 }
             )
             # st.write(f"\nConverted text is {converted_text}")
+
             parts = cid.split("_Page_")
             if len(parts) != 2:
                 continue
@@ -249,6 +254,7 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
                     "File Path": pdf_filename,
                 }
             )
+
         except Exception as e:
             st.write(f"Error parsing chunk_id: {cid}. Error: {e}")
     return records

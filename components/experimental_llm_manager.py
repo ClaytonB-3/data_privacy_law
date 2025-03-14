@@ -391,7 +391,10 @@ def obtain_text_of_chunk(chunk_id):
 
 def llm_simplify_chunk_text(text_for_llm):
     prompt_template = """
-        Give me a more readable version of the given text (a quotable summary). Be brief. Answer in points. Dont give any introductions and get straight to the point. Summarize in the context of the question
+        Provide any information from the provided context that is relevant to the question.
+        Only use the information from the context to answer the question.
+        Answer in points. Dont give any introductions and get straight to the point. 
+        Summarize in the context of the question
 
         Context:
         {context}
@@ -403,7 +406,7 @@ def llm_simplify_chunk_text(text_for_llm):
     """
     model = ChatGoogleGenerativeAI(
         model="gemini-2.0-flash-001",
-        temperature=0.5,
+        temperature=0.1,
     )
     prompt = PromptTemplate(
         template=prompt_template, input_variables=["context", "question"]
