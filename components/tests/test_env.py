@@ -72,7 +72,5 @@ class TestEnvironment(unittest.TestCase):
         models_list = list(genai.list_models())
         self.assertGreater(len(models_list), 0)
        
-# Load API key
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 if __name__ == '__main__':
     unittest.main()
