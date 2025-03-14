@@ -441,7 +441,6 @@ def main(pdf_paths):
         # Add PDF path to bill info for CSV
         bill_info["Path"] = "./" + "/".join(pdf_path.split("/")[-3:])
         bill_info["Filename"] = pdf_path.split("/")[-1]
-        bill_info["Title"] = bill_info["Title"]
         bill_info_list.append(bill_info)
         # Step 3: Split the document into chunks and get the source and page number for each chunk
         chunk_texts, chunk_metadatas = chunk_pdf_pages(pages_of_pdf, pdf_path)
