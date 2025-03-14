@@ -21,7 +21,7 @@ from experimental_llm_manager import (add_to_faiss_index,
                                       get_conversational_chain,
                                       get_confirmation_result_chain)
 
-genai.configure(api_key=os.environ.get("google_api_key"))
+
 
 class TestPDFExtraction(unittest.TestCase):
     """
@@ -92,6 +92,7 @@ class TestLLMManager(unittest.TestCase):
         self.chunk_texts, self.chunk_metadatas = chunk_pdf_pages(self.pages_of_pdf,
                                                                  self.pdf_path,
                                                                  self.chunk_size)
+        genai.configure(api_key=os.environ.get("google_api_key"))
 
     def test_parse_bill_info(self):
         """
@@ -255,6 +256,7 @@ class TestLLMResponse(unittest.TestCase):
         """
         Test sample inputs and confirm whether the LLM responses are as expected.
         """
+        genai.configure(api_key=os.environ.get("google_api_key"))
         mock_doc1 = MagicMock()
         mock_doc1.page_content = """A BILL TO BE ENTITLED\n
 AN ACT\n
