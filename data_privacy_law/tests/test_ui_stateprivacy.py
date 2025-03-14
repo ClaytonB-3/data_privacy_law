@@ -60,7 +60,7 @@ class StatePrivacyLawAppTest(unittest.TestCase):
         """
         # Since your tests are run from the project root, the relative path to the page is:
         # "pages/1_State_Privacy.py"
-        self.at = AppTest.from_file("./pages/1_State_Privacy.py").run(timeout=10)
+        self.at = AppTest.from_file("app/pages/1_State_Privacy.py").run(timeout=10)
 
     def test_header_presence(self):
         """
@@ -104,7 +104,7 @@ class StatePrivacyLawAppTest(unittest.TestCase):
         """
 
         # Use importlib to import the module, since its filename starts with a digit.
-        spec = importlib.util.spec_from_file_location("state_privacy", "./pages/1_State_Privacy.py")
+        spec = importlib.util.spec_from_file_location("state_privacy", "app/pages/1_State_Privacy.py")
         state_privacy = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(state_privacy)
         convert_date = state_privacy.convert_date

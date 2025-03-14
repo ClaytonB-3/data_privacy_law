@@ -1,14 +1,22 @@
 """
 This module creates and generates the state privacy law app for the streamlit app
 """
-
 import base64
 import os
+import sys
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)  # This gives 'app'
+root_dir = os.path.dirname(parent_dir)     # This gives 'data_privacy_law'
+
+# Add to Python path
+sys.path.append(root_dir)
+
 import time
 import streamlit as st
 import pandas as pd
 from langchain.docstore.document import Document
-from experimental_llm_manager import (
+from llm_manager.experimental_llm_manager import (
     load_faiss_index,
     get_conversational_chain,
     get_confirmation_result_chain,
@@ -478,7 +486,7 @@ def run_state_privacy_page():
         [0.01, 0.05, 0.94], gap="small", vertical_alignment="bottom"
     )
     with logo_column:
-        st.image("images/map.png", width=75)
+        st.image("./app/images/map.png", width=75)
     with title_column:
         st.header("Explore State Privacy Laws")
 

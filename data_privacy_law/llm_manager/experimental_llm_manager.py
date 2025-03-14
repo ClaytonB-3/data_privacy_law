@@ -143,7 +143,7 @@ def calculate_updated_chunk_ids(chunk_metadatas):
 
     return chunk_metadatas
 
-def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder="./faiss_index", index_name= "index.faiss"):
+def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder="./llm_manager/faiss_index", index_name= "index.faiss"):
     """
     Create or load an existing FAISS index and add new document chunks.
     """
@@ -199,7 +199,7 @@ def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder="./faiss_index
         faiss_store.save_local(faiss_folder)
 
 
-def load_faiss_index(faiss_folder="./faiss_index"):
+def load_faiss_index(faiss_folder="./llm_manager/faiss_index"):
     """
     Loads the FAISS index if it exists.
     """
@@ -411,11 +411,11 @@ def llm_simplify_chunk_text(text_for_llm):
 
 def main(pdf_paths):
     # Create data directory if it doesn't exist
-    if not os.path.exists("./data"):
-        os.makedirs("./data")
+    if not os.path.exists("./llm_manager/data"):
+        os.makedirs("./llm_manager/data")
 
-    if not os.path.exists("./faiss_index"):
-        os.makedirs("./faiss_index")
+    if not os.path.exists("./llm_manager/faiss_index"):
+        os.makedirs("./llm_manager/faiss_index")
 
     bill_info_list = []
     # Write document into faiss index
@@ -449,7 +449,7 @@ def main(pdf_paths):
         add_to_faiss_index(chunk_texts, chunk_metadatas)
 
     # Create or open CSV file for writing
-    csv_path = "./data/bill_info.csv"
+    csv_path = "./llm_manager/data/bill_info.csv"
     csv_exists = os.path.exists(csv_path)
 
     # First read existing CSV data if it exists
@@ -499,7 +499,7 @@ if __name__ == "__main__":
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
     # pdfs_folder = os.path.join(parent_dir, "pdfs", state_input)
-    pdfs_folder = os.path.join(current_dir, "pdfs", state_input)
+    pdfs_folder = os.path.join(parent_dir, "pdfs", state_input)
 
     # print(f"This is the PDF Folder\n:{pdfs_folder}")
 

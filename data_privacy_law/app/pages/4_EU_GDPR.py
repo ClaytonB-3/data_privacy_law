@@ -6,13 +6,6 @@ import streamlit as st
 from streamlit_pdf_viewer import pdf_viewer
 import pandas as pd
 from langchain.docstore.document import Document
-from experimental_llm_manager import (
-    load_faiss_index,
-    get_conversational_chain,
-    get_confirmation_result_chain,
-    obtain_text_of_chunk,
-    llm_simplify_chunk_text,
-)
 
 
 # List of US states.
@@ -112,7 +105,7 @@ st.markdown(styling_for_home_page, unsafe_allow_html=True)
 def main():
     empty_column, logo_column, title_column = st.columns([0.01,0.05,0.94], gap="small", vertical_alignment="bottom")
     with logo_column:
-        st.image("images/europe.png", width=75)
+        st.image("./app/images/europe.png", width=75)
     with title_column:
         st.title("Explore the GDPR")
 
@@ -147,7 +140,7 @@ def main():
         st.markdown(markdown_list)
 
     with image_column:
-        st.image("images/gdpr.jpeg")
+        st.image("./app/images/gdpr.jpeg")
 
 if __name__ == "__main__":
     main()

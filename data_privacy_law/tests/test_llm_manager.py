@@ -10,7 +10,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 import google.generativeai as genai
 
-from experimental_llm_manager import (add_to_faiss_index,
+from llm_manager.experimental_llm_manager import (add_to_faiss_index,
                                       parse_bill_info,
                                       extract_text_from_pdf,
                                       chunk_pdf_pages,
@@ -166,7 +166,7 @@ class TestLLMManager(unittest.TestCase):
         for ind in range(len(test_case_2)):
             self.assertEqual(expected_2[ind], test_case_2_result[ind]['Chunk_id'])
 
-    @patch("experimental_llm_manager.load_faiss_index")
+    @patch("llm_manager.experimental_llm_manager.load_faiss_index")
     def test_obtain_text_of_chunk(self, mock_load_faiss):
         """
         Test whether obtain_text_of_chunk works properly
@@ -204,9 +204,9 @@ class TestLLMResponse(unittest.TestCase):
     Test whether LLM Model related funcitons work properly
     """
 
-    @patch("experimental_llm_manager.create_stuff_documents_chain")
-    @patch("experimental_llm_manager.ChatGoogleGenerativeAI")
-    @patch("experimental_llm_manager.PromptTemplate")
+    @patch("llm_manager.experimental_llm_manager.create_stuff_documents_chain")
+    @patch("llm_manager.experimental_llm_manager.ChatGoogleGenerativeAI")
+    @patch("llm_manager.experimental_llm_manager.PromptTemplate")
     def test_llm_simplify_chunk_text(self, mock_prompt, mock_genai, mock_chain):
         """
         Test llm_simplify_chunk_text runs properly
@@ -221,9 +221,9 @@ class TestLLMResponse(unittest.TestCase):
         llm_simplify_chunk_text(text_of_chunk)
         mock_chain.assert_called_once()
 
-    @patch("experimental_llm_manager.create_stuff_documents_chain")
-    @patch("experimental_llm_manager.ChatGoogleGenerativeAI")
-    @patch("experimental_llm_manager.PromptTemplate")
+    @patch("llm_manager.experimental_llm_manager.create_stuff_documents_chain")
+    @patch("llm_manager.experimental_llm_manager.ChatGoogleGenerativeAI")
+    @patch("llm_manager.experimental_llm_manager.PromptTemplate")
     def test_get_confirmation_result_chain(self, mock_prompt, mock_genai, mock_chain):
         """
         Test get_confirmation_result_chai runs properly
@@ -237,9 +237,9 @@ class TestLLMResponse(unittest.TestCase):
         get_confirmation_result_chain()
         mock_chain.assert_called_once()
 
-    @patch("experimental_llm_manager.create_stuff_documents_chain")
-    @patch("experimental_llm_manager.ChatGoogleGenerativeAI")
-    @patch("experimental_llm_manager.PromptTemplate")
+    @patch("llm_manager.experimental_llm_manager.create_stuff_documents_chain")
+    @patch("llm_manager.experimental_llm_manager.ChatGoogleGenerativeAI")
+    @patch("llm_manager.experimental_llm_manager.PromptTemplate")
     def test_get_conversational_chain(self, mock_prompt, mock_genai, mock_chain):
         """
         Test get_conversational_chain runs properly
@@ -333,17 +333,17 @@ on TPLC's database""" in result1)
             }
         )
         self.assertTrue("""Sorry, the LLM cannot currently generate \
-a good enough response""" in result2)
+a good enough response""" in result2, msg=result2)
 
 class TestFAISSIndex(unittest.TestCase):
     """
     General unittests for faiss index related functions.
     """
 
-    @patch("experimental_llm_manager.FAISS")
-    @patch("experimental_llm_manager.GoogleGenerativeAIEmbeddings")
-    @patch("experimental_llm_manager.os.path.exists")
-    @patch("experimental_llm_manager.calculate_updated_chunk_ids")
+    @patch("llm_manager.experimental_llm_manager.FAISS")
+    @patch("llm_manager.experimental_llm_manager.GoogleGenerativeAIEmbeddings")
+    @patch("llm_manager.experimental_llm_manager.os.path.exists")
+    @patch("llm_manager.experimental_llm_manager.calculate_updated_chunk_ids")
     def test_add_to_faiss_index_create_new(self,
                                            mock_chunks,
                                            mock_exists,
@@ -375,10 +375,10 @@ class TestFAISSIndex(unittest.TestCase):
         mock_faiss.from_texts.assert_called_once()
         mock_faiss_instance.save_local.assert_called_once()
 
-    @patch("experimental_llm_manager.FAISS")
-    @patch("experimental_llm_manager.GoogleGenerativeAIEmbeddings")
-    @patch("experimental_llm_manager.os.path.exists")
-    @patch("experimental_llm_manager.calculate_updated_chunk_ids",)
+    @patch("llm_manager.experimental_llm_manager.FAISS")
+    @patch("llm_manager.experimental_llm_manager.GoogleGenerativeAIEmbeddings")
+    @patch("llm_manager.experimental_llm_manager.os.path.exists")
+    @patch("llm_manager.experimental_llm_manager.calculate_updated_chunk_ids",)
     def test_add_to_faiss_index_load_and_add_texts(self, mock_chunks,
                                                    mock_exists, mock_embeddings,
                                                    mock_faiss):
@@ -414,10 +414,10 @@ class TestFAISSIndex(unittest.TestCase):
         )
         mock_faiss_instance.save_local.assert_called_once()
 
-    @patch("experimental_llm_manager.FAISS")
-    @patch("experimental_llm_manager.GoogleGenerativeAIEmbeddings")
-    @patch("experimental_llm_manager.os.path.exists")
-    @patch("experimental_llm_manager.calculate_updated_chunk_ids", )
+    @patch("llm_manager.experimental_llm_manager.FAISS")
+    @patch("llm_manager.experimental_llm_manager.GoogleGenerativeAIEmbeddings")
+    @patch("llm_manager.experimental_llm_manager.os.path.exists")
+    @patch("llm_manager.experimental_llm_manager.calculate_updated_chunk_ids", )
     def test_add_to_faiss_index_load_error(self, mock_chunks,
                                            mock_exists,
                                            mock_embeddings, mock_faiss):
@@ -450,8 +450,8 @@ class TestFAISSIndex(unittest.TestCase):
         mock_faiss.from_texts.assert_called_once()
         mock_faiss_instance.save_local.assert_called_once()
 
-    @patch("experimental_llm_manager.FAISS")
-    @patch("experimental_llm_manager.GoogleGenerativeAIEmbeddings")
+    @patch("llm_manager.experimental_llm_manager.FAISS")
+    @patch("llm_manager.experimental_llm_manager.GoogleGenerativeAIEmbeddings")
     def test_load_faiss_index(self, mock_embeddings, mock_faiss):
         """
         Test whether load_faiss_index works properly

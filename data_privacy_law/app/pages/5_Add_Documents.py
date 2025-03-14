@@ -64,7 +64,7 @@ def main():
 
     empty_column, logo_column, title_column = st.columns([0.01,0.05,0.94], gap="small", vertical_alignment="bottom")
     with logo_column:
-        st.image("images/add.png", width=75)
+        st.image("./app/images/add.png", width=75)
     with title_column:
         st.title("Add a Document to our Database of Laws")
 
