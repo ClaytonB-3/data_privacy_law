@@ -84,7 +84,9 @@ class TestLLMManager(unittest.TestCase):
     """
 
     def setUp(self):
-        genai.configure(api_key=os.environ.get("google_api_key"))
+        api_key=os.environ.get("google_api_key")
+        genai.configure(api_key)
+        print(api_key[:3])
         self.pdf_path = './pdfs/Texas/HB 186 Social_media_children.pdf'
         self.pages_of_pdf = extract_text_from_pdf(self.pdf_path)
         full_pdf_text = "\n".join(self.pages_of_pdf)
