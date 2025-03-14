@@ -94,8 +94,12 @@ STYLING_FOR_STATE_PAGE = """
         color: white !important;
     }
     
-    div[data-baseweb="select"] > div {
+    div[data-baseweb="select"] * {
     background-color: light grey;
+    }
+   
+    [data-testid = "stSelectboxVirtualDropdown"] *{
+        color: white !important;
     }
 
     [data-testid="stSelectbox"] > div[role="button"] {
@@ -105,6 +109,7 @@ STYLING_FOR_STATE_PAGE = """
     [data-testid="stSelectbox"] div[role="listbox"] * {
         color: white !important;
     }
+    
 
     [data-testid="stSidebar"] {
         background-color: #dda15e;
