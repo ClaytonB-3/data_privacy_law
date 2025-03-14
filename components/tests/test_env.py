@@ -42,21 +42,21 @@ class TestEnvironment(unittest.TestCase):
     def test_env_vars_langchain_api_key(self):
         ''' Test the langchain_api_key.
         '''
-        langchain_api_key = os.environ.get("langchain_api_key")
+        langchain_api_key = os.environ.get("LANGCHAIN_API_KEY")
         length_of_the_key = len(langchain_api_key)
         self.assertGreater(length_of_the_key, 0)
 
     def test_env_vars_langsmith_tracing(self):
         ''' Test the langsmith_tracing.
         '''
-        langsmith_tracing = os.environ.get("langsmith_tracing")
+        langsmith_tracing = os.environ.get("LANGSMITH_TRACING")
         length_of_tracing = len(langsmith_tracing)
         self.assertGreater(length_of_tracing, 0)
 
     def test_env_vars_langsmith_endpoint(self):
         ''' Test the google_api_key.
         '''
-        langsmith_endpoint = os.environ.get("langsmith_endpoint")
+        langsmith_endpoint = os.environ.get("LANGSMITH_ENDPOINT")
         length_of_endpoint = len(langsmith_endpoint)
         self.assertGreater(length_of_endpoint, 0)
 
