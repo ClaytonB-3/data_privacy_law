@@ -112,7 +112,7 @@ def parse_bill_info(pdf_text):
         print("Error parsing LLM response:", json_err)
         bill_info = {}
 
-    print(f"bill_info is {bill_info}")
+    # print(f"bill_info is {bill_info}")
     return bill_info
 
 
@@ -143,20 +143,17 @@ def calculate_updated_chunk_ids(chunk_metadatas):
 
     return chunk_metadatas
 
-
-def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder="./faiss_index"):
+def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder="./faiss_index", index_name= "index.faiss"):
     """
     Create or load an existing FAISS index and add new document chunks.
     """
-
     chunk_metadatas = calculate_updated_chunk_ids(chunk_metadatas)
-
     # Code for testing what the new chunk_ids are. These are the key to explabaility
     # for items in chunk_metadatas:
     #     print(f"\nThese are the updated chunk ID's\n: {items.get("Chunk_id")}")
 
     embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
-    index_file = os.path.join(faiss_folder, "index.faiss")
+    index_file = os.path.join(faiss_folder, index_name)
     index_exists = os.path.exists(index_file)
 
     if index_exists:
@@ -185,13 +182,11 @@ def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder="./faiss_index
 
     # Add only new chunks to the existing index.
     existing_ids = set(faiss_store.docstore._dict.keys())
-
     # print(f"Existing ID's are {existing_ids}")
 
     new_texts = []
     new_metadatas = []
     new_ids = []
-
     for text, meta in zip(chunk_texts, chunk_metadatas):
         this_id = meta.get("Chunk_id")
         if this_id and this_id not in existing_ids:
