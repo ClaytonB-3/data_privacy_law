@@ -214,7 +214,7 @@ def create_state_selector():
     return st.session_state["selected_state"]
 
 
-def process_chunk_records(chunk_ids_with_filenames, user_question):
+def process_chunk_records(chunk_ids_with_metadata, user_question):
     """
     This function creates a list of dictionies of document, page num, and chunk num to query LLM
 
@@ -232,7 +232,7 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
     """
     # Parse the chunk_id to build a table of Document, Page Number, and Chunk Number.
     records = []
-    for cid, (pdf_filename, doc_title) in chunk_ids_with_filenames.items():
+    for cid, (pdf_filename, doc_title, doc_page) in chunk_ids_with_metadata.items():
         if not cid:
             continue
         # Expected format: Texas_Data_Privacy_and_Security_Act_Page_35_ChunkNo_1
@@ -412,11 +412,6 @@ def display_relevant_info_df():
     Displays the relevant information dataframe.
     """
     if len(st.session_state.df) > 0:
-        # st.dataframe(
-        #     st.session_state.df,
-        #     hide_index=True,
-        #     use_container_width=True,
-        # )
         st.dataframe(
             st.session_state.relevant_df.groupby(["Document", "Page"], as_index=False)
             .agg({"Relevant Information": lambda x: "\n".join(x)})
@@ -424,13 +419,6 @@ def display_relevant_info_df():
             hide_index=True,
             # height=2000,
         )
-    # if len(st.session_state.df) > 0:
-    #     st.dataframe(
-    #         st.session_state.relevant_df,
-    #         hide_index=True,
-    #         use_container_width=True,
-    #         row_height=400,
-    #     )
 
 
 def display_pdf_section():
@@ -492,14 +480,23 @@ def map_chunk_to_metadata(filtered_results):
         tuple: A tuple of (list of documents, dictionary of chunk_id to (pdf_path, doc_title))
     """
     docs_for_chain = [doc for doc, score in filtered_results]
-    chunk_ids = [doc.metadata.get("Chunk_id") for doc in docs_for_chain]
-    pdf_paths = [doc.metadata.get("Path") for doc in docs_for_chain]
-    doc_titles = [doc.metadata.get("Title") for doc in docs_for_chain]
-    chunk_ids_w_filepaths_titles = {
-        chunk_id: (pdf_path, doc_title)
-        for chunk_id, pdf_path, doc_title in zip(chunk_ids, pdf_paths, doc_titles)
+    chunk_ids = [doc.metadata.get("Chunk_id", "Unknown") for doc in docs_for_chain]
+    pdf_paths = [doc.metadata.get("Path", "Unknown") for doc in docs_for_chain]
+    doc_titles = [doc.metadata.get("Title", "Unknown") for doc in docs_for_chain]
+    doc_pages = [doc.metadata.get("Page", "Unknown") for doc in docs_for_chain]
+    chunk_id_page_tuples = list(zip(chunk_ids, doc_titles, pdf_paths, doc_pages))
+    unique_pairs = set(
+        (pdf_path, doc_title, doc_page)
+        for _, doc_title, pdf_path, doc_page in chunk_id_page_tuples
+    )
+    unique_path_page_tuples = list(unique_pairs)
+    chunk_ids_w_metadata = {
+        chunk_id: (pdf_path, doc_title, doc_page)
+        for chunk_id, pdf_path, doc_title, doc_page in zip(
+            chunk_ids, pdf_paths, doc_titles, doc_pages
+        )
     }
-    return docs_for_chain, chunk_ids_w_filepaths_titles
+    return docs_for_chain, unique_path_page_tuples  # chunk_ids_w_metadata
 
 
 def initialize_session_state():
@@ -579,8 +576,8 @@ def run_state_privacy_page():
 
                 else:
                     # Prepare documents for the conversational chain.
-                    docs_for_chain, chunk_ids_w_filepaths_titles = (
-                        map_chunk_to_metadata(filtered_results)
+                    docs_for_chain, chunk_ids_w_metadata = map_chunk_to_metadata(
+                        filtered_results
                     )
                     # Gen summary from llm of relevant context
                     chain = get_conversational_chain()
@@ -609,8 +606,8 @@ def run_state_privacy_page():
                         "Sorry, the LLM cannot currently generate a good enough response"
                         not in result
                     ):
-                        records = process_chunk_records(
-                            chunk_ids_w_filepaths_titles, user_question
+                        records = generate_page_summary(
+                            chunk_ids_w_metadata, user_question
                         )
                         st.session_state.df = pd.DataFrame(records)
                         st.session_state.relevant_df = st.session_state.df[
