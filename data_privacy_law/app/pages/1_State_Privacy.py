@@ -5,19 +5,19 @@ This module creates and generates the state privacy law app for the streamlit ap
 import base64
 import os
 import sys
+import time
+
+import PyPDF2
+import streamlit as st
+import pandas as pd
+from langchain.docstore.document import Document
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)  # This gives 'app'
 root_dir = os.path.dirname(parent_dir)  # This gives 'data_privacy_law'
-
 # Add to Python path
 sys.path.append(root_dir)
 
-import PyPDF2
-import time
-import streamlit as st
-import pandas as pd
-from langchain.docstore.document import Document
 from llm_manager.experimental_llm_manager import (
     load_faiss_index,
     get_conversational_chain,
@@ -26,7 +26,6 @@ from llm_manager.experimental_llm_manager import (
     obtain_text_of_chunk,
     llm_simplify_chunk_text,
 )
-
 
 # List of US states.
 us_states = [
@@ -232,7 +231,7 @@ def process_chunk_records(chunk_ids_with_metadata, user_question):
     """
     # Parse the chunk_id to build a table of Document, Page Number, and Chunk Number.
     records = []
-    for cid, (pdf_filename, doc_title, doc_page) in chunk_ids_with_metadata.items():
+    for cid, (pdf_filename, doc_title, _) in chunk_ids_with_metadata.items():
         if not cid:
             continue
         # Expected format: Texas_Data_Privacy_and_Security_Act_Page_35_ChunkNo_1
@@ -284,13 +283,11 @@ def generate_page_summary(chunk_ids_with_metadata, user_question):
     for pdf_path in unique_pdf_paths_list:
         # st.write(f"Processing PDF: {pdf_path}")
         # Get all chunks for this PDF path
-        chunk_pdf_pages = []
         all_pdf_pages = []
         with open(pdf_path, "rb") as file:
             reader = PyPDF2.PdfReader(file)
             for i, page in enumerate(reader.pages):
-                page_text = page.extract_text() or ""
-                all_pdf_pages.append(page_text)
+                all_pdf_pages.append(page.extract_text() or "")
         for path, title, page_num in chunk_ids_with_metadata:
             for i, page_text in enumerate(all_pdf_pages):
                 if (i + 1 == int(page_num)) and (path == pdf_path):
@@ -410,20 +407,6 @@ def show_pdf(file_path):
     st.markdown(pdf_display, unsafe_allow_html=True)
 
 
-def display_relevant_info_df():
-    """
-    Displays the relevant information dataframe.
-    """
-    if len(st.session_state.df) > 0:
-        st.dataframe(
-            st.session_state.relevant_df.groupby(["Document", "Page"], as_index=False)
-            .agg({"Relevant Information": lambda x: "\n".join(x)})
-            .sort_values(["Document", "Page"]),
-            hide_index=True,
-            # height=2000,
-        )
-
-
 def display_pdf_section():
     """
     Displays the PDF section of the app, including:
@@ -456,7 +439,7 @@ def display_pdf_section():
                     .sort_values("Page", key=lambda x: x.astype(int))
                 )
 
-                for index, row in page_data.iterrows():
+                for _, row in page_data.iterrows():
                     st.write(f"Page {row['Page']}:")
                     st.write(row["Relevant Information"])
                 # Add View PDF button for this document
@@ -492,13 +475,7 @@ def map_chunk_to_metadata(filtered_results):
         for _, doc_title, pdf_path, doc_page in chunk_id_page_tuples
     )
     unique_path_page_tuples = list(unique_pairs)
-    chunk_ids_w_metadata = {
-        chunk_id: (pdf_path, doc_title, doc_page)
-        for chunk_id, pdf_path, doc_title, doc_page in zip(
-            chunk_ids, pdf_paths, doc_titles, doc_pages
-        )
-    }
-    return docs_for_chain, unique_path_page_tuples  # chunk_ids_w_metadata
+    return docs_for_chain, unique_path_page_tuples
 
 
 def initialize_session_state():
@@ -623,7 +600,6 @@ def run_state_privacy_page():
             st.write("---")
 
     # non text summary components
-    # display_relevant_info_df()
     # with col2:
     #    display_selected_state_bills()
     display_pdf_section()
