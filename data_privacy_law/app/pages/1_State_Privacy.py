@@ -284,7 +284,7 @@ def generate_page_summary(chunk_ids_with_metadata, user_question):
     unique_pdf_paths = set(pdf_path for pdf_path, _, _ in chunk_ids_with_metadata)
     unique_pdf_paths_list = list(unique_pdf_paths)
     for pdf_path in unique_pdf_paths_list:
-        st.write(f"Processing PDF: {pdf_path}")
+        # st.write(f"Processing PDF: {pdf_path}")
         # Get all chunks for this PDF path
         chunk_pdf_pages = []
         all_pdf_pages = []
@@ -299,11 +299,16 @@ def generate_page_summary(chunk_ids_with_metadata, user_question):
                     chunk_pdf_pages.append(title)
                     chunk_pdf_pages.append(page_text)
                     chunk_pdf_pages.append(page_num)
-                    st.text(chunk_pdf_pages)
 
         chain = get_document_specific_summary()
-        doc = Document(page_content=chunk_pdf_pages[2])
-        page_information = chain.invoke({"context": [doc], "question": user_question})
+        doc = Document(page_content=chunk_pdf_pages[1])
+        st.write(f"Doc is {doc}")
+        page_information = chain.invoke(
+            {
+                "context": [doc],
+                # "question": user_question
+            }
+        )
         if page_information:
             chunk_pdf_pages.append(page_information)
         else:
