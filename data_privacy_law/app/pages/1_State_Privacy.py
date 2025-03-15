@@ -1,13 +1,14 @@
 """
 This module creates and generates the state privacy law app for the streamlit app
 """
+
 import base64
 import os
 import sys
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)  # This gives 'app'
-root_dir = os.path.dirname(parent_dir)     # This gives 'data_privacy_law'
+root_dir = os.path.dirname(parent_dir)  # This gives 'data_privacy_law'
 
 # Add to Python path
 sys.path.append(root_dir)
@@ -270,6 +271,50 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
 
         except Exception as e:
             st.write(f"Error parsing chunk_id: {cid}. Error: {e}")
+    return records
+
+
+def generate_page_summary(chunk_ids_with_metadata, user_question):
+    """
+    This function generates a summary of the page based on the user's question.
+    """
+    records = []
+    st.write(f"chunk_ids_with_metadata: {chunk_ids_with_metadata}")
+    unique_pdf_paths = set(pdf_path for pdf_path, _, _ in chunk_ids_with_metadata)
+    unique_pdf_paths_list = list(unique_pdf_paths)
+    for pdf_path in unique_pdf_paths_list:
+        st.write(f"Processing PDF: {pdf_path}")
+        # Get all chunks for this PDF path
+        chunk_pdf_pages = []
+        all_pdf_pages = []
+        with open(pdf_path, "rb") as file:
+            reader = PyPDF2.PdfReader(file)
+            for i, page in enumerate(reader.pages):
+                page_text = page.extract_text() or ""
+                all_pdf_pages.append(page_text)
+        for path, title, page_num in chunk_ids_with_metadata:
+            for i, page_text in enumerate(all_pdf_pages):
+                if (i + 1 == int(page_num)) and (path == pdf_path):
+                    chunk_pdf_pages.append(title)
+                    chunk_pdf_pages.append(page_text)
+                    chunk_pdf_pages.append(page_num)
+                    st.text(chunk_pdf_pages)
+
+        chain = get_document_specific_summary()
+        doc = Document(page_content=chunk_pdf_pages[2])
+        page_information = chain.invoke({"context": [doc], "question": user_question})
+        if page_information:
+            chunk_pdf_pages.append(page_information)
+        else:
+            chunk_pdf_pages.append("")
+        records.append(
+            {
+                "Document": chunk_pdf_pages[0],
+                "Page": chunk_pdf_pages[2],
+                "Relevant Information": chunk_pdf_pages[3],
+                "File Path": pdf_path,
+            }
+        )
     return records
 
 
