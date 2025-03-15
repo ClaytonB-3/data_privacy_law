@@ -13,6 +13,7 @@ root_dir = os.path.dirname(parent_dir)  # This gives 'data_privacy_law'
 # Add to Python path
 sys.path.append(root_dir)
 
+import PyPDF2
 import time
 import streamlit as st
 import pandas as pd
