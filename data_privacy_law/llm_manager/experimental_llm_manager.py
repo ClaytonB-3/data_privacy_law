@@ -303,15 +303,16 @@ def get_document_specific_summary():
     Sets up a QA chain using ChatGoogleGenerativeAI and a custom prompt template.
     """
     prompt_template = """
-    I will provide a single page from a bill. Using only information from 
-    that page, provide a brief summary of the key points from the page that relate to the bill.
-    Respond in bullet points and provide only the summary, no introduction or context.
-    Only use information from the page provided. 
+    I will provide a single page from a bill and a question a user asked. Using only information from 
+    that page, provide a brief summary of the key points from the page that relate to the question.
+    Respond in bullet points and provide only the summary, no introduction or context. Try to be concise.
+    Only use information from the context provided. 
 
-    context:
+    Question:
+    {question}
+
+    Context:
     {context}
-
-
 
     Summary:
     """
@@ -320,7 +321,9 @@ def get_document_specific_summary():
         temperature=0.2,
         system_prompt=("""You only have knowledge based on the provided text."""),
     )
-    prompt = PromptTemplate(template=prompt_template, input_variables=["context"])
+    prompt = PromptTemplate(
+        template=prompt_template, input_variables=["context", "question"]
+    )
     return create_stuff_documents_chain(llm=model, prompt=prompt)
 
 

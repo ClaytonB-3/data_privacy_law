@@ -83,7 +83,6 @@ us_states = [
 ]
 
 st.set_page_config(page_title="Explore State Privacy Laws", layout="wide")
-# fefae0 original color
 STYLING_FOR_STATE_PAGE = """
 <style>
     /* Set default text color for all elements */
@@ -280,7 +279,6 @@ def generate_page_summary(chunk_ids_with_metadata, user_question):
     This function generates a summary of the page based on the user's question.
     """
     records = []
-    st.write(f"chunk_ids_with_metadata: {chunk_ids_with_metadata}")
     unique_pdf_paths = set(pdf_path for pdf_path, _, _ in chunk_ids_with_metadata)
     unique_pdf_paths_list = list(unique_pdf_paths)
     for pdf_path in unique_pdf_paths_list:
@@ -296,30 +294,28 @@ def generate_page_summary(chunk_ids_with_metadata, user_question):
         for path, title, page_num in chunk_ids_with_metadata:
             for i, page_text in enumerate(all_pdf_pages):
                 if (i + 1 == int(page_num)) and (path == pdf_path):
+                    chunk_pdf_pages = []
                     chunk_pdf_pages.append(title)
                     chunk_pdf_pages.append(page_text)
                     chunk_pdf_pages.append(page_num)
-
-        chain = get_document_specific_summary()
-        doc = Document(page_content=chunk_pdf_pages[1])
-        page_information = chain.invoke(
-            {
-                "context": [doc],
-                # "question": user_question
-            }
-        )
-        if page_information:
-            chunk_pdf_pages.append(page_information)
-        else:
-            chunk_pdf_pages.append("")
-        records.append(
-            {
-                "Document": chunk_pdf_pages[0],
-                "Page": chunk_pdf_pages[2],
-                "Relevant Information": chunk_pdf_pages[3],
-                "File Path": pdf_path,
-            }
-        )
+                    # st.write(f"Chunk PDF Pages: {chunk_pdf_pages}")
+                    chain = get_document_specific_summary()
+                    doc = Document(page_content=chunk_pdf_pages[1])
+                    page_information = chain.invoke(
+                        {"context": [doc], "question": user_question}
+                    )
+                    if page_information:
+                        chunk_pdf_pages.append(page_information)
+                    else:
+                        chunk_pdf_pages.append("")
+                    records.append(
+                        {
+                            "Document": chunk_pdf_pages[0],
+                            "Page": chunk_pdf_pages[2],
+                            "Relevant Information": chunk_pdf_pages[3],
+                            "File Path": pdf_path,
+                        }
+                    )
     return records
 
 
@@ -457,9 +453,8 @@ def display_pdf_section():
                 page_data = (
                     doc_group.groupby(["Page", "File Path"], as_index=False)
                     .agg({"Relevant Information": lambda x: "\n".join(x)})
-                    .sort_values("Page")
+                    .sort_values("Page", key=lambda x: x.astype(int))
                 )
-                page_data["Page"] = page_data["Page"].astype(int)
 
                 for index, row in page_data.iterrows():
                     st.write(f"Page {row['Page']}:")
