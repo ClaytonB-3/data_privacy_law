@@ -13,6 +13,7 @@ The final metadata for each chunk is:
     "Type": "",
     "Sector": "",
     "State": "",
+    "Topics": "",
     "Chunk_id": f"{current_page_id}_ChunkNo_{current_chunk_index}"
 }
 """
@@ -67,7 +68,7 @@ def parse_bill_info(pdf_text):
     """
     Feeds the extracted PDF text into the LLM to obtain bill details.
     The LLM is expected to return a JSON object with:
-    { "Title": "", "Date": "", "Type": "", "Sector": "", "State": "" }
+    { "Title": "", "Date": "", "Type": "", "Sector": "", "State": "", "Topics": "" }
     """
     prompt_template = """
         You are given the text of a legal document from a PDF file.
@@ -84,9 +85,10 @@ def parse_bill_info(pdf_text):
         5. The title of the bill in 15 words or less. Use format (State name as the first word if it is a 
         State level sectoral bill or Comprehensive State level bill. If it is not in these categories, write Federal as
         the first word. Then put a colon ":" and write the title of the bill after that)
+        6. A list of no more than six topics that the bill is related to
 
         Return the information as a JSON object EXACTLY in the following format:
-        {{"Title": "", "Date": "", "Type": "", "Sector": "", "State": ""}}
+        {{"Title": "", "Date": "", "Type": "", "Sector": "", "State": "", "Topics": []}}
 
         Bill text:
         {context}
@@ -477,6 +479,7 @@ def main(pdf_paths):
             "Type",
             "Sector",
             "State",
+            "Topics",
             "Path",
             "Filename",
         ]

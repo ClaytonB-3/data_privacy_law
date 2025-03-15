@@ -92,10 +92,10 @@ STYLING_FOR_STATE_PAGE = """
     }
 
     [data-testid = "stAppViewContainer"]{
-    background-color: #f5f5f5;
+    background-color: #fefae0;
     opacity: 1;
     background-image:  radial-gradient(#ccd5ae 1.1000000000000001px, transparent 1.1000000000000001px), 
-    radial-gradient(#ccd5ae 1.1000000000000001px, #f5f5f5 1.1000000000000001px);
+    radial-gradient(#ccd5ae 1.1000000000000001px, #fefae0 1.1000000000000001px);
     background-size: 56px 56px;
     background-position: 0 0,28px 28px;
     color: #000;
@@ -302,7 +302,6 @@ def generate_page_summary(chunk_ids_with_metadata, user_question):
 
         chain = get_document_specific_summary()
         doc = Document(page_content=chunk_pdf_pages[1])
-        st.write(f"Doc is {doc}")
         page_information = chain.invoke(
             {
                 "context": [doc],
@@ -354,21 +353,23 @@ def display_selected_state_bills():
         bills = {}
         for doc in state_docs:
             title = doc.metadata.get("Title", "No Title")
-            date = doc.metadata.get("Date", "No Date")
+            topics = doc.metadata.get("Topics", "No Topics")
+            # date = doc.metadata.get("Date", "No Date")
 
             # Convert date from MMDDYYYY to DD/MM/YYYY.
-            date_converted = convert_date(date)
+            # date_converted = convert_date(date)
             if title not in bills:
                 bills[title] = {
                     "Title": title,
-                    "Effective Date (DD/MM/YYYY)": date_converted,
+                    # "Effective Date (DD/MM/YYYY)": date_converted,
+                    "Topics": topics,
                 }
         df_bills = pd.DataFrame(list(bills.values()))
         # Reset index so it starts from 1.
         # df_bills.index = range(1, len(df_bills) + 1)
         st.session_state.df_bills = df_bills
-        st.subheader("Bills for " + st.session_state.selected_state)
-        st.dataframe(st.session_state.df_bills, hide_index=True)
+        # st.subheader("Bills for " + st.session_state.selected_state)
+        st.dataframe(st.session_state.df_bills, width=1400, hide_index=True)
         return st.session_state.df_bills
 
     return None
@@ -538,98 +539,98 @@ def run_state_privacy_page():
     with title_column:
         st.header("Explore State Privacy Laws")
 
-    col1, col2 = st.columns([0.5, 0.5])
+    # col1, col2 = st.columns([0.8, 0.2])
 
-    with col1:
-        st.session_state.selected_state = create_state_selector()
-        # st.write(f"You have chosen the state: {selected_state}")
+    # with col1:
+    st.session_state.selected_state = create_state_selector()
+    # st.write(f"You have chosen the state: {selected_state}")
+    if st.session_state.selected_state is not None:
 
-        # Get the user's question and store in session state
-        user_question = st.text_input(
-            "Ask a question about State Privacy Laws:", key="question_input"
-        )
+        with st.expander(
+            f"## Bills for {st.session_state.selected_state}", expanded=True
+        ):
+            display_selected_state_bills()
 
-        if user_question:  # Only process if a question is asked
-            if user_question != st.session_state.user_question:
-                st.session_state.user_question = user_question
-                st.session_state.new_question = True
-                st.session_state.df = (
-                    pd.DataFrame()
-                )  # Reset results when question changes
-                st.session_state.llm_result = (
-                    None  # Reset LLM result when question changes
+    # Get the user's question and store in session state
+    user_question = st.text_input(
+        "Ask a question about State Privacy Laws:", key="question_input"
+    )
+
+    if user_question:  # Only process if a question is asked
+        if user_question != st.session_state.user_question:
+            st.session_state.user_question = user_question
+            st.session_state.new_question = True
+            st.session_state.df = pd.DataFrame()  # Reset results when question changes
+            st.session_state.llm_result = None  # Reset LLM result when question changes
+        else:
+            st.session_state.new_question = False
+
+        if st.session_state.new_question:
+            filtered_results = (
+                st.session_state.index.similarity_search_with_relevance_scores(
+                    query=user_question,
+                    k=10,
+                    filter={"State": st.session_state.selected_state},
+                    score_threshold=0.2,
                 )
+            )
+
+            if not filtered_results:
+                st.html(
+                    """<p style = "font-weight:bold; font-size:1.3rem;">
+                    "No relevant documents found for the selected state based on your query."
+                    </p>
+                """
+                )
+
             else:
-                st.session_state.new_question = False
-
-            if st.session_state.new_question:
-                filtered_results = (
-                    st.session_state.index.similarity_search_with_relevance_scores(
-                        query=user_question,
-                        k=10,
-                        filter={"State": st.session_state.selected_state},
-                        score_threshold=0.2,
-                    )
+                # Prepare documents for the conversational chain.
+                docs_for_chain, chunk_ids_w_metadata = map_chunk_to_metadata(
+                    filtered_results
                 )
-
-                if not filtered_results:
-                    st.html(
-                        """<p style = "font-weight:bold; font-size:1.3rem;">
-                        "No relevant documents found for the selected state based on your query."
-                        </p>
-                    """
-                    )
-
+                # Gen summary from llm of relevant context
+                chain = get_conversational_chain()
+                firstresult = chain.invoke(
+                    {"context": docs_for_chain, "question": user_question}
+                )
+                # Verify if the first LLM response was coherent or not.
+                chain = get_confirmation_result_chain()
+                result = chain.invoke(
+                    {
+                        "context": docs_for_chain,
+                        "question": user_question,
+                        "answer": firstresult,
+                    }
+                )
+                if result != st.session_state.llm_result:
+                    st.write_stream(stream_data(result))
+                    st.write("---")
                 else:
-                    # Prepare documents for the conversational chain.
-                    docs_for_chain, chunk_ids_w_metadata = map_chunk_to_metadata(
-                        filtered_results
-                    )
-                    # Gen summary from llm of relevant context
-                    chain = get_conversational_chain()
-                    firstresult = chain.invoke(
-                        {"context": docs_for_chain, "question": user_question}
-                    )
-                    # Verify if the first LLM response was coherent or not.
-                    chain = get_confirmation_result_chain()
-                    result = chain.invoke(
-                        {
-                            "context": docs_for_chain,
-                            "question": user_question,
-                            "answer": firstresult,
-                        }
-                    )
-                    if result != st.session_state.llm_result:
-                        st.write_stream(stream_data(result))
-                        st.write("---")
-                    else:
-                        st.write(result)
-                    st.session_state.llm_result = result
+                    st.write(result)
+                st.session_state.llm_result = result
 
-                    # generate table of contextual info for explainability
+                # generate table of contextual info for explainability
 
-                    if (
-                        "Sorry, the LLM cannot currently generate a good enough response"
-                        not in result
-                    ):
-                        records = generate_page_summary(
-                            chunk_ids_w_metadata, user_question
-                        )
-                        st.session_state.df = pd.DataFrame(records)
-                        st.session_state.relevant_df = st.session_state.df[
-                            ["Document", "Page", "Relevant Information"]
-                        ]
-                    else:
-                        records = False  # None
+                if (
+                    "Sorry, the LLM cannot currently generate a good enough response"
+                    not in result
+                ):
+                    records = generate_page_summary(chunk_ids_w_metadata, user_question)
+                    st.session_state.df = pd.DataFrame(records)
+                    st.session_state.relevant_df = st.session_state.df[
+                        ["Document", "Page", "Relevant Information"]
+                    ]
+                else:
+                    records = False  # None
 
-            else:
-                st.write(st.session_state.llm_result)
-                st.write("---")
+        else:
+            st.write(st.session_state.llm_result)
+            st.write("---")
 
     # non text summary components
     # display_relevant_info_df()
-    with col2:
-        display_selected_state_bills()
+    # with col2:
+    #    display_selected_state_bills()
     display_pdf_section()
 
 
