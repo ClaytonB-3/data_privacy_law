@@ -345,7 +345,7 @@ on TPLC's database"""
             }
         )
         self.assertTrue(
-            """Sorry, the database does not have specific information about your question."""
+            """Sorry, the database does not have specific information about your question"""
             in result2,
             msg=result2,
         )
