@@ -182,25 +182,6 @@ STYLING_FOR_STATE_PAGE = """
 st.markdown(STYLING_FOR_STATE_PAGE, unsafe_allow_html=True)
 
 
-def convert_date(date_str):
-    """
-    Convert a date in MMDDYYYY format to DD/MM/YYYY.
-    If the input is not an 8-digit number, return it unchanged.
-    Args:
-        date_str (str): The date string to convert
-
-    Returns:
-        str: The converted date string in DD/MM/YYYY format, or the original
-        string if it's not an 8-digit number
-    """
-    if isinstance(date_str, str) and len(date_str) == 8 and date_str.isdigit():
-        mm = date_str[0:2]
-        dd = date_str[2:4]
-        yyyy = date_str[4:]
-        return f"{dd}/{mm}/{yyyy}"
-    return date_str
-
-
 def create_state_selector():
     """
     This function creates the state selector.
@@ -301,10 +282,7 @@ def display_selected_state_bills():
         for doc in state_docs:
             title = doc.metadata.get("Title", "No Title")
             topics = doc.metadata.get("Topics", "No Topics")
-            # date = doc.metadata.get("Date", "No Date")
 
-            # Convert date from MMDDYYYY to DD/MM/YYYY.
-            # date_converted = convert_date(date)
             if title not in bills:
                 bills[title] = {
                     "Title": title,
