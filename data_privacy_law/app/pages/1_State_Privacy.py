@@ -19,8 +19,7 @@ import pandas as pd
 
 from llm_manager.llm_manager import (
     get_conversational_chain,
-    get_confirmation_result_chain,
-    get_document_specific_summary
+    get_confirmation_result_chain
 )
 from db_manager.faiss_db_manager import (
     load_faiss_index,
@@ -298,14 +297,12 @@ def display_pdf_section():
     - pdf_title: Title of currently selected PDF
     """
     st.session_state.df_no_duplicates = pd.DataFrame()
-
     # Remove duplicate rows based on Document column if DataFrame exists and has rows
     if len(st.session_state.df) > 0:
         # Group by Document first to organize data per document
         documents_grouped = st.session_state.df.groupby("Document")
         # Add section header for sources and relevant information
         st.markdown("### Sources and Relevant Information")
-
         # Create collapsers for each document
         for doc_name, doc_group in documents_grouped:
             with st.expander(f"## 📄 {doc_name}"):
@@ -323,7 +320,6 @@ def display_pdf_section():
                 if st.button("View PDF", key=f"pdf_btn_{doc_name}"):
                     st.session_state.selected_pdf = page_data["File Path"].iloc[0]
                     st.session_state.pdf_title = doc_name
-
         # Display selected PDF
         if st.session_state.selected_pdf:
             st.markdown(f"### Document: {st.session_state.pdf_title}")
@@ -355,7 +351,6 @@ def run_state_privacy_page():
     """
     This function runs the state privacy law page.
     """
-
     _, logo_column, title_column = st.columns(
         [0.01, 0.05, 0.94], gap="small", vertical_alignment="bottom"
     )
@@ -440,8 +435,6 @@ def run_state_privacy_page():
                     "Sorry, the LLM cannot currently generate a good enough response"
                     not in result
                 ):
-                    print(chunk_ids_w_metadata)
-                    print(user_question)
                     records = generate_page_summary(chunk_ids_w_metadata, user_question)
                     st.session_state.df = pd.DataFrame(records)
                     st.session_state.relevant_df = st.session_state.df[

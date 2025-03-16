@@ -152,24 +152,24 @@ def get_document_specific_summary():
     Sets up a QA chain using ChatGoogleGenerativeAI and a custom prompt template.
     """
     prompt_template = """
-    I will provide text that is concatinated responses from an LLM model in response
-    to a question about data privacy bills. I need you summarize the text in a way
-    that is easy to read and understand without adding any additional information. 
-    The summary should be in short paragraphs or bullet points.
-
-    Text:
-    {text}
-
+    I will provide a single page from a bill and a question a user asked. Using only information from 
+    that page, provide a brief summary of the key points from the page that relate to the question.
+    Respond in bullet points and provide only the summary, no introduction or context. Try to be concise.
+    Only use information from the context provided. 
+    Question:
+    {question}
+    Context:
+    {context}
     Summary:
     """
     model = ChatGoogleGenerativeAI(
         model="gemini-2.0-flash-001",
         temperature=0.2,
-        system_prompt=(
-            """You are a helpful assistant that summarizes text without adding any additional information. """
-        ),
+        system_prompt=("""You only have knowledge based on the provided text."""),
     )
-    prompt = PromptTemplate(template=prompt_template, input_variables=["text"])
+    prompt = PromptTemplate(
+        template=prompt_template, input_variables=["context", "question"]
+    )
     return create_stuff_documents_chain(llm=model, prompt=prompt)
 
 

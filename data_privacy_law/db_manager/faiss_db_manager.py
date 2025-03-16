@@ -94,7 +94,6 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
 def generate_page_summary(chunk_ids_with_metadata, user_question):
     """
     This function generates a summary of the page based on the user's question.
-
     Args:
         chunk_ids_with_metadata (list): A list of tuples containing:
             - pdf_path (str): The path to the PDF file
@@ -102,12 +101,12 @@ def generate_page_summary(chunk_ids_with_metadata, user_question):
             - page_num (int): The page number of the document
         user_question (str): The question posed by the user to analyze the Documents
     """
-
     if not isinstance(chunk_ids_with_metadata, list):
         raise TypeError("chunk_ids_with_metadata must be a list")
 
     if not isinstance(user_question, str):
         raise TypeError("user_question must be a string")
+
     records = []
     unique_pdf_paths = set(pdf_path for pdf_path, _, _ in chunk_ids_with_metadata)
     unique_pdf_paths_list = list(unique_pdf_paths)
@@ -121,7 +120,6 @@ def generate_page_summary(chunk_ids_with_metadata, user_question):
                     chunk_pdf_pages.append(page_text)
                     chunk_pdf_pages.append(page_num)
                     # st.write(f"Chunk PDF Pages: {chunk_pdf_pages}")
-                    print(chunk_pdf_pages[1], user_question)
                     page_information = get_document_specific_summary().invoke(
                         {
                             "context": [Document(page_content=chunk_pdf_pages[1])],
