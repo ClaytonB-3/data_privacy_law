@@ -345,8 +345,7 @@ on TPLC's database"""
             }
         )
         self.assertTrue(
-            """Sorry, the LLM cannot currently generate \
-a good enough response"""
+            """Sorry, the database does not have specific information about your question."""
             in result2,
             msg=result2,
         )
