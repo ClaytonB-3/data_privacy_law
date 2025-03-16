@@ -16,13 +16,15 @@ import time
 import streamlit as st
 import pandas as pd
 from langchain.docstore.document import Document
-from llm_manager.experimental_llm_manager import (
-    load_faiss_index,
+from llm_manager.llm_manager import (
     get_conversational_chain,
     get_confirmation_result_chain,
-    get_document_specific_summary,
-    obtain_text_of_chunk,
-    llm_simplify_chunk_text,
+    get_document_specific_summary
+)
+from db_manager.faiss_db_manager import (
+    load_faiss_index,
+    process_chunk_records,
+    map_chunk_to_metadata
 )
 
 
@@ -213,66 +215,6 @@ def create_state_selector():
     return st.session_state["selected_state"]
 
 
-def process_chunk_records(chunk_ids_with_filenames, user_question):
-    """
-    This function creates a list of dictionies of document, page num, and chunk num to query LLM
-
-    1.
-    Args:
-        chunk_ids (list): List of chunk identifiers
-        user_question (str): The question posed by the user to analyze the Documents
-
-    Returns:
-        list: A list of dictionaries containing:
-            - Document (str): Name of the document
-            - Page Number (int): Page number where chunk appears
-            - Chunk Number (int): Sequential number of the chunk
-            - Relevant information in chunk (str): LLM-processed text relevant to user question
-    """
-    # Parse the chunk_id to build a table of Document, Page Number, and Chunk Number.
-    records = []
-    for cid, (pdf_filename, doc_title) in chunk_ids_with_filenames.items():
-        if not cid:
-            continue
-        # Expected format: Texas_Data_Privacy_and_Security_Act_Page_35_ChunkNo_1
-        try:
-            text_of_chunk = obtain_text_of_chunk(cid)
-            # st.write(f"\nText of Chunk is {text_of_chunk}")
-            doc_for_processing_chunk = Document(page_content=text_of_chunk, metadata={})
-            # st.write(f"\nDoc for processing Chunk is {doc_for_processing_chunk}")
-            # st.html(f"""<p style="font-weight:bold; font-size:.5rem;">{cid}</p>""")
-            # st.html(
-            #     f"""<p style="font-weight:bold; font-size:.5rem;">{text_of_chunk}</p>"""
-            # )
-            parsed_text_for_llm_input = llm_simplify_chunk_text(text_of_chunk)
-            # st.write(f"\nDoc for processing Chunk is {parsed_text_for_llm_input}")
-            converted_text = parsed_text_for_llm_input.invoke(
-                {
-                    "context": [doc_for_processing_chunk],
-                    "question": user_question,
-                }
-            )
-            # st.write(f"\nConverted text is {converted_text}")
-
-            parts = cid.split("_Page_")
-            if len(parts) != 2:
-                continue
-            page_part, chunk_part = parts[1].split("_ChunkNo_")
-            records.append(
-                {
-                    "Document": doc_title,
-                    "Page": int(page_part),
-                    "Chunk Number": int(chunk_part),
-                    "Relevant Information": str(converted_text),
-                    "File Path": pdf_filename,
-                }
-            )
-
-        except Exception as e:
-            st.write(f"Error parsing chunk_id: {cid}. Error: {e}")
-    return records
-
-
 def display_selected_state_bills():
     """
     Retrieve all docs for selected state and return df of title and date.
@@ -436,27 +378,6 @@ def display_pdf_section():
             show_pdf(pdf_path)
 
 
-def map_chunk_to_metadata(filtered_results):
-    """
-    This function maps the filtered results to the metadata.
-
-    Args:
-        filtered_results (List[Tuple[Document, float]]): A list of tuples of Document and score
-
-    Returns:
-        tuple: A tuple of (list of documents, dictionary of chunk_id to (pdf_path, doc_title))
-    """
-    docs_for_chain = [doc for doc, score in filtered_results]
-    chunk_ids = [doc.metadata.get("Chunk_id") for doc in docs_for_chain]
-    pdf_paths = [doc.metadata.get("Path") for doc in docs_for_chain]
-    doc_titles = [doc.metadata.get("Title") for doc in docs_for_chain]
-    chunk_ids_w_filepaths_titles = {
-        chunk_id: (pdf_path, doc_title)
-        for chunk_id, pdf_path, doc_title in zip(chunk_ids, pdf_paths, doc_titles)
-    }
-    return docs_for_chain, chunk_ids_w_filepaths_titles
-
-
 def initialize_session_state():
     """
     This function initializes the session state variables.
@@ -567,7 +488,10 @@ def run_state_privacy_page():
                         records = process_chunk_records(
                             chunk_ids_w_filepaths_titles, user_question
                         )
-                        st.session_state.df = pd.DataFrame(records)
+                        if len(records) == 0:
+                            st.write(f"Error in parsing process_chunk_records")
+                        else:
+                            st.session_state.df = pd.DataFrame(records)
                         st.session_state.relevant_df = st.session_state.df[
                             ["Document", "Page", "Relevant Information"]
                         ]
