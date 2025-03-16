@@ -7,7 +7,8 @@ from langchain_community.vectorstores import FAISS
 from langchain.docstore.document import Document
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
-from llm_manager.llm_manager import llm_simplify_chunk_text
+from llm_manager.llm_manager import parse_bill_info, llm_simplify_chunk_text
+from db_manager.pdf_parser import extract_text_from_pdf, chunk_pdf_pages
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
@@ -91,7 +92,7 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
             print(f"Error parsing chunk_id: {cid}. Error: {e}")
     return records
 
-def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder="./db_manager/faiss_index", index_name= "index.faiss"):
+def add_chunk_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder="./db_manager/faiss_index", index_name= "index.faiss"):
     """
     Create or load an existing FAISS index and add new document chunks.
     """
@@ -162,7 +163,7 @@ def load_faiss_index(faiss_folder="./db_manager/faiss_index"):
 def obtain_text_of_chunk(chunk_id):
     """
     This function takes a chunk id, and then searches the whole FAISS dataset for that chunkid
-    When that chunkid is found, the associated text of that chunk is returned
+    When that chunkid is found, the associated text of that chunk is returned.
     """
     faiss_store = load_faiss_index()
     all_docs = list(faiss_store.docstore._dict.values())
@@ -214,8 +215,69 @@ def map_chunk_to_metadata(filtered_results):
     }
     return docs_for_chain, chunk_ids_w_filepaths_titles
 
-def write_db_info_to_csv(bill_info_list, file_name="bill_info.csv"):
 
+def add_bills_to_faiss_index(pdf_paths):
+    """
+    Add all of the bills in the `pdf_paths` into faiss DB.
+    Args:
+        pdf_paths: List[pdf_path:str]
+
+    Return:
+        bill_info_list: List[Dict[str, str]], The summary of the bills that were added to the FAISS DB.
+
+    """
+    
+    bill_info_list = []
+    # Write document into faiss index
+    for pdf_path in pdf_paths:
+        print(f"\nProcessing: {pdf_path}\n")
+        
+        # Step 1: Extract text from the PDF.
+        pages_of_pdf = extract_text_from_pdf(pdf_path)
+
+        if not pages_of_pdf:
+            print("No text extracted from the PDF.")
+            continue
+
+        full_pdf_text = "\n".join(pages_of_pdf)
+
+        # Step 2: Use the LLM to parse the bill details.
+        bill_info = parse_bill_info(full_pdf_text)
+
+        # Add PDF path to bill info for CSV
+        bill_info["Path"] = "./" + "/".join(pdf_path.split("/")[-3:])
+        bill_info["Filename"] = pdf_path.split("/")[-1]
+        bill_info_list.append(bill_info)
+        # Step 3: Split the document into chunks and get the source and page number for each chunk
+        chunk_texts, chunk_metadatas = chunk_pdf_pages(pages_of_pdf, pdf_path)
+
+        # Step 4: Combine the chunk metadata (Source and page number),
+        # with the doc metadata (Source, title etc.)
+        for metadata_of_chunk in chunk_metadatas:
+            metadata_of_chunk.update(bill_info)
+
+        # Step 5: Add the document and metadata to the FAISS index.
+        add_chunk_to_faiss_index(chunk_texts, chunk_metadatas)
+
+    return bill_info_list
+
+
+def write_bill_info_to_csv(bill_info_list, file_name="bill_info.csv"):
+    """
+    Write bill info into .csv file with following columns:
+    - Title
+    - Date
+    - Type
+    - Sector
+    - State
+    - Path
+    - Filename,
+    see llm_model.parse_bill_info for more details.
+    
+    Args:
+        bill_info_list: List[Dict[str, str]]
+    
+    """
     # Create or open CSV file for writing
     csv_path = f"./db_manager/data/{file_name}"
     csv_exists = os.path.exists(csv_path)
@@ -225,7 +287,9 @@ def write_db_info_to_csv(bill_info_list, file_name="bill_info.csv"):
     if csv_exists:
         with open(csv_path, "r", newline="") as csvfile:
             reader = csv.DictReader(csvfile)
+            print(reader)
             for row in reader:
+                print(row["Title"])
                 existing_data[row["Title"]] = row
     try:
         with open(csv_path, "w", newline="") as csvfile:

@@ -4,6 +4,7 @@ including test pdf extraction
 """
 
 import os
+from io import StringIO
 
 import unittest
 from unittest.mock import patch, MagicMock
@@ -14,19 +15,19 @@ from reportlab.lib.pagesizes import letter
 
 from db_manager.pdf_parser import (extract_text_from_pdf,
                                       chunk_pdf_pages)
-from db_manager.faiss_db_manager import (add_to_faiss_index,
+from db_manager.faiss_db_manager import (add_chunk_to_faiss_index,
+                                         add_bills_to_faiss_index,
                                          load_faiss_index,
                                          obtain_text_of_chunk,
-                                         calculate_updated_chunk_ids)
+                                         calculate_updated_chunk_ids,
+                                         write_bill_info_to_csv)
+
 from llm_manager.llm_manager import parse_bill_info
 
 class TestPDFExtraction(unittest.TestCase):
     """
     Testing whether the PDF's extraction function is working properly 
     and giving response in the right format. 
-
-    Args for the function --> pdf_path (str): The path to the PDF file.
-    Returns --> list: A list of strings, each representing a page of the PDF file.
     """
     def setUp(self):
         """
@@ -77,7 +78,7 @@ class TestPDFExtraction(unittest.TestCase):
         
 class TestDBManager(unittest.TestCase):
     """
-    General unittests for llm_manager
+    General unittests for DB_manager
     """
 
     def setUp(self):
@@ -172,13 +173,13 @@ class TestFAISSIndex(unittest.TestCase):
     @patch("db_manager.faiss_db_manager.GoogleGenerativeAIEmbeddings")
     @patch("db_manager.faiss_db_manager.os.path.exists")
     @patch("db_manager.faiss_db_manager.calculate_updated_chunk_ids")
-    def test_add_to_faiss_index_create_new(self,
+    def test_add_chunk_create_new(self,
                                            mock_chunks,
                                            mock_exists,
                                            mock_embeddings,
                                            mock_faiss):
         """
-        Test whether add_to_faiss_index can create new index properly
+        Test whether add_chunk_to_faiss_index can create new index properly
 
         Args:
             mock_chunks: mock patch for calculate_updated_chunk_ids
@@ -197,7 +198,7 @@ class TestFAISSIndex(unittest.TestCase):
         mock_faiss.from_texts.return_value = mock_faiss_instance
 
         # Run the function
-        add_to_faiss_index(chunk_texts=["test chunk"], chunk_metadatas=[{"Chunk_id": "123"}])
+        add_chunk_to_faiss_index(chunk_texts=["test chunk"], chunk_metadatas=[{"Chunk_id": "123"}])
 
         # Check if FAISS was called to create a new index
         mock_faiss.from_texts.assert_called_once()
@@ -207,11 +208,11 @@ class TestFAISSIndex(unittest.TestCase):
     @patch("db_manager.faiss_db_manager.GoogleGenerativeAIEmbeddings")
     @patch("db_manager.faiss_db_manager.os.path.exists")
     @patch("db_manager.faiss_db_manager.calculate_updated_chunk_ids")
-    def test_add_to_faiss_index_load_and_add_texts(self, mock_chunks,
+    def test_aadd_chunk_load_and_add_texts(self, mock_chunks,
                                                    mock_exists, mock_embeddings,
                                                    mock_faiss):
         """
-        Test whether add_to_faiss_index can load existing index and add texts properly
+        Test whether add_chunk_to_faiss_index can load existing index and add texts properly
         
         Args:
             mock_chunks: mock patch for calculate_updated_chunk_ids
@@ -231,7 +232,7 @@ class TestFAISSIndex(unittest.TestCase):
         mock_faiss_instance.docstore._dict = {"123":"123"}
         mock_faiss.load_local.return_value = mock_faiss_instance
 
-        add_to_faiss_index(["new chunk"], [{"Chunk_id": "456"}])  # New ID
+        add_chunk_to_faiss_index(["new chunk"], [{"Chunk_id": "456"}])  # New ID
         mock_faiss.load_local.assert_called_once()
 
         # Check if FAISS was called to create a add new index
@@ -242,15 +243,16 @@ class TestFAISSIndex(unittest.TestCase):
         )
         mock_faiss_instance.save_local.assert_called_once()
 
+    @patch('sys.stdout', new_callable=StringIO)
     @patch("db_manager.faiss_db_manager.FAISS")
     @patch("db_manager.faiss_db_manager.GoogleGenerativeAIEmbeddings")
     @patch("db_manager.faiss_db_manager.os.path.exists")
     @patch("db_manager.faiss_db_manager.calculate_updated_chunk_ids")
-    def test_add_to_faiss_index_load_error(self, mock_chunks,
+    def test_add_chunk_load_error(self, mock_chunks,
                                            mock_exists,
-                                           mock_embeddings, mock_faiss):
+                                           mock_embeddings, mock_faiss, mock_stdout):
         """
-        Test whether add_to_faiss_index can handle load errors properly
+        Test whether add_chunk_to_faiss_index can handle load errors properly
         
         Args:
             mock_chunks: mock patch for calculate_updated_chunk_ids
@@ -258,7 +260,7 @@ class TestFAISSIndex(unittest.TestCase):
             mock_embeddings: mock patch for GoogleGenerativeAIEmbeddings
             mock_faiss: mock patch for FAISS
         """
-
+        mock_stdout.getvalue()
         mock_chunks.return_value = [{"Chunk_id": "789"}]
         mock_exists.return_value = True
         # Mock embeddings
@@ -271,7 +273,7 @@ class TestFAISSIndex(unittest.TestCase):
         mock_faiss_instance = MagicMock()
         mock_faiss.from_texts.return_value = mock_faiss_instance
 
-        add_to_faiss_index(["test chunk"], [{"Chunk_id": "789"}])
+        add_chunk_to_faiss_index(["test chunk"], [{"Chunk_id": "789"}])
 
         # Ensure a try except and new FAISS index was created
         mock_faiss.load_local.assert_called_once()
@@ -300,7 +302,7 @@ class TestFAISSIndex(unittest.TestCase):
     @patch("db_manager.faiss_db_manager.load_faiss_index")
     def test_obtain_text_of_chunk(self, mock_load_faiss):
         """
-        Test whether obtain_text_of_chunk works properly
+        Test whether obtain_text_of_chunk works properly.
         """
         mock_faiss_instance = MagicMock()
         mock_load_faiss.return_value = mock_faiss_instance
@@ -328,3 +330,69 @@ class TestFAISSIndex(unittest.TestCase):
         mock_doc1.metadata = {'Chunk_id' : 1}
         mock_faiss_instance.docstore._dict = {'Chunk_id_1' : mock_doc1}
         self.assertEqual(obtain_text_of_chunk(1), '')
+
+    @patch('sys.stdout', new_callable=StringIO)
+    @patch("db_manager.faiss_db_manager.add_chunk_to_faiss_index")
+    @patch("db_manager.faiss_db_manager.chunk_pdf_pages")
+    @patch("db_manager.faiss_db_manager.parse_bill_info")
+    @patch("db_manager.faiss_db_manager.extract_text_from_pdf")
+    def test_add_bills_to_faiss_index(self, mock_extract_text, mock_parse_bill, mock_chunk_pdf, mock_add_chunk, mock_stdout):
+        '''
+        Test whether add_bills_to_faiss_index runs properly.
+        '''
+        mock_stdout.getvalue()
+        pdf_paths = ['path_1', 'path_2', 'path_3']
+        #  # Ensure mock_chunk_pdf accepts two arguments and returns a dummy value
+        mock_chunk_pdf.return_value = "chunk_texts", [{'metadata1':"metadata1", "metadata2":"metadata1"},
+                                                      {'metadata1':"metadata1", "metadata2":"metadata1"}]
+        add_bills_to_faiss_index(pdf_paths)
+        self.assertEqual(mock_extract_text.call_count, len(pdf_paths)) 
+        self.assertEqual(mock_parse_bill.call_count, len(pdf_paths)) 
+        self.assertEqual(mock_chunk_pdf.call_count, len(pdf_paths)) 
+        self.assertEqual(mock_add_chunk.call_count, len(pdf_paths)) 
+    
+
+class TestWriteToCSV(unittest.TestCase):
+    """
+    General unittests for write_bill_info_to_csv.
+    """
+    @patch("db_manager.faiss_db_manager.csv.DictWriter")
+    @patch("db_manager.faiss_db_manager.csv.DictReader")
+    @patch("db_manager.faiss_db_manager.os.path.exists")
+    def test_write_csv(self, mock_exists, mock_dictreader, mock_dictwriter):
+        """
+        Test whether csv writes and reads correct times.
+        """
+        mock_exists.return_value = True
+        mock_dictreader.return_value = [{'Title':'Title1', 
+                                    "Date":"Date1",
+                                    "Type":"Type1",
+                                    "Sector":"Sector1",
+                                    "State":"State1",
+                                    "Path":"Path1",
+                                    "Filename":"Filename1"}]
+        
+        bill_info_list=[{'Title':'Title2', 
+                            "Date":"Date2",
+                            "Type":"Type2",
+                            "Sector":"Sector2",
+                            "State":"State2",
+                            "Path":"Path2",
+                            "Filename":"Filename2"},
+                        {'Title':'Title3', 
+                            "Date":"Date3",
+                            "Type":"Type3",
+                            "Sector":"Sector3",
+                            "State":"State3",
+                            "Path":"Path3",
+                            "Filename":"Filename3"}]
+        file_name="test.csv"
+        write_bill_info_to_csv(bill_info_list, file_name)
+        mock_dictreader.assert_called_once()
+        # mock_writer = MagicMock()
+        mock_dictwriter.return_value.writeheader.assert_called_once()
+        self.assertEqual(
+            mock_dictwriter.return_value.writerow.call_count,
+            len(bill_info_list)+1
+            )
+    
