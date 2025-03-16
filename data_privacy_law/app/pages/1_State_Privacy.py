@@ -253,15 +253,12 @@ def generate_page_summary(chunk_ids_with_metadata, user_question):
 
 def display_selected_state_bills():
     """
-    Retrieve all docs for selected state and return df of title and date.
-    Args:
-        selected_state (str): The state selected by the user from the dropdown menu.
+    Retrieve all docs for selected state and return df of title and topics for that state.
 
     Returns:
-        pandas.DataFrame: A DataFrame containing bills for the selected state with columns:
-            - Title: Name/title of the privacy bill
-            - Date (DD/MM/YYYY): Date of the bill in DD/MM/YYYY format
-        Returns None if no bills are found for the state.
+        None
+    Output:
+        st.dataframe of title and topics for the selected state
     """
     # I tried using as_retriever() with a filter, but I wasn't sure the right search type to use.
     # pylint: disable=protected-access
