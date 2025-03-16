@@ -7,7 +7,7 @@ from langchain_community.vectorstores import FAISS
 from langchain.docstore.document import Document
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
-from llm_manager.llm_manager import parse_bill_info, llm_simplify_chunk_text
+from llm_manager.llm_manager import parse_bill_info, llm_simplify_chunk_text, get_document_specific_summary
 from db_manager.pdf_parser import extract_text_from_pdf, chunk_pdf_pages
 
 load_dotenv()
@@ -44,7 +44,6 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
     """
     This function creates a list of dictionaries of document, page num, and chunk num to query LLM
 
-    1.
     Args:
         chunk_ids (list): List of chunk identifiers
         user_question (str): The question posed by the user to analyze the Documents
@@ -92,7 +91,70 @@ def process_chunk_records(chunk_ids_with_filenames, user_question):
             print(f"Error parsing chunk_id: {cid}. Error: {e}")
     return records
 
-def add_chunk_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder="./db_manager/faiss_index", index_name= "index.faiss"):
+def generate_page_summary(chunk_ids_with_metadata, user_question):
+    """
+    This function generates a summary of the page based on the user's question.
+
+    Args:
+        chunk_ids_with_metadata (list): A list of tuples containing:
+            - pdf_path (str): The path to the PDF file
+            - doc_title (str): The title of the document
+            - page_num (int): The page number of the document
+        user_question (str): The question posed by the user to analyze the Documents
+    """
+
+    if not isinstance(chunk_ids_with_metadata, list):
+        raise TypeError("chunk_ids_with_metadata must be a list")
+
+    if not isinstance(user_question, str):
+        raise TypeError("user_question must be a string")
+    records = []
+    unique_pdf_paths = set(pdf_path for pdf_path, _, _ in chunk_ids_with_metadata)
+    unique_pdf_paths_list = list(unique_pdf_paths)
+    for pdf_path in unique_pdf_paths_list:
+        all_pdf_pages = extract_text_from_pdf(pdf_path)
+        for path, title, page_num in chunk_ids_with_metadata:
+            for i, page_text in enumerate(all_pdf_pages):
+                if (i + 1 == int(page_num)) and (path == pdf_path):
+                    chunk_pdf_pages = []
+                    chunk_pdf_pages.append(title)
+                    chunk_pdf_pages.append(page_text)
+                    chunk_pdf_pages.append(page_num)
+                    # st.write(f"Chunk PDF Pages: {chunk_pdf_pages}")
+                    print(chunk_pdf_pages[1], user_question)
+                    page_information = get_document_specific_summary().invoke(
+                        {
+                            "context": [Document(page_content=chunk_pdf_pages[1])],
+                            "question": user_question,
+                        }
+                    )
+                    if page_information:
+                        chunk_pdf_pages.append(page_information)
+                    else:
+                        chunk_pdf_pages.append("")
+                    records.append(
+                        {
+                            "Document": chunk_pdf_pages[0],
+                            "Page": chunk_pdf_pages[2],
+                            "Relevant Information": chunk_pdf_pages[3],
+                            "File Path": pdf_path,
+                        }
+                    )
+    for record in records:
+        if not all(
+            key in record
+            for key in ["Document", "Page", "Relevant Information", "File Path"]
+        ):
+            raise ValueError("Invalid record format in results")
+    return records
+
+
+def add_chunk_to_faiss_index(
+    chunk_texts,
+    chunk_metadatas,
+    faiss_folder="./db_manager/faiss_index",
+    index_name="index.faiss",
+):
     """
     Create or load an existing FAISS index and add new document chunks.
     """
@@ -203,17 +265,23 @@ def map_chunk_to_metadata(filtered_results):
         filtered_results (List[Tuple[Document, float]]): A list of tuples of Document and score
 
     Returns:
-        tuple: A tuple of (list of documents, dictionary of chunk_id to (pdf_path, doc_title))
+        tuple: A tuple of (list of documents,
+                           dictionary of chunk_id: (pdf_path, doc_title, doc_page))
     """
-    docs_for_chain = [doc for doc, _ in filtered_results]
-    chunk_ids = [doc.metadata.get("Chunk_id") for doc in docs_for_chain]
-    pdf_paths = [doc.metadata.get("Path") for doc in docs_for_chain]
-    doc_titles = [doc.metadata.get("Title") for doc in docs_for_chain]
-    chunk_ids_w_filepaths_titles = {
-        chunk_id: (pdf_path, doc_title)
-        for chunk_id, pdf_path, doc_title in zip(chunk_ids, pdf_paths, doc_titles)
-    }
-    return docs_for_chain, chunk_ids_w_filepaths_titles
+    if not isinstance(filtered_results, list):
+        raise TypeError("filtered_results must be a list")
+    docs_for_chain = [doc for doc, score in filtered_results]
+    chunk_ids = [doc.metadata.get("Chunk_id", "Unknown") for doc in docs_for_chain]
+    pdf_paths = [doc.metadata.get("Path", "Unknown") for doc in docs_for_chain]
+    doc_titles = [doc.metadata.get("Title", "Unknown") for doc in docs_for_chain]
+    doc_pages = [doc.metadata.get("Page", "Unknown") for doc in docs_for_chain]
+    chunk_id_page_tuples = list(zip(chunk_ids, doc_titles, pdf_paths, doc_pages))
+    unique_pairs = set(
+        (pdf_path, doc_title, doc_page)
+        for _, doc_title, pdf_path, doc_page in chunk_id_page_tuples
+    )
+    unique_path_page_tuples = list(unique_pairs)
+    return docs_for_chain, unique_path_page_tuples
 
 
 def add_bills_to_faiss_index(pdf_paths):
@@ -299,6 +367,7 @@ def write_bill_info_to_csv(bill_info_list, file_name="bill_info.csv"):
                 "Type",
                 "Sector",
                 "State",
+                "Topics",
                 "Path",
                 "Filename",
             ]

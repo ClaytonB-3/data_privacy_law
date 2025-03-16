@@ -1,6 +1,7 @@
 """
 Unittest for the functions in llm_mamager.py
 """
+
 import os
 
 import unittest
@@ -8,10 +9,11 @@ from unittest.mock import patch, MagicMock
 
 import google.generativeai as genai
 
-from llm_manager.llm_manager import (llm_simplify_chunk_text,
-                                     get_conversational_chain,
-                                     get_confirmation_result_chain)
-
+from llm_manager.llm_manager import (
+    llm_simplify_chunk_text,
+    get_conversational_chain,
+    get_confirmation_result_chain,
+    )
 
 
 class TestLLMResponse(unittest.TestCase):
@@ -25,7 +27,7 @@ class TestLLMResponse(unittest.TestCase):
     def test_llm_simplify_chunk_text(self, mock_prompt, mock_genai, mock_chain):
         """
         Test llm_simplify_chunk_text runs properly
-        
+
         Args:
             mock_prompt: mock patch for PromptTemplate
             mock_genai: mock genai for ChatGoogleGenerativeAI
@@ -41,7 +43,7 @@ class TestLLMResponse(unittest.TestCase):
     def test_get_confirmation_result_chain(self, mock_prompt, mock_genai, mock_chain):
         """
         Test get_confirmation_result_chai runs properly
-        
+
         Args:
             mock_prompt: mock patch for PromptTemplate
             mock_genai: mock genai for ChatGoogleGenerativeAI
@@ -57,7 +59,7 @@ class TestLLMResponse(unittest.TestCase):
     def test_get_conversational_chain(self, mock_prompt, mock_genai, mock_chain):
         """
         Test get_conversational_chain runs properly
-        
+
         Args:
             mock_prompt: mock patch for PromptTemplate
             mock_genai: mock genai for ChatGoogleGenerativeAI
@@ -128,9 +130,12 @@ completion of the age verification process."""
         )
         self.assertGreater(len(firstresult1), 0)
         self.assertGreater(len(result1), 0)
-        self.assertTrue("""The document database has an answer to your \
+        self.assertTrue(
+            """The document database has an answer to your \
 question. Here is the structured response based \
-on TPLC's database""" in result1)
+on TPLC's database"""
+            in result1
+        )
 
         user_question2 = "Who is the president of USA?"
         chain1 = get_conversational_chain()
@@ -146,8 +151,12 @@ on TPLC's database""" in result1)
                 "answer": firstresult2,
             }
         )
-        self.assertTrue("""Sorry, the LLM cannot currently generate \
-a good enough response""" in result2, msg=result2)
+        self.assertTrue(
+            """Sorry, the database does not have specific information about your question"""
+            in result2,
+            msg=result2,
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
