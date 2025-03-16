@@ -7,7 +7,7 @@ from langchain_community.vectorstores import FAISS
 from langchain.docstore.document import Document
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
-from llm_manager.llm_manager import parse_bill_info, llm_simplify_chunk_text, get_document_specific_summary
+from llm_manager.llm_manager import parse_bill_info, llm_simplify_chunk_text
 from db_manager.pdf_parser import extract_text_from_pdf, chunk_pdf_pages
 
 load_dotenv()
@@ -39,112 +39,6 @@ def calculate_updated_chunk_ids(chunk_metadatas):
         last_page_id = current_page_id
 
     return chunk_metadatas
-
-def process_chunk_records(chunk_ids_with_filenames, user_question):
-    """
-    This function creates a list of dictionaries of document, page num, and chunk num to query LLM
-
-    Args:
-        chunk_ids (list): List of chunk identifiers
-        user_question (str): The question posed by the user to analyze the Documents
-
-    Returns:
-        list: A list of dictionaries containing:
-            - Document (str): Name of the document
-            - Page Number (int): Page number where chunk appears
-            - Chunk Number (int): Sequential number of the chunk
-            - Relevant information in chunk (str): LLM-processed text relevant to user question
-    """
-    # Parse the chunk_id to build a table of Document, Page Number, and Chunk Number.
-    records = []
-    for cid, (pdf_filename, doc_title) in chunk_ids_with_filenames.items():
-        if not cid:
-            continue
-        # Expected format: Texas_Data_Privacy_and_Security_Act_Page_35_ChunkNo_1
-        try:
-            text_of_chunk = obtain_text_of_chunk(cid)
-            doc_for_processing_chunk = Document(page_content=text_of_chunk, metadata={})
-            parsed_text_for_llm_input = llm_simplify_chunk_text()
-            converted_text = parsed_text_for_llm_input.invoke(
-                {
-                    "context": [doc_for_processing_chunk],
-                    "question": user_question,
-                }
-            )
-            # st.write(f"\nConverted text is {converted_text}")
-
-            parts = cid.split("_Page_")
-            if len(parts) != 2:
-                continue
-            page_part, chunk_part = parts[1].split("_ChunkNo_")
-            records.append(
-                {
-                    "Document": doc_title,
-                    "Page": int(page_part),
-                    "Chunk Number": int(chunk_part),
-                    "Relevant Information": str(converted_text),
-                    "File Path": pdf_filename,
-                }
-            )
-
-        except Exception as e:
-            print(f"Error parsing chunk_id: {cid}. Error: {e}")
-    return records
-
-def generate_page_summary(chunk_ids_with_metadata, user_question):
-    """
-    This function generates a summary of the page based on the user's question.
-    Args:
-        chunk_ids_with_metadata (list): A list of tuples containing:
-            - pdf_path (str): The path to the PDF file
-            - doc_title (str): The title of the document
-            - page_num (int): The page number of the document
-        user_question (str): The question posed by the user to analyze the Documents
-    """
-    if not isinstance(chunk_ids_with_metadata, list):
-        raise TypeError("chunk_ids_with_metadata must be a list")
-
-    if not isinstance(user_question, str):
-        raise TypeError("user_question must be a string")
-
-    records = []
-    unique_pdf_paths = set(pdf_path for pdf_path, _, _ in chunk_ids_with_metadata)
-    unique_pdf_paths_list = list(unique_pdf_paths)
-    for pdf_path in unique_pdf_paths_list:
-        all_pdf_pages = extract_text_from_pdf(pdf_path)
-        for path, title, page_num in chunk_ids_with_metadata:
-            for i, page_text in enumerate(all_pdf_pages):
-                if (i + 1 == int(page_num)) and (path == pdf_path):
-                    chunk_pdf_pages = []
-                    chunk_pdf_pages.append(title)
-                    chunk_pdf_pages.append(page_text)
-                    chunk_pdf_pages.append(page_num)
-                    # st.write(f"Chunk PDF Pages: {chunk_pdf_pages}")
-                    page_information = get_document_specific_summary().invoke(
-                        {
-                            "context": [Document(page_content=chunk_pdf_pages[1])],
-                            "question": user_question,
-                        }
-                    )
-                    if page_information:
-                        chunk_pdf_pages.append(page_information)
-                    else:
-                        chunk_pdf_pages.append("")
-                    records.append(
-                        {
-                            "Document": chunk_pdf_pages[0],
-                            "Page": chunk_pdf_pages[2],
-                            "Relevant Information": chunk_pdf_pages[3],
-                            "File Path": pdf_path,
-                        }
-                    )
-    for record in records:
-        if not all(
-            key in record
-            for key in ["Document", "Page", "Relevant Information", "File Path"]
-        ):
-            raise ValueError("Invalid record format in results")
-    return records
 
 
 def add_chunk_to_faiss_index(

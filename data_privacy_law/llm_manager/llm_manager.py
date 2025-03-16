@@ -9,6 +9,8 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.prompts import PromptTemplate
 
+from db_manager.pdf_parser import extract_text_from_pdf
+
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
@@ -173,6 +175,60 @@ def get_document_specific_summary():
     return create_stuff_documents_chain(llm=model, prompt=prompt)
 
 
+def generate_page_summary(chunk_ids_with_metadata, user_question):
+    """
+    This function generates a summary of the page based on the user's question.
+    Args:
+        chunk_ids_with_metadata (list): A list of tuples containing:
+            - pdf_path (str): The path to the PDF file
+            - doc_title (str): The title of the document
+            - page_num (int): The page number of the document
+        user_question (str): The question posed by the user to analyze the Documents
+    """
+    if not isinstance(chunk_ids_with_metadata, list):
+        raise TypeError("chunk_ids_with_metadata must be a list")
+
+    if not isinstance(user_question, str):
+        raise TypeError("user_question must be a string")
+
+    records = []
+    unique_pdf_paths = set(pdf_path for pdf_path, _, _ in chunk_ids_with_metadata)
+    unique_pdf_paths_list = list(unique_pdf_paths)
+    for pdf_path in unique_pdf_paths_list:
+        all_pdf_pages = extract_text_from_pdf(pdf_path)
+        for path, title, page_num in chunk_ids_with_metadata:
+            for i, page_text in enumerate(all_pdf_pages):
+                if (i + 1 == int(page_num)) and (path == pdf_path):
+                    chunk_pdf_pages = []
+                    chunk_pdf_pages.append(title)
+                    chunk_pdf_pages.append(page_text)
+                    chunk_pdf_pages.append(page_num)
+                    # st.write(f"Chunk PDF Pages: {chunk_pdf_pages}")
+                    page_information = get_document_specific_summary().invoke(
+                        {
+                            "context": [Document(page_content=chunk_pdf_pages[1])],
+                            "question": user_question,
+                        }
+                    )
+                    if page_information:
+                        chunk_pdf_pages.append(page_information)
+                    else:
+                        chunk_pdf_pages.append("")
+                    records.append(
+                        {
+                            "Document": chunk_pdf_pages[0],
+                            "Page": chunk_pdf_pages[2],
+                            "Relevant Information": chunk_pdf_pages[3],
+                            "File Path": pdf_path,
+                        }
+                    )
+    for record in records:
+        if not all(
+            key in record
+            for key in ["Document", "Page", "Relevant Information", "File Path"]
+        ):
+            raise ValueError("Invalid record format in results")
+    return records
 
 def llm_simplify_chunk_text():
     prompt_template = """

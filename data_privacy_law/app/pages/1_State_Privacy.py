@@ -19,11 +19,11 @@ import pandas as pd
 
 from llm_manager.llm_manager import (
     get_conversational_chain,
+    generate_page_summary,
     get_confirmation_result_chain
 )
 from db_manager.faiss_db_manager import (
     load_faiss_index,
-    generate_page_summary,
     map_chunk_to_metadata
 )
 
