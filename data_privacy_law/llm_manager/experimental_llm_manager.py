@@ -259,19 +259,24 @@ def get_confirmation_result_chain():
     Sets up a QA chain using ChatGoogleGenerativeAI and a custom prompt template.
     """
     prompt_template = """
-        I will provide you the answer to a question I asked an LLM model based on a given context. 
+        I will provide you the answer to a question I asked an LLM model based on a given context.  
         Look at the question and the answer, and make sure that the answer is correct and coherent. 
         DO NOT MENTION THAT I HAVE ASKED YOU THIS QUESTION BEFORE.
 
-        If the answer does not make sense, state "Sorry, the LLM cannot currently generate a good enough response for 
-        this question. Please refer to the side table and see if there is anything from those topics that you would like
-        to know about."   
+        If the answer does not make sense, state "Sorry, the LLM cannot currently generate a good enough
+        response for this question. Please refer to the side table and see if there is anything from
+        those topics that you would like to know about."   
 
-        If the answer does make sense, state "The document database has an answer to your question. Here is the 
-        structured response based on TPLC's database", and then write the answer with an introduction, body 
-        and conclusion for the response. , based on the question and answer and context you were provided. 
+        If the answer does make sense then write the answer with an introduction, body and conclusion
+        for the response, based on the question and answer and context you were provided. 
+        Remember to state "Sorry, the database does not have specific information about your question"
+        first if the context does not have documents related to the question, or “The document database
+        has an answer to your question. Here is the structured response based on TPLC's database” first
+        if the context has documents related to the question.
+
         DO NOT USE THE WORDS INTRODUCTION, BODY, CONCLUSION, in your response. 
         THERE MUST BE AN INTRODUCTION AND CONCLUSION part to your response no matter what. 
+
 
         Context:
         {context}
