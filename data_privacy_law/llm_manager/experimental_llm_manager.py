@@ -13,6 +13,7 @@ The final metadata for each chunk is:
     "Type": "",
     "Sector": "",
     "State": "",
+    "Topics": "",
     "Chunk_id": f"{current_page_id}_ChunkNo_{current_chunk_index}"
 }
 """
@@ -67,7 +68,7 @@ def parse_bill_info(pdf_text):
     """
     Feeds the extracted PDF text into the LLM to obtain bill details.
     The LLM is expected to return a JSON object with:
-    { "Title": "", "Date": "", "Type": "", "Sector": "", "State": "" }
+    { "Title": "", "Date": "", "Type": "", "Sector": "", "State": "", "Topics": "" }
     """
     prompt_template = """
         You are given the text of a legal document from a PDF file.
@@ -84,9 +85,10 @@ def parse_bill_info(pdf_text):
         5. The title of the bill in 15 words or less. Use format (State name as the first word if it is a 
         State level sectoral bill or Comprehensive State level bill. If it is not in these categories, write Federal as
         the first word. Then put a colon ":" and write the title of the bill after that)
+        6. A list of no more than six topics that the bill is related to
 
         Return the information as a JSON object EXACTLY in the following format:
-        {{"Title": "", "Date": "", "Type": "", "Sector": "", "State": ""}}
+        {{"Title": "", "Date": "", "Type": "", "Sector": "", "State": "", "Topics": []}}
 
         Bill text:
         {context}
@@ -143,7 +145,13 @@ def calculate_updated_chunk_ids(chunk_metadatas):
 
     return chunk_metadatas
 
-def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder="./llm_manager/faiss_index", index_name= "index.faiss"):
+
+def add_to_faiss_index(
+    chunk_texts,
+    chunk_metadatas,
+    faiss_folder="./llm_manager/faiss_index",
+    index_name="index.faiss",
+):
     """
     Create or load an existing FAISS index and add new document chunks.
     """
@@ -251,13 +259,16 @@ def get_confirmation_result_chain():
     Sets up a QA chain using ChatGoogleGenerativeAI and a custom prompt template.
     """
     prompt_template = """
-        I will provide you the answer to a question I asked an LLM model based on a given context. 
+        I will provide you the answer to a question I asked an LLM model based on a given context.  
         Look at the question and the answer, and make sure that the answer is correct and coherent. 
         DO NOT MENTION THAT I HAVE ASKED YOU THIS QUESTION BEFORE.
 
-        If the answer does not make sense, state "Sorry, the LLM cannot currently generate a good enough response for 
-        this question. Please refer to the side table and see if there is anything from those topics that you would like
-        to know about."   
+        If the answer contains "Sorry, the database does not have specific information about your question" or a similar
+        phrase, state "Sorry, the database does not have specific information about your question”.
+
+        If the answer does not make sense, state "Sorry, the LLM cannot currently generate a good enough
+        response for this question. Please refer to the side table and see if there is anything from
+        those topics that you would like to know about."   
 
         If the answer does make sense, state "The document database has an answer to your question. Here is the 
         structured response based on TPLC's database", and then write the answer with an introduction, body 
@@ -295,24 +306,27 @@ def get_document_specific_summary():
     Sets up a QA chain using ChatGoogleGenerativeAI and a custom prompt template.
     """
     prompt_template = """
-    I will provide text that is concatinated responses from an LLM model in response
-    to a question about data privacy bills. I need you summarize the text in a way
-    that is easy to read and understand without adding any additional information. 
-    The summary should be in short paragraphs or bullet points.
+    I will provide a single page from a bill and a question a user asked. Using only information from 
+    that page, provide a brief summary of the key points from the page that relate to the question.
+    Respond in bullet points and provide only the summary, no introduction or context. Try to be concise.
+    Only use information from the context provided. 
 
-    Text:
-    {text}
+    Question:
+    {question}
+
+    Context:
+    {context}
 
     Summary:
     """
     model = ChatGoogleGenerativeAI(
         model="gemini-2.0-flash-001",
         temperature=0.2,
-        system_prompt=(
-            """You are a helpful assistant that summarizes text without adding any additional information. """
-        ),
+        system_prompt=("""You only have knowledge based on the provided text."""),
     )
-    prompt = PromptTemplate(template=prompt_template, input_variables=["text"])
+    prompt = PromptTemplate(
+        template=prompt_template, input_variables=["context", "question"]
+    )
     return create_stuff_documents_chain(llm=model, prompt=prompt)
 
 
@@ -388,8 +402,7 @@ def llm_simplify_chunk_text(text_for_llm):
     prompt_template = """
         Provide any information from the provided context that is relevant to the question.
         Only use the information from the context to answer the question.
-        Answer in points. Dont give any introductions and get straight to the point. 
-        Summarize in the context of the question
+        Be brief, answer in points. Dont give any introductions and get straight to the point. 
 
         Context:
         {context}
@@ -402,6 +415,11 @@ def llm_simplify_chunk_text(text_for_llm):
     model = ChatGoogleGenerativeAI(
         model="gemini-2.0-flash-001",
         temperature=0.1,
+        system_prompt=(
+            """
+            Your knowledge is only limited to the information in the provided context.
+            Be brief and answer in points without introduction or context."""
+        ),
     )
     prompt = PromptTemplate(
         template=prompt_template, input_variables=["context", "question"]
@@ -467,6 +485,7 @@ def main(pdf_paths):
             "Type",
             "Sector",
             "State",
+            "Topics",
             "Path",
             "Filename",
         ]
