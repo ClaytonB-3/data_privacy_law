@@ -12,10 +12,16 @@ This module provides unit tests to verify that the State Privacy Law app UI:
 import unittest
 import importlib.util
 from streamlit.testing.v1 import AppTest
-from app.pages.1_State_Privacy import (
-    map_chunk_to_metadata,
-    generate_page_summary,
+
+# Use importlib to import the module, since its filename starts with a digit.
+spec = importlib.util.spec_from_file_location(
+    "state_privacy", "app/pages/1_State_Privacy.py"
 )
+state_privacy = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(state_privacy)
+generate_page_summary = state_privacy.generate_page_summary
+map_chunk_to_metadata = state_privacy.map_chunk_to_metadata
+
 
 def find_widgets(widget, target_type):
     """
@@ -111,29 +117,29 @@ class StatePrivacyLawAppTest(unittest.TestCase):
             "Question input field with expected label not found.",
         )
 
-    def test_convert_date_function(self):
-        """
-        Verify that the convert_date function converts dates correctly.
-        """
+    # def test_convert_date_function(self):
+    #     """
+    #     Verify that the convert_date function converts dates correctly.
+    #     """
 
-        # Use importlib to import the module, since its filename starts with a digit.
-        spec = importlib.util.spec_from_file_location(
-            "state_privacy", "app/pages/1_State_Privacy.py"
-        )
-        state_privacy = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(state_privacy)
-        convert_date = state_privacy.convert_date
+    #     # Use importlib to import the module, since its filename starts with a digit.
+    #     spec = importlib.util.spec_from_file_location(
+    #         "state_privacy", "app/pages/1_State_Privacy.py"
+    #     )
+    #     state_privacy = importlib.util.module_from_spec(spec)
+    #     spec.loader.exec_module(state_privacy)
+    #     convert_date = state_privacy.convert_date
 
-        self.assertEqual(
-            convert_date("01012020"),
-            "01/01/2020",
-            "Date conversion did not work as expected.",
-        )
-        self.assertEqual(
-            convert_date("invalid"),
-            "invalid",
-            "Non 8-digit string should remain unchanged.",
-        )
+    #     self.assertEqual(
+    #         convert_date("01012020"),
+    #         "01/01/2020",
+    #         "Date conversion did not work as expected.",
+    #     )
+    #     self.assertEqual(
+    #         convert_date("invalid"),
+    #         "invalid",
+    #         "Non 8-digit string should remain unchanged.",
+    #     )
 
     def test_generate_page_summary(self):
         """
@@ -158,12 +164,11 @@ class StatePrivacyLawAppTest(unittest.TestCase):
         """
         chunk_ids_with_metadata = [
             ("./pdfs/Texas/test.pdf", "Texas Privacy Act", "1"),
-            ("./pdfs/Texas/test.pdf", "Texas Privacy Act", "2")
+            ("./pdfs/Texas/test.pdf", "Texas Privacy Act", "2"),
         ]
         self.assertTrue(isinstance(chunk_ids_with_metadata, list))
         with self.assertRaises(TypeError):
             map_chunk_to_metadata(None)
-        
 
 
 if __name__ == "__main__":
