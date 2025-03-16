@@ -279,8 +279,9 @@ def display_selected_state_bills():
         for doc in state_docs:
             title = doc.metadata.get("Title", "No Title")
             topics = doc.metadata.get("Topics", "No Topics")
+            file_path = doc.metadata.get("Path", "No Path")
 
-            if title not in bills:
+            if file_path not in bills:
                 bills[title] = {
                     "Title": title,
                     # "Effective Date (DD/MM/YYYY)": date_converted,
