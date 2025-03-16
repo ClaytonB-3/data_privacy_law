@@ -263,6 +263,9 @@ def get_confirmation_result_chain():
         Look at the question and the answer, and make sure that the answer is correct and coherent. 
         DO NOT MENTION THAT I HAVE ASKED YOU THIS QUESTION BEFORE.
 
+        If the answer contains "Sorry, the database does not have specific information about your question" or a similar
+        phrase, state "Sorry, the database does not have specific information about your question".
+
         If the answer does not make sense, state "Sorry, the LLM cannot currently generate a good enough response for 
         this question. Please refer to the side table and see if there is anything from those topics that you would like
         to know about."   
