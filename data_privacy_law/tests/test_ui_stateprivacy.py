@@ -12,7 +12,10 @@ This module provides unit tests to verify that the State Privacy Law app UI:
 import unittest
 import importlib.util
 from streamlit.testing.v1 import AppTest
-
+from app.pages.1_State_Privacy import (
+    map_chunk_to_metadata,
+    generate_page_summary,
+)
 
 def find_widgets(widget, target_type):
     """
@@ -158,6 +161,14 @@ class StatePrivacyLawAppTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             generate_page_summary(chunk_ids_with_metadata, None)
 
+    def test_map_chunk_to_metadata(self):
+        """
+        Test the map_chunk_to_metadata function.
+        """
+        chunk_ids_with_metadata = [
+            ("./pdfs/Texas/test.pdf", "Texas Privacy Act", "1"),
+            ("./pdfs/Texas/test.pdf", "Texas Privacy Act", "2")
+        ]
 
 if __name__ == "__main__":
     unittest.main()
