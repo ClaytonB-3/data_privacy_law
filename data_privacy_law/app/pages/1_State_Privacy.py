@@ -395,8 +395,10 @@ def map_chunk_to_metadata(filtered_results):
 
     Returns:
         tuple: A tuple of (list of documents,
-                           dictionary of chunk_id to (pdf_path, doc_title, doc_page))
+                           dictionary of chunk_id: (pdf_path, doc_title, doc_page))
     """
+    if not isinstance(filtered_results, list):
+        raise TypeError("filtered_results must be a list")
     docs_for_chain = [doc for doc, score in filtered_results]
     chunk_ids = [doc.metadata.get("Chunk_id", "Unknown") for doc in docs_for_chain]
     pdf_paths = [doc.metadata.get("Path", "Unknown") for doc in docs_for_chain]

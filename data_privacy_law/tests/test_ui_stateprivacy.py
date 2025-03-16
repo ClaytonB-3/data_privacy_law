@@ -145,15 +145,6 @@ class StatePrivacyLawAppTest(unittest.TestCase):
             ("./pdfs/Texas/test.pdf", "Texas Privacy Act", "2"),
         ]
         user_question = "What are state privacy laws related to social media?"
-        self.assertTrue(isinstance(chunk_ids_with_metadata, list))
-        for item in chunk_ids_with_metadata:
-            self.assertTrue(isinstance(item, tuple))
-            self.assertEqual(len(item), 3)
-            pdf_path, title, page = item
-            self.assertTrue(isinstance(pdf_path, str))
-            self.assertTrue(isinstance(title, str))
-            self.assertTrue(isinstance(page, str))
-        self.assertTrue(isinstance(user_question, str))
         # Test with invalid inputs
         with self.assertRaises(TypeError):
             generate_page_summary(None, user_question)
@@ -169,6 +160,11 @@ class StatePrivacyLawAppTest(unittest.TestCase):
             ("./pdfs/Texas/test.pdf", "Texas Privacy Act", "1"),
             ("./pdfs/Texas/test.pdf", "Texas Privacy Act", "2")
         ]
+        self.assertTrue(isinstance(chunk_ids_with_metadata, list))
+        with self.assertRaises(TypeError):
+            map_chunk_to_metadata(None)
+        
+
 
 if __name__ == "__main__":
     unittest.main()
