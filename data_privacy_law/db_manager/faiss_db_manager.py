@@ -1,4 +1,5 @@
 import os
+import csv
 
 from dotenv import load_dotenv
 import google.generativeai as genai

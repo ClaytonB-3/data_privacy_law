@@ -1,8 +1,6 @@
 import os
 import sys
 
-import csv
-
 from db_manager.faiss_db_manager import add_to_faiss_index, write_db_info_to_csv
 from db_manager.pdf_parser import extract_text_from_pdf, chunk_pdf_pages
 from llm_manager.llm_manager import parse_bill_info
