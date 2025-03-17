@@ -7,24 +7,23 @@ import os
 import sys
 import time
 
-import streamlit as st
 import pandas as pd
-from langchain.docstore.document import Document
+import streamlit as st
 
+# Set up root directory for imports
 current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)  # This gives 'app'
-root_dir = os.path.dirname(parent_dir)  # This gives 'data_privacy_law'
-# Add to Python path
+parent_dir = os.path.dirname(current_dir)    # This gives "app"
+root_dir = os.path.dirname(parent_dir)    # This gives "data_privacy_law"
 sys.path.append(root_dir)
 
-from llm_manager.experimental_llm_manager import (
-    extract_text_from_pdf,
+from db_manager.faiss_db_manager import (
     load_faiss_index,
-    get_conversational_chain,
+    map_chunk_to_metadata,
+)
+from llm_manager.llm_manager import (
+    generate_page_summary,
     get_confirmation_result_chain,
-    get_document_specific_summary,
-    # obtain_text_of_chunk,
-    # llm_simplify_chunk_text,
+    get_conversational_chain,
 )
 
 # List of US states.
@@ -190,75 +189,21 @@ def create_state_selector():
         "Select a state to explore their privacy law", us_states, index=None
     )
     st.session_state["selected_state"] = selected_state
-    st.write(f"Selected state: {st.session_state['selected_state']}")
+    st.write(f"Selected state: {st.session_state["selected_state"]}")
     return st.session_state["selected_state"]
-
-
-def generate_page_summary(chunk_ids_with_metadata, user_question):
-    """
-    This function generates a summary of the page based on the user's question.
-
-    Args:
-        chunk_ids_with_metadata (list): A list of tuples containing:
-            - pdf_path (str): The path to the PDF file
-            - doc_title (str): The title of the document
-            - page_num (int): The page number of the document
-        user_question (str): The question posed by the user to analyze the Documents
-    """
-    if not isinstance(chunk_ids_with_metadata, list):
-        raise TypeError("chunk_ids_with_metadata must be a list")
-
-    if not isinstance(user_question, str):
-        raise TypeError("user_question must be a string")
-
-    records = []
-    unique_pdf_paths = set(pdf_path for pdf_path, _, _ in chunk_ids_with_metadata)
-    unique_pdf_paths_list = list(unique_pdf_paths)
-    for pdf_path in unique_pdf_paths_list:
-        all_pdf_pages = extract_text_from_pdf(pdf_path)
-        for path, title, page_num in chunk_ids_with_metadata:
-            for i, page_text in enumerate(all_pdf_pages):
-                if (i + 1 == int(page_num)) and (path == pdf_path):
-                    chunk_pdf_pages = []
-                    chunk_pdf_pages.append(title)
-                    chunk_pdf_pages.append(page_text)
-                    chunk_pdf_pages.append(page_num)
-                    # st.write(f"Chunk PDF Pages: {chunk_pdf_pages}")
-                    page_information = get_document_specific_summary().invoke(
-                        {
-                            "context": [Document(page_content=chunk_pdf_pages[1])],
-                            "question": user_question,
-                        }
-                    )
-                    if page_information:
-                        chunk_pdf_pages.append(page_information)
-                    else:
-                        chunk_pdf_pages.append("")
-                    records.append(
-                        {
-                            "Document": chunk_pdf_pages[0],
-                            "Page": chunk_pdf_pages[2],
-                            "Relevant Information": chunk_pdf_pages[3],
-                            "File Path": pdf_path,
-                        }
-                    )
-    for record in records:
-        if not all(
-            key in record
-            for key in ["Document", "Page", "Relevant Information", "File Path"]
-        ):
-            raise ValueError("Invalid record format in results")
-    return records
 
 
 def display_selected_state_bills():
     """
     Retrieve all docs for selected state and return df of title and topics for that state.
 
+
+
     Returns:
         None
     Output:
         st.dataframe of title and topics for the selected state
+
     """
     # I tried using as_retriever() with a filter, but I wasn't sure the right search type to use.
     # pylint: disable=protected-access
@@ -282,6 +227,8 @@ def display_selected_state_bills():
             file_path = doc.metadata.get("Path", "No Path")
 
             if file_path not in bills:
+
+
                 bills[title] = {
                     "Title": title,
                     # "Effective Date (DD/MM/YYYY)": date_converted,
@@ -296,8 +243,6 @@ def display_selected_state_bills():
         return st.session_state.df_bills
 
     return None
-
-    # return df_bills
 
 
 def stream_data(result_of_llm):
@@ -351,14 +296,12 @@ def display_pdf_section():
     - pdf_title: Title of currently selected PDF
     """
     st.session_state.df_no_duplicates = pd.DataFrame()
-
     # Remove duplicate rows based on Document column if DataFrame exists and has rows
     if len(st.session_state.df) > 0:
         # Group by Document first to organize data per document
         documents_grouped = st.session_state.df.groupby("Document")
         # Add section header for sources and relevant information
         st.markdown("### Sources and Relevant Information")
-
         # Create collapsers for each document
         for doc_name, doc_group in documents_grouped:
             with st.expander(f"## 📄 {doc_name}"):
@@ -370,45 +313,17 @@ def display_pdf_section():
                 )
 
                 for _, row in page_data.iterrows():
-                    st.write(f"Page {row['Page']}:")
+                    st.write(f"Page {row["Page"]}:")
                     st.write(row["Relevant Information"])
                 # Add View PDF button for this document
                 if st.button("View PDF", key=f"pdf_btn_{doc_name}"):
                     st.session_state.selected_pdf = page_data["File Path"].iloc[0]
                     st.session_state.pdf_title = doc_name
-
         # Display selected PDF
         if st.session_state.selected_pdf:
             st.markdown(f"### Document: {st.session_state.pdf_title}")
             pdf_path = os.path.normpath(st.session_state.selected_pdf)
             show_pdf(pdf_path)
-
-
-def map_chunk_to_metadata(filtered_results):
-    """
-    This function maps the filtered results to the metadata.
-
-    Args:
-        filtered_results (List[Tuple[Document, float]]): A list of tuples of Document and score
-
-    Returns:
-        tuple: A tuple of (list of documents,
-                           dictionary of chunk_id: (pdf_path, doc_title, doc_page))
-    """
-    if not isinstance(filtered_results, list):
-        raise TypeError("filtered_results must be a list")
-    docs_for_chain = [doc for doc, score in filtered_results]
-    chunk_ids = [doc.metadata.get("Chunk_id", "Unknown") for doc in docs_for_chain]
-    pdf_paths = [doc.metadata.get("Path", "Unknown") for doc in docs_for_chain]
-    doc_titles = [doc.metadata.get("Title", "Unknown") for doc in docs_for_chain]
-    doc_pages = [doc.metadata.get("Page", "Unknown") for doc in docs_for_chain]
-    chunk_id_page_tuples = list(zip(chunk_ids, doc_titles, pdf_paths, doc_pages))
-    unique_pairs = set(
-        (pdf_path, doc_title, doc_page)
-        for _, doc_title, pdf_path, doc_page in chunk_id_page_tuples
-    )
-    unique_path_page_tuples = list(unique_pairs)
-    return docs_for_chain, unique_path_page_tuples
 
 
 def initialize_session_state():
@@ -435,7 +350,6 @@ def run_state_privacy_page():
     """
     This function runs the state privacy law page.
     """
-
     _, logo_column, title_column = st.columns(
         [0.01, 0.05, 0.94], gap="small", vertical_alignment="bottom"
     )
