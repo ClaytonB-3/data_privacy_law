@@ -14,13 +14,14 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 
 from db_manager.pdf_parser import (extract_text_from_pdf,
-                                      chunk_pdf_pages)
+    chunk_pdf_pages)
 from db_manager.faiss_db_manager import (add_chunk_to_faiss_index,
-                                         add_bills_to_faiss_index,
-                                         load_faiss_index,
-                                         obtain_text_of_chunk,
-                                         calculate_updated_chunk_ids,
-                                         write_bill_info_to_csv)
+    add_bills_to_faiss_index,
+    map_chunk_to_metadata,
+    load_faiss_index,
+    obtain_text_of_chunk,
+    calculate_updated_chunk_ids,
+    write_bill_info_to_csv)
 
 from llm_manager.llm_manager import parse_bill_info
 
@@ -78,7 +79,8 @@ class TestPDFExtraction(unittest.TestCase):
         self.assertIn(
             "Second page in the project TPLC", pages[1], "Page 2 text does not match."
         )
-        
+
+
 class TestDBManager(unittest.TestCase):
     """
     General unittests for DB_manager
@@ -105,8 +107,8 @@ class TestDBManager(unittest.TestCase):
         self.assertEqual(self.bill_info["State"], "Texas")
 
         # Sometimes it returns different results
-        # self.assertEqual(self.bill_info['Title'],
-        #                  'Texas: Act prohibiting social media use by children')
+        # self.assertEqual(self.bill_info["Title"],
+        #                  "Texas: Act prohibiting social media use by children")
         self.assertEqual(self.bill_info["Date"], "09012025")
         self.assertEqual(self.bill_info["Type"], "State level sectoral")
         self.assertEqual(self.bill_info["Sector"], "Children’s Data Protection")
@@ -168,6 +170,37 @@ class TestDBManager(unittest.TestCase):
         for ind in range(len(test_case_2)):
             self.assertEqual(expected_2[ind], test_case_2_result[ind]["Chunk_id"])
 
+    def test_map_chunk_to_metadata(self):
+        """
+        Test whether map_chunk_to_metadata runs properly.
+        """
+        metadata_dict = {"Chunk_id":["Chunk_id1", "Chunk_id2"],
+                         "Path":["Path1", "Path2"],
+                         "Title":["Title1", "Title2"],
+                         "Page":["Page1", "Page2"]
+                         }
+        doc1 = MagicMock(spec=[])
+        doc2 = MagicMock(spec=[])
+        doc1.metadata = {}
+        doc2.metadata = {}
+        paired1 = []
+        paired2 = []
+        for key, value in metadata_dict.items():
+            doc1.metadata[key] = value[0]
+            doc2.metadata[key] = value[1]
+            if key == "Chunk_id":
+                continue
+            paired1.append(value[0])
+            paired2.append(value[1])
+
+        expected_docs_for_chain = [doc1, doc2]
+        expected_unique_path_page_tuples = [tuple(paired2), tuple(paired1)]
+        filtered_results = [(doc1, 0.1), (doc2, 0.9)]
+        docs_for_chain, unique_path_page_tuples = map_chunk_to_metadata(filtered_results)
+        self.assertEqual(docs_for_chain, expected_docs_for_chain)
+        self.assertEqual(unique_path_page_tuples, expected_unique_path_page_tuples)
+
+
 class TestFAISSIndex(unittest.TestCase):
     """
     General unittests for faiss index related functions.
@@ -210,6 +243,7 @@ class TestFAISSIndex(unittest.TestCase):
         mock_faiss.from_texts.assert_called_once()
         mock_faiss_instance.save_local.assert_called_once()
 
+
     @patch("db_manager.faiss_db_manager.FAISS")
     @patch("db_manager.faiss_db_manager.GoogleGenerativeAIEmbeddings")
     @patch("db_manager.faiss_db_manager.os.path.exists")
@@ -249,13 +283,17 @@ class TestFAISSIndex(unittest.TestCase):
         )
         mock_faiss_instance.save_local.assert_called_once()
 
-    @patch('sys.stdout', new_callable=StringIO)
-    @patch("db_manager.faiss_db_manager.FAISS")
-    @patch("db_manager.faiss_db_manager.GoogleGenerativeAIEmbeddings")
-    @patch("db_manager.faiss_db_manager.os.path.exists")
-    @patch("db_manager.faiss_db_manager.calculate_updated_chunk_ids")
+
+    @patch("sys.stdout", new_callable=StringIO)
+    @patch.multiple(
+        "db_manager.faiss_db_manager",
+        FAISS=MagicMock(),
+        GoogleGenerativeAIEmbeddings=MagicMock(),
+        os=MagicMock(),
+        calculate_updated_chunk_ids=MagicMock(),
+    )
     def test_add_chunk_to_faiss_index_load_error(
-        self, mock_chunks, mock_exists, mock_embeddings, mock_faiss, mock_stdout
+        self, mock_stdout, **mocks
     ):
         """
         Test whether add_chunk_to_faiss_index can handle load errors properly
@@ -266,6 +304,10 @@ class TestFAISSIndex(unittest.TestCase):
             mock_embeddings: mock patch for GoogleGenerativeAIEmbeddings
             mock_faiss: mock patch for FAISS
         """
+        mock_chunks = mocks["calculate_updated_chunk_ids"]
+        mock_exists = mocks["os"].path.exists
+        mock_embeddings = mocks["GoogleGenerativeAIEmbeddings"]
+        mock_faiss = mocks["FAISS"]
 
         mock_stdout.getvalue()
         mock_chunks.return_value = [{"Chunk_id": "789"}]
@@ -286,6 +328,7 @@ class TestFAISSIndex(unittest.TestCase):
         mock_faiss.load_local.assert_called_once()
         mock_faiss.from_texts.assert_called_once()
         mock_faiss_instance.save_local.assert_called_once()
+
 
     @patch("db_manager.faiss_db_manager.FAISS")
     @patch("db_manager.faiss_db_manager.GoogleGenerativeAIEmbeddings")
@@ -341,71 +384,140 @@ class TestFAISSIndex(unittest.TestCase):
         mock_faiss_instance.docstore._dict = {"Chunk_id_1": mock_doc1}
         self.assertEqual(obtain_text_of_chunk(1), "")
 
-    @patch('sys.stdout', new_callable=StringIO)
-    @patch("db_manager.faiss_db_manager.add_chunk_to_faiss_index")
-    @patch("db_manager.faiss_db_manager.chunk_pdf_pages")
-    @patch("db_manager.faiss_db_manager.parse_bill_info")
-    @patch("db_manager.faiss_db_manager.extract_text_from_pdf")
-    def test_add_bills_to_faiss_index(self, mock_extract_text, mock_parse_bill, mock_chunk_pdf, mock_add_chunk, mock_stdout):
-        '''
-        Test whether add_bills_to_faiss_index runs properly.
-        '''
-        mock_stdout.getvalue()
-        pdf_paths = ['path_1', 'path_2', 'path_3']
-        #  # Ensure mock_chunk_pdf accepts two arguments and returns a dummy value
-        mock_chunk_pdf.return_value = "chunk_texts", [{'metadata1':"metadata1", "metadata2":"metadata1"},
-                                                      {'metadata1':"metadata1", "metadata2":"metadata1"}]
-        add_bills_to_faiss_index(pdf_paths)
-        self.assertEqual(mock_extract_text.call_count, len(pdf_paths)) 
-        self.assertEqual(mock_parse_bill.call_count, len(pdf_paths)) 
-        self.assertEqual(mock_chunk_pdf.call_count, len(pdf_paths)) 
-        self.assertEqual(mock_add_chunk.call_count, len(pdf_paths)) 
-    
 
-# class TestWriteToCSV(unittest.TestCase):
-#     """
-#     General unittests for write_bill_info_to_csv.
-#     """
-#     @patch("db_manager.faiss_db_manager.csv.DictWriter")
-#     @patch("db_manager.faiss_db_manager.csv.DictReader")
-#     @patch("db_manager.faiss_db_manager.os.path.exists")
-#     def test_write_csv(self, mock_exists, mock_dictreader, mock_dictwriter):
-#         """
-#         Test whether csv writes and reads correct times.
-#         """
-#         mock_exists.return_value = True
-#         mock_dictreader.return_value = [{'Title':'Title1', 
-#                                     "Date":"Date1",
-#                                     "Type":"Type1",
-#                                     "Sector":"Sector1",
-#                                     "State":"State1",
-#                                     "Path":"Path1",
-#                                     "Filename":"Filename1"}]
-        
-#         bill_info_list=[{'Title':'Title2', 
-#                             "Date":"Date2",
-#                             "Type":"Type2",
-#                             "Sector":"Sector2",
-#                             "State":"State2",
-#                             "Path":"Path2",
-#                             "Filename":"Filename2"},
-#                         {'Title':'Title3', 
-#                             "Date":"Date3",
-#                             "Type":"Type3",
-#                             "Sector":"Sector3",
-#                             "State":"State3",
-#                             "Path":"Path3",
-#                             "Filename":"Filename3"}]
-#         file_name="test.csv"
-#         write_bill_info_to_csv(bill_info_list, file_name)
-#         mock_dictreader.assert_called_once()
-#         # mock_writer = MagicMock()
-#         mock_dictwriter.return_value.writeheader.assert_called_once()
-#         self.assertEqual(
-#             mock_dictwriter.return_value.writerow.call_count,
-#             len(bill_info_list)+1
-#             )
-    
+    @patch("sys.stdout", new_callable=StringIO)
+    @patch("sys.stdout", new_callable=StringIO)
+    @patch.multiple(
+        "db_manager.faiss_db_manager",
+        add_chunk_to_faiss_index=MagicMock(),
+        chunk_pdf_pages=MagicMock(),
+        parse_bill_info=MagicMock(),
+        extract_text_from_pdf=MagicMock(),
+    )
+    def test_add_bills_to_faiss_index(
+        self, mock_stdout, **mock
+    ):
+        """
+        Test whether add_bills_to_faiss_index runs properly.
+        """
+        mock_extract_text = mock["extract_text_from_pdf"]
+        mock_parse_bill = mock["parse_bill_info"]
+        mock_chunk_pdf = mock["chunk_pdf_pages"]
+        mock_add_chunk = mock["add_chunk_to_faiss_index"]
+
+        mock_stdout.getvalue()
+        pdf_paths = ["path_1", "path_2", "path_3"]
+        #  # Ensure mock_chunk_pdf accepts two arguments and returns a dummy value
+        mock_chunk_pdf.return_value = ("chunk_texts",
+                                       [{"metadata1":"metadata1", "metadata2":"metadata1"},
+                                        {"metadata1":"metadata1", "metadata2":"metadata1"}])
+        add_bills_to_faiss_index(pdf_paths)
+        self.assertEqual(mock_extract_text.call_count, len(pdf_paths))
+        self.assertEqual(mock_parse_bill.call_count, len(pdf_paths))
+        self.assertEqual(mock_chunk_pdf.call_count, len(pdf_paths))
+        self.assertEqual(mock_add_chunk.call_count, len(pdf_paths))
+
+
+class TestWriteToCSV(unittest.TestCase):
+    """
+    General unittests for write_bill_info_to_csv.
+    """
+    @patch("db_manager.faiss_db_manager.csv.DictWriter")
+    @patch("db_manager.faiss_db_manager.csv.DictReader")
+    @patch("db_manager.faiss_db_manager.os.path.exists")
+    @patch("db_manager.faiss_db_manager.open")
+    def test_write_csv(
+        self, mock_open, mock_exists, mock_dictreader, mock_dictwriter
+    ):
+        """
+        Test whether csv writes and reads correct times.
+        """
+        mock_open.return_value = MagicMock()
+        mock_exists.return_value = True
+        existing_data = [{"Title":"Title1",
+                            "Date":"Date1",
+                            "Type":"Type1",
+                            "Sector":"Sector1",
+                            "State":"State1",
+                            "Topics":"Topics1",
+                            "Path":"Path1",
+                            "Filename":"Filename1"}]
+        mock_dictreader.return_value = existing_data
+
+        bill_info_list=[{"Title":"Title2",
+                            "Date":"Date2",
+                            "Type":"Type2",
+                            "Sector":"Sector2",
+                            "State":"State2",
+                            "Topics":"Topics2",
+                            "Path":"Path2",
+                            "Filename":"Filename2"},
+                        {"Title":"Title3",
+                            "Date":"Date3",
+                            "Type":"Type3",
+                            "Sector":"Sector3",
+                            "State":"State3",
+                            "Topics":"Topics3",
+                            "Path":"Path3",
+                            "Filename":"Filename3"}]
+        file_name="test.csv"
+        write_bill_info_to_csv(bill_info_list, file_name)
+        mock_dictreader.assert_called_once()
+        mock_dictwriter.return_value.writeheader.assert_called_once()
+        self.assertEqual(
+            mock_dictwriter.return_value.writerow.call_count,
+            len(bill_info_list)+len(existing_data)
+            )
+
+
+    @patch("db_manager.faiss_db_manager.csv.DictWriter")
+    @patch("db_manager.faiss_db_manager.csv.DictReader")
+    @patch("db_manager.faiss_db_manager.os.path.exists")
+    @patch("db_manager.faiss_db_manager.open")
+    def test_write_csv_existing(
+        self, mock_open, mock_exists, mock_dictreader, mock_dictwriter
+    ):
+        """
+        Test whether csv writes and reads correct times.
+        """
+        mock_open.return_value = MagicMock()
+        mock_exists.return_value = True
+        mock_dictreader.return_value = [{"Title":"Title1",
+                                    "Date":"Date1",
+                                    "Type":"Type1",
+                                    "Sector":"Sector1",
+                                    "State":"State1",
+                                    "Topics":"Topic1",
+                                    "Path":"Path1",
+                                    "Filename":"Filename1"}]
+
+        bill_info_list=[{"Title":"Title1",
+                            "Date":"Date1",
+                            "Type":"Type1",
+                            "Sector":"Sector1",
+                            "State":"State1",
+                            "Topics":"Topic1",
+                            "Path":"Path1",
+                            "Filename":"Filename1"},
+                        {"Title":"Title3",
+                            "Date":"Date3",
+                            "Type":"Type3",
+                            "Sector":"Sector3",
+                            "State":"State3",
+                            "Topics":"Topic3",
+                            "Path":"Path3",
+                            "Filename":"Filename3"}]
+        file_name="test.csv"
+        # print("test", existing_data)
+        write_bill_info_to_csv(bill_info_list, file_name)
+        mock_dictreader.assert_called_once()
+        mock_dictwriter.return_value.writeheader.assert_called_once()
+        # print("test", existing_data)
+        self.assertEqual(
+            mock_dictwriter.return_value.writerow.call_count,
+            2
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

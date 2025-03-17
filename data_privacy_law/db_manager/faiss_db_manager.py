@@ -1,13 +1,16 @@
+"""
+Functions for managing FAISS database and chunks
+"""
+
 import os
 import csv
 
 from dotenv import load_dotenv
 import google.generativeai as genai
 from langchain_community.vectorstores import FAISS
-from langchain.docstore.document import Document
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
-from llm_manager.llm_manager import parse_bill_info, llm_simplify_chunk_text
+from llm_manager.llm_manager import parse_bill_info
 from db_manager.pdf_parser import extract_text_from_pdf, chunk_pdf_pages
 
 load_dotenv()
@@ -87,18 +90,23 @@ def add_chunk_to_faiss_index(
     existing_ids = set(faiss_store.docstore._dict.keys())
     # print(f"Existing ID's are {existing_ids}")
 
-    new_texts = []
-    new_metadatas = []
-    new_ids = []
+    new_doc_dict = {
+        "new_texts":[],
+        "new_metadatas":[],
+        "new_ids":[]
+    }
+
     for text, meta in zip(chunk_texts, chunk_metadatas):
         this_id = meta.get("Chunk_id")
         if this_id and this_id not in existing_ids:
-            new_texts.append(text)
-            new_metadatas.append(meta)
-            new_ids.append(this_id)
+            new_doc_dict["new_texts"].append(text)
+            new_doc_dict["new_metadatas"].append(meta)
+            new_doc_dict["new_ids"].append(this_id)
 
-    if new_texts:
-        faiss_store.add_texts(texts=new_texts, metadatas=new_metadatas, ids=new_ids)
+    if len(new_doc_dict["new_texts"]) != 0:
+        faiss_store.add_texts(texts=new_doc_dict["new_texts"],
+                              metadatas=new_doc_dict["new_metadatas"],
+                              ids=new_doc_dict["new_ids"])
         faiss_store.save_local(faiss_folder)
 
 
@@ -123,7 +131,7 @@ def obtain_text_of_chunk(chunk_id):
     all_docs = list(faiss_store.docstore._dict.values())
     text_to_send_to_llm = None
 
-    for idx, content in enumerate(all_docs):
+    for _, content in enumerate(all_docs):
         # print("\nProcessing document index:", idx)
 
         metadata = content.metadata if hasattr(content, "metadata") else {}
@@ -163,6 +171,7 @@ def map_chunk_to_metadata(filtered_results):
     if not isinstance(filtered_results, list):
         raise TypeError("filtered_results must be a list")
     docs_for_chain = [doc for doc, score in filtered_results]
+    # print(docs_for_chain[0].metadata.get("Chunk_id"))
     chunk_ids = [doc.metadata.get("Chunk_id", "Unknown") for doc in docs_for_chain]
     pdf_paths = [doc.metadata.get("Path", "Unknown") for doc in docs_for_chain]
     doc_titles = [doc.metadata.get("Title", "Unknown") for doc in docs_for_chain]
@@ -183,15 +192,16 @@ def add_bills_to_faiss_index(pdf_paths):
         pdf_paths: List[pdf_path:str]
 
     Return:
-        bill_info_list: List[Dict[str, str]], The summary of the bills that were added to the FAISS DB.
+        bill_info_list: List[Dict[str, str]], The summary of the bills 
+    that were added to the FAISS DB.
 
     """
-    
+
     bill_info_list = []
     # Write document into faiss index
     for pdf_path in pdf_paths:
         print(f"\nProcessing: {pdf_path}\n")
-        
+
         # Step 1: Extract text from the PDF.
         pages_of_pdf = extract_text_from_pdf(pdf_path)
 
@@ -230,6 +240,7 @@ def write_bill_info_to_csv(bill_info_list, file_name="bill_info.csv"):
     - Type
     - Sector
     - State
+    - Topic
     - Path
     - Filename,
     see llm_model.parse_bill_info for more details.
@@ -245,14 +256,13 @@ def write_bill_info_to_csv(bill_info_list, file_name="bill_info.csv"):
     # First read existing CSV data if it exists
     existing_data = {}
     if csv_exists:
-        with open(csv_path, "r", newline="") as csvfile:
+        with open(csv_path, "r", newline="", encoding="utf-8") as csvfile:
             reader = csv.DictReader(csvfile)
-            print(reader)
             for row in reader:
-                print(row["Title"])
-                existing_data[row["Title"]] = row
+                # print(row["Title"])
+                existing_data[row["Path"]] = row
     try:
-        with open(csv_path, "w", newline="") as csvfile:
+        with open(csv_path, "w", newline="", encoding="utf-8") as csvfile:
             fieldnames = [
                 "Title",
                 "Date",
@@ -265,21 +275,23 @@ def write_bill_info_to_csv(bill_info_list, file_name="bill_info.csv"):
             ]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
-
             # Write existing data first
             for row in existing_data.values():
                 writer.writerow(row)
 
             for bill_info in bill_info_list:
                 # Check if this title already exists and if the data is different
-                title = bill_info["Title"]
-                if title in existing_data:
-                    existing_row = existing_data[title]
-                    if all(bill_info[k] == existing_row[k] for k in fieldnames):
+                ## Fix bugs: Path should be the unique key for bills, not Title
+                path = bill_info["Path"]
+
+                if path in existing_data:
+                    existing_row = existing_data[path]
+                    if all([bill_info[k] == existing_row[k] for k in fieldnames]):
+                        del existing_data[path]  # Remove old entry to be replaced
                         continue  # Skip if all values are the same
-                    del existing_data[title]  # Remove old entry to be replaced
                 # Write new/updated entry to CSV
                 writer.writerow(bill_info)
-    except:
-        print(f'Failed to write {title} into csv.')
-    return None
+
+    except ValueError as e:
+        print(e)
+        print(f"Failed to write {path} into csv.")
