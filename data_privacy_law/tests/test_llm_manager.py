@@ -13,6 +13,7 @@ from llm_manager.llm_manager import (
     llm_simplify_chunk_text,
     get_conversational_chain,
     get_confirmation_result_chain,
+    get_document_specific_summary,
     )
 
 
@@ -37,6 +38,24 @@ class TestLLMResponse(unittest.TestCase):
         llm_simplify_chunk_text()
         mock_chain.assert_called_once()
 
+
+    @patch("llm_manager.llm_manager.create_stuff_documents_chain")
+    @patch("llm_manager.llm_manager.ChatGoogleGenerativeAI")
+    @patch("llm_manager.llm_manager.PromptTemplate")
+    def test_get_conversational_chain(self, mock_prompt, mock_genai, mock_chain):
+        """
+        Test get_confirmation_result_chai runs properly
+
+        Args:
+            mock_prompt: mock patch for PromptTemplate
+            mock_genai: mock genai for ChatGoogleGenerativeAI
+            mock_chain: mock chain for create_stuff_documents_chain
+        """
+        _ = mock_prompt, mock_genai
+        get_confirmation_result_chain()
+        mock_chain.assert_called_once()
+
+
     @patch("llm_manager.llm_manager.create_stuff_documents_chain")
     @patch("llm_manager.llm_manager.ChatGoogleGenerativeAI")
     @patch("llm_manager.llm_manager.PromptTemplate")
@@ -53,12 +72,13 @@ class TestLLMResponse(unittest.TestCase):
         get_confirmation_result_chain()
         mock_chain.assert_called_once()
 
+
     @patch("llm_manager.llm_manager.create_stuff_documents_chain")
     @patch("llm_manager.llm_manager.ChatGoogleGenerativeAI")
     @patch("llm_manager.llm_manager.PromptTemplate")
-    def test_get_conversational_chain(self, mock_prompt, mock_genai, mock_chain):
+    def test_get_document_specific_summary(self, mock_prompt, mock_genai, mock_chain):
         """
-        Test get_conversational_chain runs properly
+        Test get_document_specific_summary runs properly
 
         Args:
             mock_prompt: mock patch for PromptTemplate
@@ -66,8 +86,9 @@ class TestLLMResponse(unittest.TestCase):
             mock_chain: mock chain for create_stuff_documents_chain
         """
         _ = mock_prompt, mock_genai
-        get_conversational_chain()
+        get_document_specific_summary()
         mock_chain.assert_called_once()
+
 
     def test_llm_response_str(self):
         """
@@ -158,5 +179,5 @@ on TPLC's database"""
         )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

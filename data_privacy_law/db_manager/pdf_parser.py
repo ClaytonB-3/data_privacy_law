@@ -1,3 +1,7 @@
+"""
+Functions for parsing texts from pdf.
+"""
+
 import PyPDF2
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
@@ -49,7 +53,7 @@ def extract_text_from_pdf(pdf_path):
     try:
         with open(pdf_path, "rb") as file:
             reader = PyPDF2.PdfReader(file)
-            for i, page in enumerate(reader.pages):
+            for _, page in enumerate(reader.pages):
                 page_text = page.extract_text() or ""
                 text.append(page_text)
 

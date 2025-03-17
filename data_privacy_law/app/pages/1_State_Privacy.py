@@ -7,24 +7,23 @@ import os
 import sys
 import time
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)  # This gives 'app'
-root_dir = os.path.dirname(parent_dir)  # This gives 'data_privacy_law'
+import pandas as pd
+import streamlit as st
 
-# Add to Python path
+# Set up root directory for imports
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)    # This gives "app"
+root_dir = os.path.dirname(parent_dir)    # This gives "data_privacy_law"
 sys.path.append(root_dir)
 
-import streamlit as st
-import pandas as pd
-
-from llm_manager.llm_manager import (
-    get_conversational_chain,
-    generate_page_summary,
-    get_confirmation_result_chain
-)
 from db_manager.faiss_db_manager import (
     load_faiss_index,
-    map_chunk_to_metadata
+    map_chunk_to_metadata,
+)
+from llm_manager.llm_manager import (
+    generate_page_summary,
+    get_confirmation_result_chain,
+    get_conversational_chain,
 )
 
 # List of US states.
@@ -190,7 +189,7 @@ def create_state_selector():
         "Select a state to explore their privacy law", us_states, index=None
     )
     st.session_state["selected_state"] = selected_state
-    st.write(f"Selected state: {st.session_state['selected_state']}")
+    st.write(f"Selected state: {st.session_state["selected_state"]}")
     return st.session_state["selected_state"]
 
 
@@ -314,7 +313,7 @@ def display_pdf_section():
                 )
 
                 for _, row in page_data.iterrows():
-                    st.write(f"Page {row['Page']}:")
+                    st.write(f"Page {row["Page"]}:")
                     st.write(row["Relevant Information"])
                 # Add View PDF button for this document
                 if st.button("View PDF", key=f"pdf_btn_{doc_name}"):

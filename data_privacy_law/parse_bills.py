@@ -1,5 +1,7 @@
+"""
+Parse PDF in selected folders and add into FAISS database.
+"""
 import os
-import sys
 import argparse
 
 from db_manager.faiss_db_manager import add_bills_to_faiss_index, write_bill_info_to_csv
@@ -63,10 +65,11 @@ def get_args():
     Parse command-line arguments.
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument('-s', '--states', required=True, action='append', type=str,
-                        help="Which folder's bill PDF would you like to parse? Enter 'all' for all available.")
+    parser.add_argument("-s", "--states", required=True, action="append", type=str,
+                        help="Which folder's bill PDF would you like to parse?\
+                              Enter 'all' for all available.")
     return parser.parse_args()
-    
+
 def main():
     """
     Main execution function.
@@ -82,20 +85,19 @@ def main():
     state_inputs = args.states
 
     folders = os.listdir("pdfs/")
-    if 'all' in state_inputs:
+    if "all" in state_inputs:
         state_inputs += folders
-        state_inputs.remove('all')
+        state_inputs.remove("all")
 
     print(f"Processed list: [{", ".join(state_inputs)}]")
     for state_input in state_inputs:
         state_input = state_input.strip().capitalize()
-        
-        if (state_input not in us_states):
-            print(f'{state_input} skipped: No such state or type of bill')
+
+        if state_input not in us_states:
+            print(f"{state_input} skipped: No such state or type of bill")
             continue
-        if (state_input not in folders):
-            
-            print(f'{state_input} skipped: No such state or type of bill in pdfs/')
+        if state_input not in folders:
+            print(f"{state_input} skipped: No such state or type of bill in pdfs/")
             continue
 
         pdfs_folder = os.path.join("pdfs", state_input)
