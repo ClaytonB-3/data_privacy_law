@@ -65,7 +65,7 @@ Replace `your_langchain_api_key` and `your_google_api_key` with your actual API 
 1. Start the Streamlit application:
 ```bash
 cd data_privacy_law
-streamlit run app/pages/1_State_Privacy.py
+streamlit run app/Home.py
 ```
 
 The application should open in your default web browser at `http://localhost:8501`
@@ -74,7 +74,7 @@ The application should open in your default web browser at `http://localhost:850
 
 To run the test suite:
 ```bash
-python -m pytest
+python -m unittest discover
 ```
 
 For running tests with coverage:
@@ -84,3 +84,7 @@ python -m pytest --cov=data_privacy_law tests/
 
 ### Troubleshooting
 If having issues with the index delete the faiss_index folder and rebuild it by doing the following:
+```bash
+cd data_privacy_law
+python parse_bills.py -s all
+```
