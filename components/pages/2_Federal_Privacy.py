@@ -1,8 +1,6 @@
 """
 This module creates and generates the state comprehensive laws page for the streamlit app
 """
-import os
-import sys
 
 import streamlit as st
 # from streamlit_pdf_viewer import pdf_viewer
@@ -113,7 +111,7 @@ st.markdown(styling_for_federal_page, unsafe_allow_html=True)
 def main():
     empty_column, logo_column, title_column = st.columns([0.01,0.05,0.94], gap="small", vertical_alignment="bottom")
     with logo_column:
-        st.image("./app/images/federal.png", width=75)
+        st.image("images/federal.png", width=75)
     with title_column:
         st.title("Explore Federal Privacy Laws")
 
@@ -146,7 +144,7 @@ def main():
     with image_column:
         empty_space_left, main_image_column, empty_space_right = st.columns([0.2,0.6,0.2])
         with main_image_column:
-            st.image("./app/images/federallaws.webp")
+            st.image("images/federallaws.webp")
 
 if __name__ == "__main__":
     main()

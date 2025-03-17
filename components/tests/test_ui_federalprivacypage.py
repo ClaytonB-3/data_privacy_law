@@ -1,14 +1,15 @@
 """
-Testing the State Comprehensive Laws page UI for subheaders, column content, and images.
+Testing the Federal Privacy Laws page UI for subheaders and column content.
 
-This module provides unit tests to verify that the State Comprehensive Laws page UI:
-  - Renders the expected title and subheader texts.
+This module provides unit tests to verify that the Federal Privacy Laws page UI:
+  - Renders the expected subheader texts.
   - Contains non-empty content in the content column.
-  - Contains at least one image in the image column.
+  - Contains an image in the image column.
 """
 
 import unittest
 from streamlit.testing.v1 import AppTest
+
 
 def find_widgets(widget, target_type):
     """
@@ -46,39 +47,36 @@ def find_widgets(widget, target_type):
                 found.extend(find_widgets(child, target_type))
     return found
 
-class StateComprehensivePageTest(unittest.TestCase):
+
+class StateFederalPageSubheaderTest(unittest.TestCase):
     """
-    Unit tests for verifying subheader and column content elements on the State Comprehensive Laws page.
+    Unit tests for verifying subheader and column content elements on the Federal Privacy Laws page.
     """
 
     def setUp(self):
         """
-        Set up the test environment by loading the State Comprehensive Laws page.
-        Adjust the file path if necessary.
+        Set up the test environment by loading the Federal Privacy Laws page.
         """
-        self.at = AppTest.from_file('app/pages/3_Comprehensive_State_Privacy.py').run(timeout=10)
-
-    def test_title(self):
-        """
-        Verify that the title of the page matches the expected title.
-        """
-        self.assertEqual(
-            self.at.title[0].value, 
-            'Explore Comprehensive State Privacy Laws',
-            "The page title does not match the expected title."
-        )
+        self.at = AppTest.from_file('./pages/2_Federal_Privacy.py').run(timeout=10)
 
     def test_subheaders_presence(self):
         """
         Verify that the expected subheader texts are present in the widget tree.
+
+        This test searches for all subheader widgets in the page and asserts that each
+        expected subheader text is found.
         """
         subheaders = []
+
         for widget in self.at:
             subheaders.extend(find_widgets(widget, 'subheader'))
+
         expected_subheaders = [
-            "Current state of Comprehensive Privacy Laws",
-            "Level of Privacy Activity in the states"
+            "The main message on Federal Privacy Laws",
+            "The crucial ongoing debate",
+            "Emerging Technology and Data Practices"
         ]
+
         for expected_text in expected_subheaders:
             self.assertTrue(
                 any(sh.value == expected_text for sh in subheaders),
@@ -88,11 +86,17 @@ class StateComprehensivePageTest(unittest.TestCase):
     def test_content_column_has_content(self):
         """
         Verify that the content column contains expected text content.
+
+        This test searches for markdown widgets in the widget tree and asserts that one
+        of them contains a known snippet of text expected in the content column.
         """
         markdown_widgets = []
+
         for widget in self.at:
             markdown_widgets.extend(find_widgets(widget, 'markdown'))
-        expected_snippet = "19 comprehensive laws currently in effect"
+
+        expected_snippet = "Federal bills cover almost every corner of privacy"
+
         self.assertTrue(
             any(expected_snippet in mw.value for mw in markdown_widgets if mw.value),
             f"Expected content snippet '{expected_snippet}' not found in the content column."
@@ -100,15 +104,28 @@ class StateComprehensivePageTest(unittest.TestCase):
 
     def test_image_column_has_content(self):
         """
-        Verify that the image column contains at least one image.
+        Verify that the image column contains an image.
+
+        This test searches for image widgets (of type 'imgs') in the widget tree and
+        asserts that at least one image widget is found.
         """
         image_widgets = []
+
         for widget in self.at:
             image_widgets.extend(find_widgets(widget, 'imgs'))
+
         self.assertTrue(
             len(image_widgets) > 0,
             "Expected an image in the image column, but no image widget was found."
         )
+    
+    
+    def test_title(self):
+        """
+        Verify to see that the title of the page matches the expected title.
+        """
+        self.assertEqual(self.at.title[0].value, 'Explore Federal Privacy Laws')
+
 
 if __name__ == "__main__":
     unittest.main()

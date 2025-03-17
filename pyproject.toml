@@ -38,4 +38,4 @@ dependencies = {file = ["requirements.txt"]}
 Homepage = "https://github.com/ClaytonB-3/data_privacy_law"
 
 [tool.setuptools]
-packages = ["data_privacy_law"]
+packages = ["pages", "components"]

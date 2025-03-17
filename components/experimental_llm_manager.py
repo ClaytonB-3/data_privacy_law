@@ -13,7 +13,6 @@ The final metadata for each chunk is:
     "Type": "",
     "Sector": "",
     "State": "",
-    "Topics": "",
     "Chunk_id": f"{current_page_id}_ChunkNo_{current_chunk_index}"
 }
 """
@@ -68,7 +67,7 @@ def parse_bill_info(pdf_text):
     """
     Feeds the extracted PDF text into the LLM to obtain bill details.
     The LLM is expected to return a JSON object with:
-    { "Title": "", "Date": "", "Type": "", "Sector": "", "State": "", "Topics": "" }
+    { "Title": "", "Date": "", "Type": "", "Sector": "", "State": "" }
     """
     prompt_template = """
         You are given the text of a legal document from a PDF file.
@@ -85,10 +84,9 @@ def parse_bill_info(pdf_text):
         5. The title of the bill in 15 words or less. Use format (State name as the first word if it is a 
         State level sectoral bill or Comprehensive State level bill. If it is not in these categories, write Federal as
         the first word. Then put a colon ":" and write the title of the bill after that)
-        6. A list of no more than six topics that the bill is related to
 
         Return the information as a JSON object EXACTLY in the following format:
-        {{"Title": "", "Date": "", "Type": "", "Sector": "", "State": "", "Topics": []}}
+        {{"Title": "", "Date": "", "Type": "", "Sector": "", "State": ""}}
 
         Bill text:
         {context}
@@ -114,7 +112,7 @@ def parse_bill_info(pdf_text):
         print("Error parsing LLM response:", json_err)
         bill_info = {}
 
-    # print(f"bill_info is {bill_info}")
+    print(f"bill_info is {bill_info}")
     return bill_info
 
 
@@ -132,7 +130,7 @@ def calculate_updated_chunk_ids(chunk_metadatas):
     for meta in chunk_metadatas:
         source = meta.get("Title", "unknown")
         source = source.replace(" ", "_")
-        page = meta.get("Page", "1")
+        page = meta.get("page", "1")
         current_page_id = f"{source}_Page_{page}"
 
         if current_page_id == last_page_id:
@@ -146,22 +144,19 @@ def calculate_updated_chunk_ids(chunk_metadatas):
     return chunk_metadatas
 
 
-def add_to_faiss_index(
-    chunk_texts,
-    chunk_metadatas,
-    faiss_folder="./llm_manager/faiss_index",
-    index_name="index.faiss",
-):
+def add_to_faiss_index(chunk_texts, chunk_metadatas, faiss_folder="./faiss_index"):
     """
     Create or load an existing FAISS index and add new document chunks.
     """
+
     chunk_metadatas = calculate_updated_chunk_ids(chunk_metadatas)
+
     # Code for testing what the new chunk_ids are. These are the key to explabaility
     # for items in chunk_metadatas:
     #     print(f"\nThese are the updated chunk ID's\n: {items.get("Chunk_id")}")
 
     embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
-    index_file = os.path.join(faiss_folder, index_name)
+    index_file = os.path.join(faiss_folder, "index.faiss")
     index_exists = os.path.exists(index_file)
 
     if index_exists:
@@ -190,11 +185,13 @@ def add_to_faiss_index(
 
     # Add only new chunks to the existing index.
     existing_ids = set(faiss_store.docstore._dict.keys())
+
     # print(f"Existing ID's are {existing_ids}")
 
     new_texts = []
     new_metadatas = []
     new_ids = []
+
     for text, meta in zip(chunk_texts, chunk_metadatas):
         this_id = meta.get("Chunk_id")
         if this_id and this_id not in existing_ids:
@@ -207,7 +204,7 @@ def add_to_faiss_index(
         faiss_store.save_local(faiss_folder)
 
 
-def load_faiss_index(faiss_folder="./llm_manager/faiss_index"):
+def load_faiss_index(faiss_folder="./faiss_index"):
     """
     Loads the FAISS index if it exists.
     """
@@ -259,16 +256,13 @@ def get_confirmation_result_chain():
     Sets up a QA chain using ChatGoogleGenerativeAI and a custom prompt template.
     """
     prompt_template = """
-        I will provide you the answer to a question I asked an LLM model based on a given context.  
+        I will provide you the answer to a question I asked an LLM model based on a given context. 
         Look at the question and the answer, and make sure that the answer is correct and coherent. 
         DO NOT MENTION THAT I HAVE ASKED YOU THIS QUESTION BEFORE.
 
-        If the answer contains "Sorry, the database does not have specific information about your question" or a similar
-        phrase, state "Sorry, the database does not have specific information about your question”.
-
-        If the answer does not make sense, state "Sorry, the LLM cannot currently generate a good enough
-        response for this question. Please refer to the side table and see if there is anything from
-        those topics that you would like to know about."   
+        If the answer does not make sense, state "Sorry, the LLM cannot currently generate a good enough response for 
+        this question. Please refer to the side table and see if there is anything from those topics that you would like
+        to know about."   
 
         If the answer does make sense, state "The document database has an answer to your question. Here is the 
         structured response based on TPLC's database", and then write the answer with an introduction, body 
@@ -297,35 +291,6 @@ def get_confirmation_result_chain():
     )
     prompt = PromptTemplate(
         template=prompt_template, input_variables=["context", "question", "answer"]
-    )
-    return create_stuff_documents_chain(llm=model, prompt=prompt)
-
-
-def get_document_specific_summary():
-    """
-    Sets up a QA chain using ChatGoogleGenerativeAI and a custom prompt template.
-    """
-    prompt_template = """
-    I will provide a single page from a bill and a question a user asked. Using only information from 
-    that page, provide a brief summary of the key points from the page that relate to the question.
-    Respond in bullet points and provide only the summary, no introduction or context. Try to be concise.
-    Only use information from the context provided. 
-
-    Question:
-    {question}
-
-    Context:
-    {context}
-
-    Summary:
-    """
-    model = ChatGoogleGenerativeAI(
-        model="gemini-2.0-flash-001",
-        temperature=0.2,
-        system_prompt=("""You only have knowledge based on the provided text."""),
-    )
-    prompt = PromptTemplate(
-        template=prompt_template, input_variables=["context", "question"]
     )
     return create_stuff_documents_chain(llm=model, prompt=prompt)
 
@@ -400,9 +365,7 @@ def obtain_text_of_chunk(chunk_id):
 
 def llm_simplify_chunk_text(text_for_llm):
     prompt_template = """
-        Provide any information from the provided context that is relevant to the question.
-        Only use the information from the context to answer the question.
-        Be brief, answer in points. Dont give any introductions and get straight to the point. 
+        Give me a more readable version of the given text (a quotable summary). Be brief. Answer in points. Dont give any introductions and get straight to the point. Summarize in the context of the question
 
         Context:
         {context}
@@ -414,12 +377,7 @@ def llm_simplify_chunk_text(text_for_llm):
     """
     model = ChatGoogleGenerativeAI(
         model="gemini-2.0-flash-001",
-        temperature=0.1,
-        system_prompt=(
-            """
-            Your knowledge is only limited to the information in the provided context.
-            Be brief and answer in points without introduction or context."""
-        ),
+        temperature=0.5,
     )
     prompt = PromptTemplate(
         template=prompt_template, input_variables=["context", "question"]
@@ -429,11 +387,11 @@ def llm_simplify_chunk_text(text_for_llm):
 
 def main(pdf_paths):
     # Create data directory if it doesn't exist
-    if not os.path.exists("./llm_manager/data"):
-        os.makedirs("./llm_manager/data")
+    if not os.path.exists("./data"):
+        os.makedirs("./data")
 
-    if not os.path.exists("./llm_manager/faiss_index"):
-        os.makedirs("./llm_manager/faiss_index")
+    if not os.path.exists("./faiss_index"):
+        os.makedirs("./faiss_index")
 
     bill_info_list = []
     # Write document into faiss index
@@ -467,7 +425,7 @@ def main(pdf_paths):
         add_to_faiss_index(chunk_texts, chunk_metadatas)
 
     # Create or open CSV file for writing
-    csv_path = "./llm_manager/data/bill_info.csv"
+    csv_path = "./data/bill_info.csv"
     csv_exists = os.path.exists(csv_path)
 
     # First read existing CSV data if it exists
@@ -485,7 +443,6 @@ def main(pdf_paths):
             "Type",
             "Sector",
             "State",
-            "Topics",
             "Path",
             "Filename",
         ]
@@ -517,7 +474,6 @@ if __name__ == "__main__":
     # Construct the path to the PDFs folder.
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
-    # pdfs_folder = os.path.join(parent_dir, "pdfs", state_input)
     pdfs_folder = os.path.join(parent_dir, "pdfs", state_input)
 
     # print(f"This is the PDF Folder\n:{pdfs_folder}")

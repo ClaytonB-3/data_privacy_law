@@ -1,7 +1,6 @@
-import sys
 import time
 import streamlit as st
-
+# from components.map import map_generator
 
 st.set_page_config(page_title="Privacy Laws Explorer", layout="wide")
 
@@ -73,7 +72,7 @@ privacy_topics = [
 def main():
     empty_column, logo_column, title_column = st.columns([0.01,0.05,0.94], gap="small", vertical_alignment="center")
     with logo_column:
-        st.image("./app/images/cardinal-points.png", width=75)
+        st.image("images/cardinal-points.png", width=75)
     with title_column:
         st.title("Welcome to the Privacy Law Compass")
     st.divider()
@@ -124,9 +123,9 @@ def main():
     with col2:
         image1column, image2column = st.columns([0.45,0.55], gap="small")
         with image1column:
-            st.image("./app/images/plawimage1.png")
+            st.image("images/plawimage1.png")
         with image2column:
-            st.image("./app/images/plawimage2.png")
+            st.image("images/plawimage2.png")
 
         st.divider()
         st.html(

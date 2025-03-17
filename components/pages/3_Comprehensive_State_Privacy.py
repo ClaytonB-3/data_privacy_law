@@ -1,11 +1,18 @@
 """
-This module creates and generates the EU GDPR page for the streamlit app
+This module creates and generates the state comprehensive laws page for the streamlit app
 """
 
 import streamlit as st
 from streamlit_pdf_viewer import pdf_viewer
 import pandas as pd
 from langchain.docstore.document import Document
+from experimental_llm_manager import (
+    load_faiss_index,
+    get_conversational_chain,
+    get_confirmation_result_chain,
+    obtain_text_of_chunk,
+    llm_simplify_chunk_text,
+)
 
 
 # List of US states.
@@ -105,42 +112,30 @@ st.markdown(styling_for_home_page, unsafe_allow_html=True)
 def main():
     empty_column, logo_column, title_column = st.columns([0.01,0.05,0.94], gap="small", vertical_alignment="bottom")
     with logo_column:
-        st.image("./app/images/europe.png", width=75)
+        st.image("images/law.png", width=75)
     with title_column:
-        st.title("Explore the GDPR")
+        st.title("Explore Comprehensive State Privacy Laws")
 
     st.write("")
     st.write("")
     st.write("")
     content_column, image_column = st.columns([0.35,0.65])
     with content_column:
-        st.subheader("Overview of GDPR", divider = True)
-        st.write("The General Data Protection Regulation (GDPR) is a comprehensive data protection law enacted by the "
-        "European Union (EU) to safeguard individuals' personal data and regulate its free movement within the EU "
-        "and European Economic Area (EEA). Adopted on April 14, 2016, and enforced from May 25, 2018, GDPR replaced "
-        "the Data Protection Directive 95/46/EC, establishing uniform data protection rules across member states.")
+        st.subheader("Current state of Comprehensive Privacy Laws", divider = True)
+        st.write("State-level privacy regulation has expanded considerably, with 19 comprehensive laws currently in "
+        "effect per IAPP’s criteria. In 2024 alone, seven new laws were enacted, a significant rise from just 2 bills "
+        "in 2018 and a peak of 59 bills in 2022–2023.")
         st.write("")
+        st.write("An independent evaluation by EPIC of 14 state laws found that nearly half received failing grades, with none "
+        "achieving the highest standards. This numerical and qualitative variability underscores the fragmented nature "
+        "of state privacy protections and the pressing need for more uniform federal standards.")
 
         st.write("")
         st.write("")
-        st.subheader("Key Principles of GDPR", divider = True)
-        # Creating a list for display
-        list_of_GDPR_principles = ["Lawfulness, Fairness, and Transparency: Data must be processed legally, fairly, "
-        "and transparently, ensuring individuals are informed about how their data is used.", "Purpose Limitation: "
-        "Data should be collected for specified, explicit, and legitimate purposes and not processed in a manner "
-        "incompatible with those purposes.", "Data Minimization: Only data necessary for the intended purpose should be "
-        "collected and processed.", "Accuracy: Personal data must be accurate and kept up to date; inaccuracies "
-        "should be corrected or deleted promptly.", "Storage Limitation: Data should not be kept longer than "
-        "necessary for the purposes for which it is processed.", "Integrity and Confidentiality: Data must be processed "
-        "securely to protect against unauthorized or unlawful processing, accidental loss, destruction, or damage.", 
-        "Accountability: Data controllers are responsible for demonstrating compliance with these principles."]
-
-        markdown_list = '\n'.join(f'- {item}' for item in list_of_GDPR_principles)
-
-        st.markdown(markdown_list)
-
+        st.subheader("Level of Privacy Activity in the states", divider = True)
+        st.image("images/comprehensive.png")
     with image_column:
-        st.image("./app/images/gdpr.jpeg")
+        st.image("images/statetracker.png")
 
 if __name__ == "__main__":
     main()
