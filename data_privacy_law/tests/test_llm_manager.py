@@ -14,6 +14,7 @@ from llm_manager.llm_manager import (
     get_conversational_chain,
     get_confirmation_result_chain,
     get_document_specific_summary,
+    generate_page_summary,
     )
 
 
@@ -90,6 +91,38 @@ class TestLLMResponse(unittest.TestCase):
         mock_chain.assert_called_once()
 
 
+    @patch("llm_manager.llm_manager.Document")
+    @patch("llm_manager.llm_manager.extract_text_from_pdf")
+    @patch("llm_manager.llm_manager.get_document_specific_summary")
+    def test_generate_page_summary(self, mock_get_doc, mock_extract, mock_doc):
+        """
+        Test generate_page_summary calls correct times and generates the proper results. 
+        """
+        test_question = "test question"
+        chunk_ids_with_metadata = [
+            ("path1", "title1", "1"),
+            ("path1", "title1", "2"),
+            ("path1", "title1", "3"),
+            ("path2", "title2", "1"),
+            ("path3", "title3", "1"),
+            ("path3", "title3", "2")
+        ]
+        mock_extract.side_effect = [
+            ["path_1_page1_text", "path_1_page2_text", "path_1_page3_text", "path_1_page4_text"],
+            ["path_2_page1_text", "path_2_page2_text", "path_2_page3_text"],
+            ["path_3_page1_text", "path_3_page2_text", "path_3_page3_text"]
+        ]
+        records = generate_page_summary(chunk_ids_with_metadata, test_question)
+        self.assertEqual(mock_extract.call_count, 3)
+        self.assertEqual(mock_get_doc.call_count, len(chunk_ids_with_metadata))
+        self.assertEqual(mock_doc.call_count, len(chunk_ids_with_metadata))
+        self.assertEqual(len(records), len(chunk_ids_with_metadata))
+        for record in records:
+            self.assertListEqual(
+                list(record.keys()), ["Document", "Page", "Relevant Information", "File Path"]
+            )
+
+
     def test_llm_response_str(self):
         """
         Test sample inputs and confirm whether the LLM responses are as expected.
@@ -155,7 +188,8 @@ completion of the age verification process."""
             """The document database has an answer to your \
 question. Here is the structured response based \
 on TPLC's database"""
-            in result1
+            in result1,
+            msg=(result1),
         )
 
         user_question2 = "Who is the president of USA?"
