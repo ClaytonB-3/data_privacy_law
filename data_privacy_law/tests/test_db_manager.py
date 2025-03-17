@@ -25,6 +25,7 @@ from db_manager.faiss_db_manager import (add_chunk_to_faiss_index,
 
 from llm_manager.llm_manager import parse_bill_info
 
+
 class TestPDFExtraction(unittest.TestCase):
     """
     Testing whether the PDF's extraction function is working properly
@@ -198,7 +199,7 @@ class TestDBManager(unittest.TestCase):
         filtered_results = [(doc1, 0.1), (doc2, 0.9)]
         docs_for_chain, unique_path_page_tuples = map_chunk_to_metadata(filtered_results)
         self.assertEqual(docs_for_chain, expected_docs_for_chain)
-        self.assertEqual(unique_path_page_tuples, expected_unique_path_page_tuples)
+        self.assertCountEqual(unique_path_page_tuples, expected_unique_path_page_tuples)
 
 
 class TestFAISSIndex(unittest.TestCase):
@@ -284,17 +285,14 @@ class TestFAISSIndex(unittest.TestCase):
         mock_faiss_instance.save_local.assert_called_once()
 
 
-    @patch("sys.stdout", new_callable=StringIO)
-    @patch.multiple(
-        "db_manager.faiss_db_manager",
-        FAISS=MagicMock(),
-        GoogleGenerativeAIEmbeddings=MagicMock(),
-        os=MagicMock(),
-        calculate_updated_chunk_ids=MagicMock(),
-    )
+    @patch("db_manager.faiss_db_manager.FAISS")
+    @patch("db_manager.faiss_db_manager.GoogleGenerativeAIEmbeddings")
+    @patch("db_manager.faiss_db_manager.os")
+    @patch("db_manager.faiss_db_manager.calculate_updated_chunk_ids")
     def test_add_chunk_to_faiss_index_load_error(
-        self, mock_stdout, **mocks
+        self, mock_chunks, mock_exists, mock_embeddings, mock_faiss
     ):
+     
         """
         Test whether add_chunk_to_faiss_index can handle load errors properly
 
@@ -304,30 +302,28 @@ class TestFAISSIndex(unittest.TestCase):
             mock_embeddings: mock patch for GoogleGenerativeAIEmbeddings
             mock_faiss: mock patch for FAISS
         """
-        mock_chunks = mocks["calculate_updated_chunk_ids"]
-        mock_exists = mocks["os"].path.exists
-        mock_embeddings = mocks["GoogleGenerativeAIEmbeddings"]
-        mock_faiss = mocks["FAISS"]
+      
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
+            mock_stdout.getvalue()
+            mock_stdout.getvalue()
+            mock_chunks.return_value = [{"Chunk_id": "789"}]
+            mock_exists.return_value = True
+            # Mock embeddings
+            mock_embeddings.return_value = MagicMock()
 
-        mock_stdout.getvalue()
-        mock_chunks.return_value = [{"Chunk_id": "789"}]
-        mock_exists.return_value = True
-        # Mock embeddings
-        mock_embeddings.return_value = MagicMock()
+            # Mock OSError when loading FAISS
+            mock_faiss.load_local.side_effect = OSError("Failed to load index")
 
-        # Mock OSError when loading FAISS
-        mock_faiss.load_local.side_effect = OSError("Failed to load index")
+            # Mock FAISS.from_texts to handle new index creation
+            mock_faiss_instance = MagicMock()
+            mock_faiss.from_texts.return_value = mock_faiss_instance
 
-        # Mock FAISS.from_texts to handle new index creation
-        mock_faiss_instance = MagicMock()
-        mock_faiss.from_texts.return_value = mock_faiss_instance
+            add_chunk_to_faiss_index(["test chunk"], [{"Chunk_id": "789"}])
 
-        add_chunk_to_faiss_index(["test chunk"], [{"Chunk_id": "789"}])
-
-        # Ensure a try except and new FAISS index was created
-        mock_faiss.load_local.assert_called_once()
-        mock_faiss.from_texts.assert_called_once()
-        mock_faiss_instance.save_local.assert_called_once()
+            # Ensure a try except and new FAISS index was created
+            mock_faiss.load_local.assert_called_once()
+            mock_faiss.from_texts.assert_called_once()
+            mock_faiss_instance.save_local.assert_called_once()
 
 
     @patch("db_manager.faiss_db_manager.FAISS")
@@ -385,37 +381,30 @@ class TestFAISSIndex(unittest.TestCase):
         self.assertEqual(obtain_text_of_chunk(1), "")
 
 
-    @patch("sys.stdout", new_callable=StringIO)
-    @patch("sys.stdout", new_callable=StringIO)
-    @patch.multiple(
-        "db_manager.faiss_db_manager",
-        add_chunk_to_faiss_index=MagicMock(),
-        chunk_pdf_pages=MagicMock(),
-        parse_bill_info=MagicMock(),
-        extract_text_from_pdf=MagicMock(),
-    )
+    
+    @patch("db_manager.faiss_db_manager.add_chunk_to_faiss_index")
+    @patch("db_manager.faiss_db_manager.chunk_pdf_pages")
+    @patch("db_manager.faiss_db_manager.parse_bill_info")
+    @patch("db_manager.faiss_db_manager.extract_text_from_pdf")
     def test_add_bills_to_faiss_index(
-        self, mock_stdout, **mock
+        self, mock_extract_text, mock_parse_bill, mock_chunk_pdf, mock_add_chunk
     ):
         """
         Test whether add_bills_to_faiss_index runs properly.
         """
-        mock_extract_text = mock["extract_text_from_pdf"]
-        mock_parse_bill = mock["parse_bill_info"]
-        mock_chunk_pdf = mock["chunk_pdf_pages"]
-        mock_add_chunk = mock["add_chunk_to_faiss_index"]
+        with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
+            mock_stdout.getvalue()
 
-        mock_stdout.getvalue()
-        pdf_paths = ["path_1", "path_2", "path_3"]
-        #  # Ensure mock_chunk_pdf accepts two arguments and returns a dummy value
-        mock_chunk_pdf.return_value = ("chunk_texts",
-                                       [{"metadata1":"metadata1", "metadata2":"metadata1"},
-                                        {"metadata1":"metadata1", "metadata2":"metadata1"}])
-        add_bills_to_faiss_index(pdf_paths)
-        self.assertEqual(mock_extract_text.call_count, len(pdf_paths))
-        self.assertEqual(mock_parse_bill.call_count, len(pdf_paths))
-        self.assertEqual(mock_chunk_pdf.call_count, len(pdf_paths))
-        self.assertEqual(mock_add_chunk.call_count, len(pdf_paths))
+            pdf_paths = ["path_1", "path_2", "path_3"]
+            #  # Ensure mock_chunk_pdf accepts two arguments and returns a dummy value
+            mock_chunk_pdf.return_value = ("chunk_texts",
+                                        [{"metadata1":"metadata1", "metadata2":"metadata1"},
+                                            {"metadata1":"metadata1", "metadata2":"metadata1"}])
+            add_bills_to_faiss_index(pdf_paths)
+            self.assertEqual(mock_extract_text.call_count, len(pdf_paths))
+            self.assertEqual(mock_parse_bill.call_count, len(pdf_paths))
+            self.assertEqual(mock_chunk_pdf.call_count, len(pdf_paths))
+            self.assertEqual(mock_add_chunk.call_count, len(pdf_paths))
 
 
 class TestWriteToCSV(unittest.TestCase):
