@@ -77,11 +77,6 @@ To run the test suite:
 python -m unittest discover
 ```
 
-For running tests with coverage:
-```bash
-python -m pytest --cov=data_privacy_law tests/
-```
-
 ### Troubleshooting
 If having issues with the index delete the faiss_index folder and rebuild it by doing the following:
 ```bash

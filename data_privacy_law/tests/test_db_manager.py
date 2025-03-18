@@ -81,6 +81,14 @@ class TestPDFExtraction(unittest.TestCase):
             "Second page in the project TPLC", pages[1], "Page 2 text does not match."
         )
 
+    def test_pdf_extraction_file_not_exist(self):
+        """
+        Test Raising FileNotFoundError works properly. 
+        """
+        temp_pdf_path ='/abc.pdf'
+        with self.assertRaises(FileNotFoundError):
+            extract_text_from_pdf(temp_pdf_path)
+
 
 class TestDBManager(unittest.TestCase):
     """
