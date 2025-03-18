@@ -102,8 +102,12 @@ styling_for_home_page = """
 
 st.markdown(styling_for_home_page, unsafe_allow_html=True)
 
+
 def main():
-    empty_column, logo_column, title_column = st.columns([0.01,0.05,0.94], gap="small", vertical_alignment="bottom")
+    st.session_state.reset_state_page = True
+    empty_column, logo_column, title_column = st.columns(
+        [0.01, 0.05, 0.94], gap="small", vertical_alignment="bottom"
+    )
     with logo_column:
         st.image("./app/images/law.png", width=75)
     with title_column:
@@ -112,23 +116,28 @@ def main():
     st.write("")
     st.write("")
     st.write("")
-    content_column, image_column = st.columns([0.35,0.65])
+    content_column, image_column = st.columns([0.35, 0.65])
     with content_column:
-        st.subheader("Current state of Comprehensive Privacy Laws", divider = True)
-        st.write("State-level privacy regulation has expanded considerably, with 19 comprehensive laws currently in "
-        "effect per IAPP’s criteria. In 2024 alone, seven new laws were enacted, a significant rise from just 2 bills "
-        "in 2018 and a peak of 59 bills in 2022–2023.")
+        st.subheader("Current state of Comprehensive Privacy Laws", divider=True)
+        st.write(
+            "State-level privacy regulation has expanded considerably, with 19 comprehensive laws currently in "
+            "effect per IAPP’s criteria. In 2024 alone, seven new laws were enacted, a significant rise from just 2 bills "
+            "in 2018 and a peak of 59 bills in 2022–2023."
+        )
         st.write("")
-        st.write("An independent evaluation by EPIC of 14 state laws found that nearly half received failing grades, with none "
-        "achieving the highest standards. This numerical and qualitative variability underscores the fragmented nature "
-        "of state privacy protections and the pressing need for more uniform federal standards.")
+        st.write(
+            "An independent evaluation by EPIC of 14 state laws found that nearly half received failing grades, with none "
+            "achieving the highest standards. This numerical and qualitative variability underscores the fragmented nature "
+            "of state privacy protections and the pressing need for more uniform federal standards."
+        )
 
         st.write("")
         st.write("")
-        st.subheader("Level of Privacy Activity in the states", divider = True)
+        st.subheader("Level of Privacy Activity in the states", divider=True)
         st.image("./app/images/comprehensive.png")
     with image_column:
         st.image("./app/images/statetracker.png")
+
 
 if __name__ == "__main__":
     main()

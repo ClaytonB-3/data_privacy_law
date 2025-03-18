@@ -1,13 +1,16 @@
 """
 This module creates and generates the state comprehensive laws page for the streamlit app
 """
+
 import os
 import sys
 
 import streamlit as st
+
 # from streamlit_pdf_viewer import pdf_viewer
 import pandas as pd
 from langchain.docstore.document import Document
+
 # from components.experimental_llm_manager import (
 #     load_faiss_index,
 #     get_conversational_chain,
@@ -110,8 +113,12 @@ styling_for_federal_page = """
 
 st.markdown(styling_for_federal_page, unsafe_allow_html=True)
 
+
 def main():
-    empty_column, logo_column, title_column = st.columns([0.01,0.05,0.94], gap="small", vertical_alignment="bottom")
+    st.session_state.reset_state_page = True
+    empty_column, logo_column, title_column = st.columns(
+        [0.01, 0.05, 0.94], gap="small", vertical_alignment="bottom"
+    )
     with logo_column:
         st.image("./app/images/federal.png", width=75)
     with title_column:
@@ -120,33 +127,44 @@ def main():
     st.write("")
     st.write("")
     st.write("")
-    content_column, image_column = st.columns([0.35,0.65])
+    content_column, image_column = st.columns([0.35, 0.65])
     with content_column:
-        st.subheader("The main message on Federal Privacy Laws", divider = True)
-        st.write("Federal bills cover almost every corner of privacy—from consumer rights, workplace and health data, "
-        "to financial, children’s, and even governmental privacy obligations. This segmentation shows that lawmakers "
-        "are trying to tackle every issue separately rather than unifying them under one umbrella.")
+        st.subheader("The main message on Federal Privacy Laws", divider=True)
+        st.write(
+            "Federal bills cover almost every corner of privacy—from consumer rights, workplace and health data, "
+            "to financial, children’s, and even governmental privacy obligations. This segmentation shows that lawmakers "
+            "are trying to tackle every issue separately rather than unifying them under one umbrella."
+        )
         st.write("")
-        st.write("Heading into 2025, comprehensive federal privacy and AI regulations seem stalled as post-election "
-        "shifts favor other priorities. Persistent splits over private rights, federal preemption, and civil rights—with "
-        "leaders leaning toward innovation—have left both privacy and AI policies in limbo. "
-        "Meanwhile, the FTC is expected to pivot under new leadership, even as state legislatures push ahead with "
-        "their own privacy reforms, especially in health care.")
-        
-        st.subheader("The crucial ongoing debate", divider = True)
-        st.write("One of the hottest debates is whether a federal law should override the diverse state laws or simply "
-        "set a floor for minimum standards. Some proposals preempt state laws, while others are designed to coexist "
-        "with them—highlighting a fundamental disagreement on how to streamline privacy protections.")
+        st.write(
+            "Heading into 2025, comprehensive federal privacy and AI regulations seem stalled as post-election "
+            "shifts favor other priorities. Persistent splits over private rights, federal preemption, and civil rights—with "
+            "leaders leaning toward innovation—have left both privacy and AI policies in limbo. "
+            "Meanwhile, the FTC is expected to pivot under new leadership, even as state legislatures push ahead with "
+            "their own privacy reforms, especially in health care."
+        )
+
+        st.subheader("The crucial ongoing debate", divider=True)
+        st.write(
+            "One of the hottest debates is whether a federal law should override the diverse state laws or simply "
+            "set a floor for minimum standards. Some proposals preempt state laws, while others are designed to coexist "
+            "with them—highlighting a fundamental disagreement on how to streamline privacy protections."
+        )
         st.write("")
-        
-        st.subheader("Emerging Technology and Data Practices", divider = True)
-        st.write("There’s a clear focus on modern challenges—data minimization, privacy by design, algorithmic "
-        "accountability, and issues around emerging tech like facial recognition and biometric data. These proposals "
-        "reflect the need to catch up with fast-evolving technologies.")
+
+        st.subheader("Emerging Technology and Data Practices", divider=True)
+        st.write(
+            "There’s a clear focus on modern challenges—data minimization, privacy by design, algorithmic "
+            "accountability, and issues around emerging tech like facial recognition and biometric data. These proposals "
+            "reflect the need to catch up with fast-evolving technologies."
+        )
     with image_column:
-        empty_space_left, main_image_column, empty_space_right = st.columns([0.2,0.6,0.2])
+        empty_space_left, main_image_column, empty_space_right = st.columns(
+            [0.2, 0.6, 0.2]
+        )
         with main_image_column:
             st.image("./app/images/federallaws.webp")
+
 
 if __name__ == "__main__":
     main()

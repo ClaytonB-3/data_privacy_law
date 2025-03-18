@@ -329,19 +329,31 @@ def initialize_session_state():
     """
     This function initializes the session state variables.
     """
-    if "index" not in st.session_state:
+    if "index" not in st.session_state or st.session_state.reset_state_page == True:
         st.session_state.index = load_faiss_index()
-    if "df" not in st.session_state:
+    if "df" not in st.session_state or st.session_state.reset_state_page == True:
         st.session_state.df = pd.DataFrame()
-    if "selected_pdf" not in st.session_state:
+    if (
+        "selected_pdf" not in st.session_state
+        or st.session_state.reset_state_page == True
+    ):
         st.session_state.selected_pdf = None
-    if "pdf_title" not in st.session_state:
+    if "pdf_title" not in st.session_state or st.session_state.reset_state_page == True:
         st.session_state.pdf_title = None
-    if "user_question" not in st.session_state:
+    if (
+        "user_question" not in st.session_state
+        or st.session_state.reset_state_page == True
+    ):
         st.session_state.user_question = ""
-    if "llm_result" not in st.session_state:
+    if (
+        "llm_result" not in st.session_state
+        or st.session_state.reset_state_page == True
+    ):
         st.session_state.llm_result = None
-    if "new_question" not in st.session_state:
+    if (
+        "new_question" not in st.session_state
+        or st.session_state.reset_state_page == True
+    ):
         st.session_state.new_question = True
 
 
@@ -446,10 +458,6 @@ def run_state_privacy_page():
         else:
             st.write(st.session_state.llm_result)
             st.write("---")
-
-    # non text summary components
-    # with col2:
-    #    display_selected_state_bills()
     display_pdf_section()
 
 
@@ -459,6 +467,7 @@ def main():
     """
     initialize_session_state()
     run_state_privacy_page()
+    st.session_state.reset_state_page = False
 
 
 if __name__ == "__main__":
