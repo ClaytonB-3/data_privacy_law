@@ -1,6 +1,11 @@
-import datetime
+# pylint: disable=invalid-name
+# the above line is used to disable the invalid-name error for the file name.
+# Capital letters needed as Streamlit inherits case for page name from file name
+"""
+This module creates and generates the Add Documents page for the streamlit app
+"""
+
 import streamlit as st
-import tempfile
 
 # List of US states for the dropdown
 us_states = [
@@ -71,7 +76,7 @@ sector_list = [
 
 st.set_page_config(page_title="Privacy Laws Explorer", layout="wide")
 
-styling_for_home_page = """
+STYLING_FOR_ADD_DOC_PAGE = """
 <style>
     [data-testid = "stAppViewContainer"]{
     background-color: #fefae0;
@@ -107,12 +112,15 @@ styling_for_home_page = """
 </style>
 """
 
-st.markdown(styling_for_home_page, unsafe_allow_html=True)
+st.markdown(STYLING_FOR_ADD_DOC_PAGE, unsafe_allow_html=True)
 
 
 def main():
+    """
+    This function runs the Add Document page.
+    """
     st.session_state.reset_state_page = True
-    empty_column, logo_column, title_column = st.columns(
+    _, logo_column, title_column = st.columns(
         [0.01, 0.05, 0.94], gap="small", vertical_alignment="bottom"
     )
     with logo_column:
@@ -171,7 +179,7 @@ def main():
     st.write("")
     st.write("")
     st.write("")
-    empty_col, button_col, empty_col2 = st.columns([0.25, 0.5, 0.25])
+    _, button_col, _ = st.columns([0.25, 0.5, 0.25])
     with button_col:
         if button_col.button(
             "Validate and Submit Inputs",
