@@ -20,10 +20,17 @@ parent_dir = os.path.dirname(current_dir)  # This gives "app"
 root_dir = os.path.dirname(parent_dir)  # This gives "data_privacy_law"
 sys.path.append(root_dir)
 
+# Streamlit requires pages be in the page directory so these apps have to be run
+# from outside the root directory causing import pylint errors that are suppressed
+# pylint: disable=wrong-import-position, import-error
 from db_manager.faiss_db_manager import (
     load_faiss_index,
     map_chunk_to_metadata,
 )
+
+# Streamlit requires pages be in the page directory so these apps have to be run
+# from outside the root directory causing import pylint errors that are suppressed
+# pylint: disable=wrong-import-position, import-error
 from llm_manager.llm_manager import (
     generate_page_summary,
     get_confirmation_result_chain,
