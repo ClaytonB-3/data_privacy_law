@@ -12,8 +12,8 @@ import streamlit as st
 
 # Set up root directory for imports
 current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)    # This gives "app"
-root_dir = os.path.dirname(parent_dir)    # This gives "data_privacy_law"
+parent_dir = os.path.dirname(current_dir)  # This gives "app"
+root_dir = os.path.dirname(parent_dir)  # This gives "data_privacy_law"
 sys.path.append(root_dir)
 
 from db_manager.faiss_db_manager import (
@@ -228,7 +228,6 @@ def display_selected_state_bills():
 
             if file_path not in bills:
 
-
                 bills[title] = {
                     "Title": title,
                     # "Effective Date (DD/MM/YYYY)": date_converted,
@@ -368,7 +367,9 @@ def run_state_privacy_page():
         with st.expander(
             f"## Bills for {st.session_state.selected_state}", expanded=True
         ):
-            display_selected_state_bills()
+            margin1, center_col, margin2 = st.columns([0.05, 0.9, 0.05])
+            with center_col:
+                display_selected_state_bills()
 
     # Get the user's question and store in session state
     user_question = st.text_input(
