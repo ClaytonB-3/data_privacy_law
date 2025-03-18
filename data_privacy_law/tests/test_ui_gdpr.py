@@ -61,9 +61,9 @@ class StateFederalPageSubheaderTest(unittest.TestCase):
         for widget in self.at:
             markdown_widgets.extend(find_widgets(widget, 'markdown'))
 
-        expected_snippet = "The General Data Protection Regulation (GDPR)" \
-"is a comprehensive data protection law " \
-"enacted by the European Union (EU)"
+        expected_snippet = """The General Data Protection Regulation (GDPR) \
+is a comprehensive data protection law \
+enacted by the European Union (EU)"""
 
         self.assertTrue(
             any(expected_snippet in mw.value for mw in markdown_widgets if mw.value),
