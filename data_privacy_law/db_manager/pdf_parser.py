@@ -37,6 +37,57 @@ def chunk_pdf_pages(texts_per_page, pdf_path, chunk_size=800, chunk_overlap=200)
             )
     return chunk_texts, chunk_metadatas
 
+def chunk_text_while_adding_docs(
+    pdf_pages: list[str],
+    chunk_size: int = 800,
+    chunk_overlap: int = 200
+):
+    """
+    Takes a list of PDF pages (as strings) from extract_uploaded_pdf_pages,
+    splits each page into smaller chunks using RecursiveCharacterTextSplitter,
+    and sets metadata for each chunk, including:
+        - Path: "Submitted-Online"
+        - Page: The page number (as a string)
+    
+    No Filename or Source are included here because that is handled elsewhere.
+
+    Args:
+        pdf_pages (list[str]): A list of strings, each representing one PDF page’s text.
+        chunk_size (int): Maximum characters per chunk. Default = 800.
+        chunk_overlap (int): Overlap of characters between chunks. Default = 200.
+
+    Returns:
+        (chunk_texts, chunk_metadatas):
+            chunk_texts (List[str]): The textual chunks.
+            chunk_metadatas (List[dict]): Each chunk’s metadata dict with
+                                          "Path" and "Page".
+    """
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap
+    )
+
+    chunk_texts = []
+    chunk_metadatas = []
+
+    # Iterate through each page in the pdf_pages list
+    for page_num, page_text in enumerate(pdf_pages, start=1):
+        # Skip empty pages
+        if not page_text.strip():
+            continue
+
+        # Split the page text into smaller chunks
+        splitted_docs = text_splitter.create_documents([page_text])
+        for doc in splitted_docs:
+            chunk_texts.append(doc.page_content)
+            
+            # Minimal metadata: path + page number
+            chunk_metadatas.append({
+                "Path": "Submitted-Online",
+                "Page": str(page_num)
+            })
+
+    return chunk_texts, chunk_metadatas
 
 def extract_text_from_pdf(pdf_path):
     """
@@ -61,3 +112,19 @@ def extract_text_from_pdf(pdf_path):
         print("Error reading PDF:", e)
 
     return text
+
+def extract_uploaded_pdf_pages(uploaded_file):
+    """
+    Takes an uploaded file (Streamlit's UploadedFile) and returns a list of 
+    page texts, exactly like 'extract_text_from_pdf' does for a local PDF path.
+    """
+
+    all_pages = []
+    try:
+        reader = PyPDF2.PdfReader(uploaded_file)
+        for page in reader.pages:
+            page_text = page.extract_text() or ""
+            all_pages.append(page_text)
+    except Exception as e:
+        print(f"Error reading PDF: {e}")
+    return all_pages

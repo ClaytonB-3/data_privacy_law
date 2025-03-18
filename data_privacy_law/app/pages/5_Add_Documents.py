@@ -1,6 +1,27 @@
+import os
+import sys
 import datetime
 import streamlit as st
 import tempfile
+from PyPDF2 import PdfReader
+
+# Set up root directory for imports
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)    # This gives "app"
+root_dir = os.path.dirname(parent_dir)    # This gives "data_privacy_law"
+sys.path.append(root_dir)
+
+from db_manager.faiss_db_manager import (
+    add_chunk_to_faiss_index,
+    create_folder_for_added_files
+)
+from llm_manager.llm_manager import (
+    parse_bill_variant_for_adding_docs,
+)
+from db_manager.pdf_parser import (
+    extract_uploaded_pdf_pages, 
+    chunk_text_while_adding_docs
+)
 
 # List of US states for the dropdown
 us_states = [
@@ -72,7 +93,7 @@ def main():
     st.write("")
     st.write("")
 
-    input_1, input_2, input_3, input_4 = st.columns([0.25,0.25,0.25,0.25])
+    empty_space_1,input_1,empty_space_2, input_2, empty_space_3 = st.columns([0.12,0.3,0.12,0.3,0.12])
     with input_1:
         st.subheader("Select the type of law", divider = True)
         level_of_law = st.radio("", 
@@ -87,16 +108,8 @@ def main():
                             )
         st.write("")
         st.write("Type of law selection:", level_of_law)
-
-    with input_2:
-        st.subheader("Enter sector of this law / NA", divider = True)
-        sector = st.selectbox(
-                            "Select a state to explore their privacy law", sector_list, index=None
-                            )
-        st.write("")
-        st.write("State selection:", sector)
     
-    with input_3:
+    with input_2:
         st.subheader("Enter relevant US state / NA", divider = True)
         selected_state = st.selectbox(
                             "Select a state to explore their privacy law", us_states, index=None
@@ -104,23 +117,77 @@ def main():
         st.write("")
         st.write("State selection:", selected_state)
     
-    with input_4:
-        st.subheader("Date of law taking effect", divider = True)
-        effective_date = st.date_input(
-                            "When did this law take effect?", value=None
-                            )
-        st.write("")
-        st.write("Date entered:", effective_date)
+
+    st.write("")
+    st.write("")
+    
+    empty_1, file_upload_column, empty_2 = st.columns([0.33,0.33,0.33])
+    with file_upload_column:
+        uploaded_file = st.file_uploader("Choose a PDF file", type = "pdf")
+        if uploaded_file is not None:
+            reader = PdfReader(uploaded_file)
+            text = ""
+            for page in reader.pages:
+                page_text = page.extract_text()
+                if page_text:
+                    text += page_text
 
     st.write("")
     st.write("")
     st.write("")
+
     empty_col, button_col, empty_col2 = st.columns([0.25, 0.5, 0.25])
     with button_col:
         if button_col.button("Validate and Submit Inputs", type = "primary", use_container_width = True,
                              icon = ":material/place_item:"
                              ):
-            button_col.markdown("Clicked the button")
+            if None not in (level_of_law, selected_state, uploaded_file):
+                st.html("""<p style = "font-weight:bold;">Values obtained. Metadata being listed below...</p>""")
+
+                # Process the given text and other parameters to create a JSON object containing the metadata
+                parsed_metadata_of_doc = parse_bill_variant_for_adding_docs(text, selected_state, level_of_law)
+                st.write(parsed_metadata_of_doc)
+
+                # Gather all the pages of the pdf in the form of a list with indexes
+                list_of_pages = []
+                list_of_pages = extract_uploaded_pdf_pages(uploaded_file)
+
+                st.html("""<p style = "font-weight:bold;">Adding to database now...</p>""")
+
+                # Create new metadata for each chunk of text
+                # chunk_text is a list of strings
+                # chunk_metadatas is a JSON object containing the metadata for each chunk_text
+                chunk_texts, chunk_metadatas = chunk_text_while_adding_docs(list_of_pages)
+
+                # Combine the metadatas obtained by both function -->
+                # parse_bill_variant_for_adding_docs(), and chunk_text_while_adding_docs()
+                for metadata_of_chunk in chunk_metadatas:
+                    metadata_of_chunk.update(parsed_metadata_of_doc)
+
+                # Save the PDF file
+                # Check to see if the correct directory exists. If not then create it. Add results into it then.
+                # The following function will also update the chunk_metadatas and give them a new "Path" value
+                chunk_metadatas = create_folder_for_added_files(chunk_metadatas, uploaded_file)
+                st.html("""<p style = "font-weight:bold; 
+                        text-align:center;
+                        font-size:1.3rem;
+                        ">
+                        Your files have been saved to our database.
+                        </p>""")
+                
+                # Add the document to FAISS database
+                add_chunk_to_faiss_index(chunk_texts, chunk_metadatas)
+                st.html("""<p style = "font-weight:bold; 
+                        text-align:center;
+                        font-size:1.3rem;
+                        ">
+                        Your files have been added to the FAISS database.
+                        </p>""")
+                
+                
+
+            else:
+                st.write("All inputs have not been filled!")
 
 
 if __name__ == "__main__":
