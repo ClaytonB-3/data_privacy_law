@@ -1,11 +1,11 @@
+# pylint: disable=invalid-name
+# the above line is used to disable the invalid-name error for the file name.
+# Capital letters needed as Streamlit inherits case for page name from file name
 """
 This module creates and generates the EU GDPR page for the streamlit app
 """
 
 import streamlit as st
-from streamlit_pdf_viewer import pdf_viewer
-import pandas as pd
-from langchain.docstore.document import Document
 
 
 # List of US states.
@@ -104,8 +104,11 @@ st.markdown(styling_for_home_page, unsafe_allow_html=True)
 
 
 def main():
+    """
+    This function runs the EU GDPR page.
+    """
     st.session_state.reset_state_page = True
-    empty_column, logo_column, title_column = st.columns(
+    _, logo_column, title_column = st.columns(
         [0.01, 0.05, 0.94], gap="small", vertical_alignment="bottom"
     )
     with logo_column:
@@ -120,10 +123,12 @@ def main():
     with content_column:
         st.subheader("Overview of GDPR", divider=True)
         st.write(
-            "The General Data Protection Regulation (GDPR) is a comprehensive data protection law enacted by the "
-            "European Union (EU) to safeguard individuals' personal data and regulate its free movement within the EU "
-            "and European Economic Area (EEA). Adopted on April 14, 2016, and enforced from May 25, 2018, GDPR replaced "
-            "the Data Protection Directive 95/46/EC, establishing uniform data protection rules across member states."
+            """The General Data Protection Regulation (GDPR) is a comprehensive
+data protection law enacted by the European Union (EU) to safeguard individuals'
+personal data and regulate its free movement within the EU and European Economic
+Area (EEA). Adopted on April 14, 2016, and enforced from May 25, 2018, GDPR replaced
+the Data Protection Directive 95/46/EC, establishing uniform data protection rules
+across member states."""
         )
         st.write("")
 
@@ -132,20 +137,21 @@ def main():
         st.subheader("Key Principles of GDPR", divider=True)
         # Creating a list for display
         list_of_GDPR_principles = [
-            "Lawfulness, Fairness, and Transparency: Data must be processed legally, fairly, "
-            "and transparently, ensuring individuals are informed about how their data is used.",
-            "Purpose Limitation: "
-            "Data should be collected for specified, explicit, and legitimate purposes and not processed in a manner "
-            "incompatible with those purposes.",
-            "Data Minimization: Only data necessary for the intended purpose should be "
-            "collected and processed.",
-            "Accuracy: Personal data must be accurate and kept up to date; inaccuracies "
-            "should be corrected or deleted promptly.",
-            "Storage Limitation: Data should not be kept longer than "
-            "necessary for the purposes for which it is processed.",
-            "Integrity and Confidentiality: Data must be processed "
-            "securely to protect against unauthorized or unlawful processing, accidental loss, destruction, or damage.",
-            "Accountability: Data controllers are responsible for demonstrating compliance with these principles.",
+            """Lawfulness, Fairness, and Transparency: Data must be processed legally, fairly, 
+            and transparently, ensuring individuals are informed about how their data is used.""",
+            """Purpose Limitation: Data should be collected for specified, explicit, and 
+            legitimate purposes and not processed in a manner incompatible with those purposes.""",
+            """Data Minimization: Only data necessary for the intended purpose should be 
+            collected and processed.""",
+            """Accuracy: Personal data must be accurate and kept up to date; inaccuracies 
+            should be corrected or deleted promptly.""",
+            """Storage Limitation: Data should not be kept longer than necessary for the 
+            purposes for which it is processed.""",
+            """Integrity and Confidentiality: Data must be processed 
+            securely to protect against unauthorized or unlawful processing,
+            accidental loss, destruction, or damage.""",
+            """Accountability: Data controllers are responsible for demonstrating
+            compliance with these principles.""",
         ]
 
         markdown_list = "\n".join(f"- {item}" for item in list_of_GDPR_principles)
