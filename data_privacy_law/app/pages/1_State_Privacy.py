@@ -243,6 +243,79 @@ def display_selected_state_bills(selected_state):
     return None
 
 
+def generate_llm_response(user_question):
+    """
+    This function generates the LLM response to the user's question.
+
+    Args:
+        user_question (str): The user's question
+
+    Returns:
+        None
+
+    Output:
+        if question has already been asked:
+            st.write of the LLM response
+        if no relevant documents are found:
+            st.html of the LLM response
+        if new question and relevant documents are found:
+            st.session_state.llm_result updated with the new response
+            st.dataframe of the summary for each page used to generate response
+    """
+    filtered_results = st.session_state.index.similarity_search_with_relevance_scores(
+        query=user_question,
+        k=10,
+        filter={"State": st.session_state.selected_state},
+        score_threshold=0.2,
+    )
+
+    if not filtered_results:
+        st.html(
+            """<p style = "font-weight:bold; font-size:1.3rem;">
+            "No relevant documents found for the selected state based on your query."
+            </p>
+        """
+        )
+
+    else:
+        # Prepare documents for the conversational chain.
+        docs_for_chain, chunk_ids_w_metadata = map_chunk_to_metadata(filtered_results)
+        # Gen summary from llm of relevant context
+        chain = get_conversational_chain()
+        firstresult = chain.invoke(
+            {"context": docs_for_chain, "question": user_question}
+        )
+        # Verify if the first LLM response was coherent or not.
+        chain = get_confirmation_result_chain()
+        result = chain.invoke(
+            {
+                "context": docs_for_chain,
+                "question": user_question,
+                "answer": firstresult,
+            }
+        )
+        if result != st.session_state.llm_result:
+            st.write_stream(stream_data(result))
+            st.write("---")
+        else:
+            st.write(result)
+        st.session_state.llm_result = result
+
+        # generate table of contextual info for explainability
+
+        if (
+            "Sorry, the LLM cannot currently generate a good enough response"
+            not in result
+        ):
+            records = generate_page_summary(chunk_ids_w_metadata, user_question)
+            st.session_state.df = pd.DataFrame(records)
+            st.session_state.relevant_df = st.session_state.df[
+                ["Document", "Page", "Relevant Information"]
+            ]
+        else:
+            records = False  # None
+
+
 def stream_data(result_of_llm):
     """
     This function streams the LLM result to the screen.
@@ -328,35 +401,35 @@ def initialize_session_state():
     """
     This function initializes the session state variables.
     """
-    if "index" not in st.session_state or st.session_state.reset_state_page == True:
+    if "index" not in st.session_state or st.session_state.reset_state_page is True:
         st.session_state.index = load_faiss_index()
-    if "df" not in st.session_state or st.session_state.reset_state_page == True:
+    if "df" not in st.session_state or st.session_state.reset_state_page is True:
         st.session_state.df = pd.DataFrame()
     if (
         "selected_pdf" not in st.session_state
-        or st.session_state.reset_state_page == True
+        or st.session_state.reset_state_page is True
     ):
         st.session_state.selected_pdf = None
-    if "pdf_title" not in st.session_state or st.session_state.reset_state_page == True:
+    if "pdf_title" not in st.session_state or st.session_state.reset_state_page is True:
         st.session_state.pdf_title = None
     if (
         "user_question" not in st.session_state
-        or st.session_state.reset_state_page == True
+        or st.session_state.reset_state_page is True
     ):
         st.session_state.user_question = ""
     if (
         "llm_result" not in st.session_state
-        or st.session_state.reset_state_page == True
+        or st.session_state.reset_state_page is True
     ):
         st.session_state.llm_result = None
     if (
         "new_question" not in st.session_state
-        or st.session_state.reset_state_page == True
+        or st.session_state.reset_state_page is True
     ):
         st.session_state.new_question = True
     if (
         "question_input_key" not in st.session_state
-        or st.session_state.reset_state_page == True
+        or st.session_state.reset_state_page is True
     ):
         st.session_state.question_input_key = 0
 
@@ -373,18 +446,11 @@ def run_state_privacy_page():
     with title_column:
         st.header("Explore State Privacy Laws")
 
-    # col1, col2 = st.columns([0.8, 0.2])
-
-    # with col1:
-
     selected_state = create_state_selector()
 
-    # st.write(f"You have chosen the state: {selected_state}")
-    # if st.session_state.selected_state is not None:
     if selected_state:
-
         with st.expander(f"## Bills for {selected_state}", expanded=True):
-            margin1, center_col, margin2 = st.columns([0.05, 0.9, 0.05])
+            _, center_col, _ = st.columns([0.05, 0.9, 0.05])
             with center_col:
                 display_selected_state_bills(selected_state)
     if ("selected_state" not in st.session_state) or (
@@ -421,64 +487,7 @@ def run_state_privacy_page():
                 st.session_state.new_question = False
 
             if st.session_state.new_question:
-                filtered_results = (
-                    st.session_state.index.similarity_search_with_relevance_scores(
-                        query=user_question,
-                        k=10,
-                        filter={"State": st.session_state.selected_state},
-                        score_threshold=0.2,
-                    )
-                )
-
-                if not filtered_results:
-                    st.html(
-                        """<p style = "font-weight:bold; font-size:1.3rem;">
-                        "No relevant documents found for the selected state based on your query."
-                        </p>
-                    """
-                    )
-
-                else:
-                    # Prepare documents for the conversational chain.
-                    docs_for_chain, chunk_ids_w_metadata = map_chunk_to_metadata(
-                        filtered_results
-                    )
-                    # Gen summary from llm of relevant context
-                    chain = get_conversational_chain()
-                    firstresult = chain.invoke(
-                        {"context": docs_for_chain, "question": user_question}
-                    )
-                    # Verify if the first LLM response was coherent or not.
-                    chain = get_confirmation_result_chain()
-                    result = chain.invoke(
-                        {
-                            "context": docs_for_chain,
-                            "question": user_question,
-                            "answer": firstresult,
-                        }
-                    )
-                    if result != st.session_state.llm_result:
-                        st.write_stream(stream_data(result))
-                        st.write("---")
-                    else:
-                        st.write(result)
-                    st.session_state.llm_result = result
-
-                    # generate table of contextual info for explainability
-
-                    if (
-                        "Sorry, the LLM cannot currently generate a good enough response"
-                        not in result
-                    ):
-                        records = generate_page_summary(
-                            chunk_ids_w_metadata, user_question
-                        )
-                        st.session_state.df = pd.DataFrame(records)
-                        st.session_state.relevant_df = st.session_state.df[
-                            ["Document", "Page", "Relevant Information"]
-                        ]
-                    else:
-                        records = False  # None
+                generate_llm_response(user_question)
 
             else:
                 st.write(st.session_state.llm_result)
