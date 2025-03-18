@@ -7,64 +7,9 @@ This module creates and generates the EU GDPR page for the streamlit app
 
 import streamlit as st
 
-
-# List of US states.
-us_states = [
-    "Alabama",
-    "Alaska",
-    "Arizona",
-    "Arkansas",
-    "California",
-    "Colorado",
-    "Connecticut",
-    "Delaware",
-    "Florida",
-    "Georgia",
-    "Hawaii",
-    "Idaho",
-    "Illinois",
-    "Indiana",
-    "Iowa",
-    "Kansas",
-    "Kentucky",
-    "Louisiana",
-    "Maine",
-    "Maryland",
-    "Massachusetts",
-    "Michigan",
-    "Minnesota",
-    "Mississippi",
-    "Missouri",
-    "Montana",
-    "Nebraska",
-    "Nevada",
-    "New Hampshire",
-    "New Jersey",
-    "New Mexico",
-    "New York",
-    "North Carolina",
-    "North Dakota",
-    "Ohio",
-    "Oklahoma",
-    "Oregon",
-    "Pennsylvania",
-    "Rhode Island",
-    "South Carolina",
-    "South Dakota",
-    "Tennessee",
-    "Texas",
-    "Utah",
-    "Vermont",
-    "Virginia",
-    "Washington",
-    "West Virginia",
-    "Wisconsin",
-    "Wyoming",
-]
-
 st.set_page_config(page_title="Privacy Laws Explorer", layout="wide")
 
-styling_for_home_page = """
+STYLING_FOR_EU_GDPR_PAGE = """
 <style>
     [data-testid = "stAppViewContainer"]{
     background-color: #fefae0;
@@ -100,7 +45,7 @@ styling_for_home_page = """
 """
 
 
-st.markdown(styling_for_home_page, unsafe_allow_html=True)
+st.markdown(STYLING_FOR_EU_GDPR_PAGE, unsafe_allow_html=True)
 
 
 def main():
