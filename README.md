@@ -77,6 +77,14 @@ To run the test suite:
 python -m unittest discover
 ```
 
+### Running pylint formatting checking
+
+To run the pylint checking:
+```bash
+cd data_privacy_law
+pylint .
+```
+
 ### Troubleshooting
 If having issues with the index delete the faiss_index folder and rebuild it by doing the following:
 ```bash
