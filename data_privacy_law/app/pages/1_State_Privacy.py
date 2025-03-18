@@ -1,6 +1,10 @@
+# pylint: disable=invalid-name
+# the above line is used to disable the invalid-name error for the file name.
+# Capital letters needed as Streamlit inherits case for page name from file name
 """
 This module creates and generates the state privacy law app for the streamlit app
 """
+
 
 import base64
 import os
@@ -28,56 +32,8 @@ from llm_manager.llm_manager import (
 
 # List of US states.
 us_states = [
-    "Alabama",
-    "Alaska",
-    "Arizona",
-    "Arkansas",
-    "California",
-    "Colorado",
-    "Connecticut",
-    "Delaware",
-    "Florida",
-    "Georgia",
-    "Hawaii",
-    "Idaho",
-    "Illinois",
-    "Indiana",
-    "Iowa",
-    "Kansas",
-    "Kentucky",
-    "Louisiana",
-    "Maine",
-    "Maryland",
-    "Massachusetts",
-    "Michigan",
-    "Minnesota",
-    "Mississippi",
-    "Missouri",
-    "Montana",
-    "Nebraska",
-    "Nevada",
-    "New Hampshire",
-    "New Jersey",
-    "New Mexico",
-    "New York",
-    "North Carolina",
-    "North Dakota",
-    "Ohio",
-    "Oklahoma",
-    "Oregon",
-    "Pennsylvania",
-    "Rhode Island",
-    "South Carolina",
-    "South Dakota",
-    "Tennessee",
     "Texas",
-    "Utah",
-    "Vermont",
-    "Virginia",
     "Washington",
-    "West Virginia",
-    "Wisconsin",
-    "Wyoming",
 ]
 
 st.set_page_config(page_title="Explore State Privacy Laws", layout="wide")
