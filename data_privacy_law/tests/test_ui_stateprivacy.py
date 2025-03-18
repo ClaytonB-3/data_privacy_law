@@ -24,6 +24,7 @@ state_privacy = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(state_privacy)
 generate_page_summary = state_privacy.generate_page_summary
 map_chunk_to_metadata = state_privacy.map_chunk_to_metadata
+generate_llm_response = state_privacy.generate_llm_response
 
 
 class StatePrivacyLawAppTest(unittest.TestCase):
@@ -82,6 +83,68 @@ class StatePrivacyLawAppTest(unittest.TestCase):
             ),
             "Question input field with expected label not found.",
         )
+
+    # def test_convert_date_function(self):
+    #     """
+    #     Verify that the convert_date function converts dates correctly.
+    #     """
+
+    #     # Use importlib to import the module, since its filename starts with a digit.
+    #     spec = importlib.util.spec_from_file_location(
+    #         "state_privacy", "app/pages/1_State_Privacy.py"
+    #     )
+    #     state_privacy = importlib.util.module_from_spec(spec)
+    #     spec.loader.exec_module(state_privacy)
+    #     convert_date = state_privacy.convert_date
+
+    #     self.assertEqual(
+    #         convert_date("01012020"),
+    #         "01/01/2020",
+    #         "Date conversion did not work as expected.",
+    #     )
+    #     self.assertEqual(
+    #         convert_date("invalid"),
+    #         "invalid",
+    #         "Non 8-digit string should remain unchanged.",
+    #     )
+
+    def test_generate_page_summary(self):
+        """
+        Test the generate_page_summary function.
+        """
+        # Test valid inputs
+        chunk_ids_with_metadata = [
+            ("./pdfs/Texas/test.pdf", "Texas Privacy Act", "1"),
+            ("./pdfs/Texas/test.pdf", "Texas Privacy Act", "2"),
+        ]
+        user_question = "What are state privacy laws related to social media?"
+        # Test with invalid inputs
+        with self.assertRaises(TypeError):
+            generate_page_summary(None, user_question)
+
+        with self.assertRaises(TypeError):
+            generate_page_summary(chunk_ids_with_metadata, None)
+
+    def test_map_chunk_to_metadata(self):
+        """
+        Test the map_chunk_to_metadata function.
+        """
+        chunk_ids_with_metadata = [
+            ("./pdfs/Texas/test.pdf", "Texas Privacy Act", "1"),
+            ("./pdfs/Texas/test.pdf", "Texas Privacy Act", "2"),
+        ]
+        self.assertTrue(isinstance(chunk_ids_with_metadata, list))
+        with self.assertRaises(TypeError):
+            map_chunk_to_metadata(None)
+
+    def test_generate_llm_response(self):
+        """
+        Test the generate_llm_response function.
+        """
+        non_string_user_question = 123
+        with self.assertRaises(TypeError):
+            generate_llm_response(non_string_user_question)
+
 
 if __name__ == "__main__":
     unittest.main()
