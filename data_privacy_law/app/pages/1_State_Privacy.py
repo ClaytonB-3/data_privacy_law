@@ -188,7 +188,6 @@ def create_state_selector():
     selected_state = st.selectbox(
         "Select a state to explore their privacy law", us_states, index=None
     )
-    # st.session_state["selected_state"] = selected_state
     st.write(f"Selected state: {selected_state}")
     return selected_state
 
@@ -206,7 +205,8 @@ def display_selected_state_bills(selected_state):
         st.dataframe of title and topics for the selected state
 
     """
-    # I tried using as_retriever() with a filter, but I wasn't sure the right search type to use.
+    # I tried using as_retriever() with a filter, but it didn't work and
+    # this is the only way I could get it to work.
     # pylint: disable=protected-access
     if selected_state is not None:
         all_docs = list(st.session_state.index.docstore._dict.values())
@@ -229,14 +229,10 @@ def display_selected_state_bills(selected_state):
 
                 bills[title] = {
                     "Title": title,
-                    # "Effective Date (DD/MM/YYYY)": date_converted,
                     "Topics": topics,
                 }
         df_bills = pd.DataFrame(list(bills.values()))
-        # Reset index so it starts from 1.
-        # df_bills.index = range(1, len(df_bills) + 1)
         st.session_state.df_bills = df_bills
-        # st.subheader("Bills for " + st.session_state.selected_state)
         st.dataframe(st.session_state.df_bills, width=1400, hide_index=True)
         return st.session_state.df_bills
 
@@ -301,8 +297,6 @@ def generate_llm_response(user_question):
             st.write(result)
         st.session_state.llm_result = result
 
-        # generate table of contextual info for explainability
-
         if (
             "Sorry, the LLM cannot currently generate a good enough response"
             not in result
@@ -313,7 +307,7 @@ def generate_llm_response(user_question):
                 ["Document", "Page", "Relevant Information"]
             ]
         else:
-            records = False  # None
+            records = False
 
 
 def stream_data(result_of_llm):
@@ -472,7 +466,6 @@ def run_state_privacy_page():
         st.session_state.selected_state = selected_state
 
     else:
-        # st.session_state.selected_state = selected_state
         if user_question:  # Only process if a question is asked
             if user_question != st.session_state.user_question:
                 st.session_state.user_question = user_question
