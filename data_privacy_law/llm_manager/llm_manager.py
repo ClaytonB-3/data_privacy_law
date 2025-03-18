@@ -1,13 +1,24 @@
+"""
+This module contains functions to interact with the LLM models.
+- parse_bill_info: Extracts bill details from a PDF file using the LLM.
+- get_conversational_chain: Sets up a QA chain using ChatGoogleGenerativeAI
+    and a custom prompt template.
+- get_confirmation_result_chain: Sets up a QA chain using ChatGoogleGenerativeAI
+    and a custom prompt template.
+- get_document_specific_summary: Generates a summary of the page based on the
+    user's question.
+- generate_page_summary: Generates a summary of the page based on the user's question.
+"""
 import os
 import json
 
 from dotenv import load_dotenv
 
 import google.generativeai as genai
-from langchain.docstore.document import Document
-from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain.docstore.document import Document
 from langchain.prompts import PromptTemplate
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 from db_manager.pdf_parser import extract_text_from_pdf
 
@@ -229,31 +240,3 @@ def generate_page_summary(chunk_ids_with_metadata, user_question):
         ):
             raise ValueError("Invalid record format in results")
     return records
-
-def llm_simplify_chunk_text():
-    prompt_template = """
-        Provide any information from the provided context that is relevant to the question.
-        Only use the information from the context to answer the question.
-        Be brief, answer in points. Dont give any introductions and get straight to the point. 
-
-        Context:
-        {context}
-
-        Question:
-        {question}
-
-        Answer:
-    """
-    model = ChatGoogleGenerativeAI(
-        model="gemini-2.0-flash-001",
-        temperature=0.1,
-        system_prompt=(
-            """
-            Your knowledge is only limited to the information in the provided context.
-            Be brief and answer in points without introduction or context."""
-        ),
-    )
-    prompt = PromptTemplate(
-        template=prompt_template, input_variables=["context", "question"]
-    )
-    return create_stuff_documents_chain(llm=model, prompt=prompt)
