@@ -1,82 +1,15 @@
+# pylint: disable=invalid-name
+# the above line is used to disable the invalid-name error for the file name.
+# Capital letters needed as Streamlit inherits case for page name from file name
 """
 This module creates and generates the state comprehensive laws page for the streamlit app
 """
 
-import os
-import sys
-
 import streamlit as st
-
-# from streamlit_pdf_viewer import pdf_viewer
-import pandas as pd
-from langchain.docstore.document import Document
-
-# from components.experimental_llm_manager import (
-#     load_faiss_index,
-#     get_conversational_chain,
-#     get_confirmation_result_chain,
-#     obtain_text_of_chunk,
-#     llm_simplify_chunk_text,
-# )
-
-
-# List of US states.
-us_states = [
-    "Alabama",
-    "Alaska",
-    "Arizona",
-    "Arkansas",
-    "California",
-    "Colorado",
-    "Connecticut",
-    "Delaware",
-    "Florida",
-    "Georgia",
-    "Hawaii",
-    "Idaho",
-    "Illinois",
-    "Indiana",
-    "Iowa",
-    "Kansas",
-    "Kentucky",
-    "Louisiana",
-    "Maine",
-    "Maryland",
-    "Massachusetts",
-    "Michigan",
-    "Minnesota",
-    "Mississippi",
-    "Missouri",
-    "Montana",
-    "Nebraska",
-    "Nevada",
-    "New Hampshire",
-    "New Jersey",
-    "New Mexico",
-    "New York",
-    "North Carolina",
-    "North Dakota",
-    "Ohio",
-    "Oklahoma",
-    "Oregon",
-    "Pennsylvania",
-    "Rhode Island",
-    "South Carolina",
-    "South Dakota",
-    "Tennessee",
-    "Texas",
-    "Utah",
-    "Vermont",
-    "Virginia",
-    "Washington",
-    "West Virginia",
-    "Wisconsin",
-    "Wyoming",
-]
 
 st.set_page_config(page_title="Privacy Laws Explorer", layout="wide")
 
-styling_for_federal_page = """
+STYLING_FOR_FEDERAL_PAGE = """
 <style>
     [data-testid = "stAppViewContainer"]{
     background-color: #fefae0;
@@ -111,12 +44,15 @@ styling_for_federal_page = """
 """
 
 
-st.markdown(styling_for_federal_page, unsafe_allow_html=True)
+st.markdown(STYLING_FOR_FEDERAL_PAGE, unsafe_allow_html=True)
 
 
 def main():
+    """
+    This function runs the federal privacy laws page.
+    """
     st.session_state.reset_state_page = True
-    empty_column, logo_column, title_column = st.columns(
+    _, logo_column, title_column = st.columns(
         [0.01, 0.05, 0.94], gap="small", vertical_alignment="bottom"
     )
     with logo_column:
@@ -131,37 +67,38 @@ def main():
     with content_column:
         st.subheader("The main message on Federal Privacy Laws", divider=True)
         st.write(
-            "Federal bills cover almost every corner of privacy—from consumer rights, workplace and health data, "
-            "to financial, children’s, and even governmental privacy obligations. This segmentation shows that lawmakers "
-            "are trying to tackle every issue separately rather than unifying them under one umbrella."
+            """Federal bills cover almost every corner of privacy—from consumer
+rights, workplace and health data, to financial, children’s, and even governmental
+privacy obligations. This segmentation shows that lawmakers are trying to tackle every
+issue separately rather than unifying them under one umbrella."""
         )
         st.write("")
         st.write(
-            "Heading into 2025, comprehensive federal privacy and AI regulations seem stalled as post-election "
-            "shifts favor other priorities. Persistent splits over private rights, federal preemption, and civil rights—with "
-            "leaders leaning toward innovation—have left both privacy and AI policies in limbo. "
-            "Meanwhile, the FTC is expected to pivot under new leadership, even as state legislatures push ahead with "
-            "their own privacy reforms, especially in health care."
+            """Heading into 2025, comprehensive federal privacy and AI regulations seem
+stalled as post-election shifts favor other priorities. Persistent splits over private rights,
+federal preemption, and civil rights—with leaders leaning toward innovation—have left both privacy 
+and AI policies in limbo. Meanwhile, the FTC is expected to pivot under new leadership,
+even as state legislatures push ahead with their own privacy reforms, especially in health care."""
         )
 
         st.subheader("The crucial ongoing debate", divider=True)
         st.write(
-            "One of the hottest debates is whether a federal law should override the diverse state laws or simply "
-            "set a floor for minimum standards. Some proposals preempt state laws, while others are designed to coexist "
-            "with them—highlighting a fundamental disagreement on how to streamline privacy protections."
+            """One of the hottest debates is whether a federal law should override the diverse
+state laws or simply set a floor for minimum standards. Some proposals preempt state
+laws, while others are designed to coexist with them—highlighting a fundamental
+disagreement on how to streamline privacy protections."""
         )
         st.write("")
 
         st.subheader("Emerging Technology and Data Practices", divider=True)
         st.write(
-            "There’s a clear focus on modern challenges—data minimization, privacy by design, algorithmic "
-            "accountability, and issues around emerging tech like facial recognition and biometric data. These proposals "
-            "reflect the need to catch up with fast-evolving technologies."
+            """There’s a clear focus on modern challenges—data minimization, privacy by
+design, algorithmic accountability, and issues around emerging tech like facial
+recognition and biometric data. These proposals reflect the need to catch up with
+fast-evolving technologies."""
         )
     with image_column:
-        empty_space_left, main_image_column, empty_space_right = st.columns(
-            [0.2, 0.6, 0.2]
-        )
+        _, main_image_column, _ = st.columns([0.2, 0.6, 0.2])
         with main_image_column:
             st.image("./app/images/federallaws.webp")
 
