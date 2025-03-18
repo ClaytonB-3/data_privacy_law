@@ -123,16 +123,16 @@ def main():
     with content_column:
         st.subheader("Current state of Comprehensive Privacy Laws", divider=True)
         st.write(
-            """State-level privacy regulation has expanded considerably, with 19 
-comprehensive laws currently in effect per IAPP’s criteria. In 2024 alone, seven
-new laws were enacted, a significant rise from just 2 bills in 2018 and a peak of
+            """State-level privacy regulation has expanded considerably, with 19 \
+comprehensive laws currently in effect per IAPP’s criteria. In 2024 alone, seven \
+new laws were enacted, a significant rise from just 2 bills in 2018 and a peak of \
 59 bills in 2022–2023."""
         )
         st.write("")
         st.write(
-            """An independent evaluation by EPIC of 14 state laws found that nearly half received
-failing grades, with none achieving the highest standards. This numerical and qualitative
-variability underscores the fragmented nature of state privacy protections and the pressing
+            """An independent evaluation by EPIC of 14 state laws found that nearly half received \
+failing grades, with none achieving the highest standards. This numerical and qualitative \
+variability underscores the fragmented nature of state privacy protections and the pressing \
 need for more uniform federal standards."""
         )
 

@@ -223,7 +223,7 @@ def generate_llm_response(user_question):
     """
     if not isinstance(user_question, str):
         raise TypeError("User question must be a string")
-    if not "selected_state" in st.session_state:
+    if "selected_state" not in st.session_state:
         raise ValueError("Selected state not found in session state")
 
     filtered_results = st.session_state.index.similarity_search_with_relevance_scores(

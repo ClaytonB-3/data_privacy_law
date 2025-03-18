@@ -68,11 +68,11 @@ def main():
     with content_column:
         st.subheader("Overview of GDPR", divider=True)
         st.write(
-            """The General Data Protection Regulation (GDPR) is a comprehensive
-data protection law enacted by the European Union (EU) to safeguard individuals'
-personal data and regulate its free movement within the EU and European Economic
-Area (EEA). Adopted on April 14, 2016, and enforced from May 25, 2018, GDPR replaced
-the Data Protection Directive 95/46/EC, establishing uniform data protection rules
+            """The General Data Protection Regulation (GDPR) is a comprehensive \
+data protection law enacted by the European Union (EU) to safeguard individuals' \
+personal data and regulate its free movement within the EU and European Economic \
+Area (EEA). Adopted on April 14, 2016, and enforced from May 25, 2018, GDPR replaced \
+the Data Protection Directive 95/46/EC, establishing uniform data protection rules \
 across member states."""
         )
         st.write("")
