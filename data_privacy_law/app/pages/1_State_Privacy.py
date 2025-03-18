@@ -221,6 +221,11 @@ def generate_llm_response(user_question):
             st.session_state.llm_result updated with the new response
             st.dataframe of the summary for each page used to generate response
     """
+    if not isinstance(user_question, str):
+        raise TypeError("User question must be a string")
+    if not "selected_state" in st.session_state:
+        raise ValueError("Selected state not found in session state")
+
     filtered_results = st.session_state.index.similarity_search_with_relevance_scores(
         query=user_question,
         k=10,

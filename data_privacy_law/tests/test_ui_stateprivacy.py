@@ -21,6 +21,7 @@ state_privacy = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(state_privacy)
 generate_page_summary = state_privacy.generate_page_summary
 map_chunk_to_metadata = state_privacy.map_chunk_to_metadata
+generate_llm_response = state_privacy.generate_llm_response
 
 
 def find_widgets(widget, target_type):
@@ -169,6 +170,14 @@ class StatePrivacyLawAppTest(unittest.TestCase):
         self.assertTrue(isinstance(chunk_ids_with_metadata, list))
         with self.assertRaises(TypeError):
             map_chunk_to_metadata(None)
+
+    def test_generate_llm_response(self):
+        """
+        Test the generate_llm_response function.
+        """
+        non_string_user_question = 123
+        with self.assertRaises(TypeError):
+            generate_llm_response(non_string_user_question)
 
 
 if __name__ == "__main__":
