@@ -109,7 +109,7 @@ def extract_text_from_pdf(pdf_path):
                 text.append(page_text)
 
     except FileNotFoundError as e:
-        print("Error reading PDF:", e)
+        raise FileNotFoundError("Error reading PDF:", e)
 
     return text
 

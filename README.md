@@ -17,3 +17,69 @@ __Data Sources__
 - LegiScan National Legislative Datasets
 - Open States Bills Data
 - International Association of Privacy Professionals (IAPP) : US State Privacy Legislation Tracker
+
+## Setup Guide
+
+### Prerequisites
+- Python 3.12
+- Conda (Miniconda or Anaconda)
+- Git
+
+### Environment Setup
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd data_privacy_law
+```
+
+2. Create and activate the conda environment:
+```bash
+conda env create -f environment.yml
+conda activate data_privacy_law
+```
+
+Alternatively, you can create the environment manually:
+```bash
+conda create --name data_privacy_law python=3.12
+conda activate data_privacy_law
+pip install -r requirements.txt
+```
+
+3. Set up environment variables:
+Create a `.env` file in the root directory with the following variables:
+```bash
+LANGSMITH_TRACING=true
+LANGSMITH_ENDPOINT="https://api.smith.langchain.com"
+LANGCHAIN_API_KEY="your_langchain_api_key"
+LANGCHAIN_PROJECT="your_langchain_project_name"
+GOOGLE_API_KEY="your_google_api_key"
+```
+
+Replace `your_langchain_api_key` and `your_google_api_key` with your actual API keys:
+- Get a Google API key from [Google Cloud Console](https://console.cloud.google.com/)
+- Get a LangChain API key from [LangSmith](https://smith.langchain.com/)
+
+### Running the Application
+
+1. Start the Streamlit application:
+```bash
+cd data_privacy_law
+streamlit run app/Home.py
+```
+
+The application should open in your default web browser at `http://localhost:8501`
+
+### Running Tests
+
+To run the test suite:
+```bash
+python -m unittest discover
+```
+
+### Troubleshooting
+If having issues with the index delete the faiss_index folder and rebuild it by doing the following:
+```bash
+cd data_privacy_law
+python parse_bills.py -s all
+```
