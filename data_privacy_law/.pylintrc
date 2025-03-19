@@ -1,0 +1,8 @@
+[MASTER]
+init-hook='import sys; sys.path.append("./")'  # Add the project root to the path
+
+[MESSAGES CONTROL]
+disable=
+    no-name-in-module,  # False Alarms
+    import-error,  # False Alarms
+    duplicate-code  # We use some similar codes in different files to test UI

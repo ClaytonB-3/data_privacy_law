@@ -10,7 +10,6 @@ from unittest.mock import patch, MagicMock
 import google.generativeai as genai
 
 from llm_manager.llm_manager import (
-    llm_simplify_chunk_text,
     get_conversational_chain,
     get_confirmation_result_chain,
     get_document_specific_summary,
@@ -22,23 +21,6 @@ class TestLLMResponse(unittest.TestCase):
     """
     Test whether LLM Model related funcitons work properly
     """
-
-    @patch("llm_manager.llm_manager.create_stuff_documents_chain")
-    @patch("llm_manager.llm_manager.ChatGoogleGenerativeAI")
-    @patch("llm_manager.llm_manager.PromptTemplate")
-    def test_llm_simplify_chunk_text(self, mock_prompt, mock_genai, mock_chain):
-        """
-        Test llm_simplify_chunk_text runs properly
-
-        Args:
-            mock_prompt: mock patch for PromptTemplate
-            mock_genai: mock genai for ChatGoogleGenerativeAI
-            mock_chain: mock chain for create_stuff_documents_chain
-        """
-        _ = mock_prompt, mock_genai
-        llm_simplify_chunk_text()
-        mock_chain.assert_called_once()
-
 
     @patch("llm_manager.llm_manager.create_stuff_documents_chain")
     @patch("llm_manager.llm_manager.ChatGoogleGenerativeAI")

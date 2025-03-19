@@ -13,7 +13,7 @@ build-backend = "setuptools.build_meta"
 name = "law"
 version = "0.0.1"
 authors = [
-  { name="Brady Huanh" },
+  { name="Hua-Hsing Huang" },
   { name="Srimant Mishra" },
   { name="Clayton Brock" },
 ]

@@ -1,3 +1,10 @@
+# pylint: disable=invalid-name
+# the above line is used to disable the invalid-name error for the file name.
+# Capital letters needed as Streamlit inherits case for page name from file name
+"""
+This module creates and generates the Add Documents page for the streamlit app
+"""
+
 import os
 import sys
 import datetime
@@ -25,25 +32,74 @@ from db_manager.pdf_parser import (
 
 # List of US states for the dropdown
 us_states = [
-    "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
-    "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho",
-    "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana",
-    "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi",
-    "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey",
-    "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio",
-    "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina",
-    "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia",
-    "Washington", "West Virginia", "Wisconsin", "Wyoming"
+    "Alabama",
+    "Alaska",
+    "Arizona",
+    "Arkansas",
+    "California",
+    "Colorado",
+    "Connecticut",
+    "Delaware",
+    "Florida",
+    "Georgia",
+    "Hawaii",
+    "Idaho",
+    "Illinois",
+    "Indiana",
+    "Iowa",
+    "Kansas",
+    "Kentucky",
+    "Louisiana",
+    "Maine",
+    "Maryland",
+    "Massachusetts",
+    "Michigan",
+    "Minnesota",
+    "Mississippi",
+    "Missouri",
+    "Montana",
+    "Nebraska",
+    "Nevada",
+    "New Hampshire",
+    "New Jersey",
+    "New Mexico",
+    "New York",
+    "North Carolina",
+    "North Dakota",
+    "Ohio",
+    "Oklahoma",
+    "Oregon",
+    "Pennsylvania",
+    "Rhode Island",
+    "South Carolina",
+    "South Dakota",
+    "Tennessee",
+    "Texas",
+    "Utah",
+    "Vermont",
+    "Virginia",
+    "Washington",
+    "West Virginia",
+    "Wisconsin",
+    "Wyoming",
 ]
 
-sector_list = ["Health", "Education", "Finance", 
-        "Telecommunications & Technology", "Government & Public Sector", "Retail & E-Commerce", "Employment & HR", 
-        "Media & Advertising", "Critical Infrastructure (Energy, Transportation, etc.)", 
-        "Children’s Data Protection"]
+sector_list = [
+    "Health",
+    "Education",
+    "Finance",
+    "Telecommunications & Technology",
+    "Government & Public Sector",
+    "Retail & E-Commerce",
+    "Employment & HR",
+    "Media & Advertising",
+    "Critical Infrastructure (Energy, Transportation, etc.)",
+    "Children’s Data Protection",
+]
 
 st.set_page_config(page_title="Privacy Laws Explorer", layout="wide")
 
-styling_for_home_page = """
+STYLING_FOR_ADD_DOC_PAGE = """
 <style>
     [data-testid = "stAppViewContainer"]{
     background-color: #fefae0;
@@ -79,11 +135,17 @@ styling_for_home_page = """
 </style>
 """
 
-st.markdown(styling_for_home_page, unsafe_allow_html=True)
+st.markdown(STYLING_FOR_ADD_DOC_PAGE, unsafe_allow_html=True)
+
 
 def main():
-
-    empty_column, logo_column, title_column = st.columns([0.01,0.05,0.94], gap="small", vertical_alignment="bottom")
+    """
+    This function runs the Add Document page.
+    """
+    st.session_state.reset_state_page = True
+    _, logo_column, title_column = st.columns(
+        [0.01, 0.05, 0.94], gap="small", vertical_alignment="bottom"
+    )
     with logo_column:
         st.image("./app/images/add.png", width=75)
     with title_column:
@@ -93,29 +155,41 @@ def main():
     st.write("")
     st.write("")
 
+
     empty_space_1,input_1,empty_space_2, input_2, empty_space_3 = st.columns([0.12,0.3,0.12,0.3,0.12])
+
+
     with input_1:
-        st.subheader("Select the type of law", divider = True)
-        level_of_law = st.radio("", 
-                                ["State-level sectoral", "State-level Comprehensive", "Federal level", "GDPR"],
-                                captions=[
-                                    "Choose if the law is a state law focusing on one specific issue",
-                                    "Choose if the law is a state law focusing on a broad set of issues",
-                                    "Choose if the federal government created this law",
-                                    "Choose if your law is related to EU's GDPR"
-                                ],
-                                index = None,
-                            )
+        st.subheader("Select the type of law", divider=True)
+        level_of_law = st.radio(
+            "",
+            [
+                "State-level sectoral",
+                "State-level Comprehensive",
+                "Federal level",
+                "GDPR",
+            ],
+            captions=[
+                "Choose if the law is a state law focusing on one specific issue",
+                "Choose if the law is a state law focusing on a broad set of issues",
+                "Choose if the federal government created this law",
+                "Choose if your law is related to EU's GDPR",
+            ],
+            index=None,
+        )
         st.write("")
         st.write("Type of law selection:", level_of_law)
+
     
     with input_2:
         st.subheader("Enter relevant US state / NA", divider = True)
+
         selected_state = st.selectbox(
-                            "Select a state to explore their privacy law", us_states, index=None
-                            )
+            "Select a state to explore their privacy law", us_states, index=None
+        )
         st.write("")
         st.write("State selection:", selected_state)
+
     
 
     st.write("")
@@ -132,9 +206,11 @@ def main():
                 if page_text:
                     text += page_text
 
+
     st.write("")
     st.write("")
     st.write("")
+
 
     empty_col, button_col, empty_col2 = st.columns([0.25, 0.5, 0.25])
     with button_col:
@@ -188,6 +264,7 @@ def main():
 
             else:
                 st.write("All inputs have not been filled!")
+
 
 
 if __name__ == "__main__":

@@ -88,7 +88,7 @@ def add_chunk_to_faiss_index(
         return
 
     # Add only new chunks to the existing index.
-    existing_ids = set(faiss_store.docstore._dict.keys())
+    existing_ids = set(getattr(faiss_store.docstore, "_dict").keys())
     # print(f"Existing ID's are {existing_ids}")
 
     new_doc_dict = {
@@ -129,7 +129,7 @@ def obtain_text_of_chunk(chunk_id):
     When that chunkid is found, the associated text of that chunk is returned.
     """
     faiss_store = load_faiss_index()
-    all_docs = list(faiss_store.docstore._dict.values())
+    all_docs = list(getattr(faiss_store.docstore, "_dict").values())
     text_to_send_to_llm = None
 
     for _, content in enumerate(all_docs):
@@ -151,9 +151,6 @@ def obtain_text_of_chunk(chunk_id):
             # print("DEBUG: Extracted page text for chunk_id", chunk_id, ":\n", page_text)
             text_to_send_to_llm = page_text
             break
-        else:
-            continue
-            # print("DEBUG: Chunk id does not match, continuing...")
 
     return text_to_send_to_llm
 
@@ -287,7 +284,7 @@ def write_bill_info_to_csv(bill_info_list, file_name="bill_info.csv"):
 
                 if path in existing_data:
                     existing_row = existing_data[path]
-                    if all([bill_info[k] == existing_row[k] for k in fieldnames]):
+                    if all(bill_info[k] == existing_row[k] for k in fieldnames):
                         del existing_data[path]  # Remove old entry to be replaced
                         continue  # Skip if all values are the same
                 # Write new/updated entry to CSV

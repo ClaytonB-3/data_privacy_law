@@ -1,5 +1,7 @@
 """
 Parse PDF in selected folders and add into FAISS database.
+Usage: python parse_bills.py -s <state1> -s <state2> ...
+-s <state1> -s <state2> ...: Specify the state folders to parse. Enter 'all' for all available.
 """
 import os
 import argparse

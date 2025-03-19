@@ -1,6 +1,10 @@
+# pylint: disable=invalid-name
+# the above line is used to disable the invalid-name error for the file name.
+# Capital letters needed as Streamlit inherits case for page name from file name
 """
 This module creates and generates the state privacy law app for the streamlit app
 """
+
 
 import base64
 import os
@@ -12,14 +16,21 @@ import streamlit as st
 
 # Set up root directory for imports
 current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)    # This gives "app"
-root_dir = os.path.dirname(parent_dir)    # This gives "data_privacy_law"
+parent_dir = os.path.dirname(current_dir)  # This gives "app"
+root_dir = os.path.dirname(parent_dir)  # This gives "data_privacy_law"
 sys.path.append(root_dir)
 
+# Streamlit requires pages be in the page directory so these apps have to be run
+# from outside the root directory causing import pylint errors that are suppressed
+# pylint: disable=wrong-import-position, import-error
 from db_manager.faiss_db_manager import (
     load_faiss_index,
     map_chunk_to_metadata,
 )
+
+# Streamlit requires pages be in the page directory so these apps have to be run
+# from outside the root directory causing import pylint errors that are suppressed
+# pylint: disable=wrong-import-position, import-error
 from llm_manager.llm_manager import (
     generate_page_summary,
     get_confirmation_result_chain,
@@ -28,56 +39,8 @@ from llm_manager.llm_manager import (
 
 # List of US states.
 us_states = [
-    "Alabama",
-    "Alaska",
-    "Arizona",
-    "Arkansas",
-    "California",
-    "Colorado",
-    "Connecticut",
-    "Delaware",
-    "Florida",
-    "Georgia",
-    "Hawaii",
-    "Idaho",
-    "Illinois",
-    "Indiana",
-    "Iowa",
-    "Kansas",
-    "Kentucky",
-    "Louisiana",
-    "Maine",
-    "Maryland",
-    "Massachusetts",
-    "Michigan",
-    "Minnesota",
-    "Mississippi",
-    "Missouri",
-    "Montana",
-    "Nebraska",
-    "Nevada",
-    "New Hampshire",
-    "New Jersey",
-    "New Mexico",
-    "New York",
-    "North Carolina",
-    "North Dakota",
-    "Ohio",
-    "Oklahoma",
-    "Oregon",
-    "Pennsylvania",
-    "Rhode Island",
-    "South Carolina",
-    "South Dakota",
-    "Tennessee",
     "Texas",
-    "Utah",
-    "Vermont",
-    "Virginia",
     "Washington",
-    "West Virginia",
-    "Wisconsin",
-    "Wyoming",
 ]
 
 st.set_page_config(page_title="Explore State Privacy Laws", layout="wide")
@@ -193,16 +156,16 @@ def create_state_selector():
     selected_state = st.selectbox(
         "Select a state to explore their privacy law", us_states, index=None
     )
-    st.session_state["selected_state"] = selected_state
-    st.write(f"Selected state: {st.session_state["selected_state"]}")
-    return st.session_state["selected_state"]
+    st.write(f"Selected state: {selected_state}")
+    return selected_state
 
 
-def display_selected_state_bills():
+def display_selected_state_bills(selected_state):
     """
     Retrieve all docs for selected state and return df of title and topics for that state.
 
-
+    Args:
+        selected_state (str): The selected state to display bills for
 
     Returns:
         None
@@ -210,15 +173,14 @@ def display_selected_state_bills():
         st.dataframe of title and topics for the selected state
 
     """
-    # I tried using as_retriever() with a filter, but I wasn't sure the right search type to use.
+    # I tried using as_retriever() with a filter, but it didn't work and
+    # this is the only way I could get it to work.
     # pylint: disable=protected-access
-    if st.session_state.selected_state is not None:
+    if selected_state is not None:
         all_docs = list(st.session_state.index.docstore._dict.values())
         # Filter for documents that have metadata "State" matching selected_state.
         state_docs = [
-            doc
-            for doc in all_docs
-            if doc.metadata.get("State") == st.session_state.selected_state
+            doc for doc in all_docs if doc.metadata.get("State") == selected_state
         ]
         if not state_docs:
             st.write("No bills found for this state.")
@@ -233,21 +195,92 @@ def display_selected_state_bills():
 
             if file_path not in bills:
 
-
                 bills[title] = {
                     "Title": title,
-                    # "Effective Date (DD/MM/YYYY)": date_converted,
                     "Topics": topics,
                 }
         df_bills = pd.DataFrame(list(bills.values()))
-        # Reset index so it starts from 1.
-        # df_bills.index = range(1, len(df_bills) + 1)
         st.session_state.df_bills = df_bills
-        # st.subheader("Bills for " + st.session_state.selected_state)
         st.dataframe(st.session_state.df_bills, width=1400, hide_index=True)
         return st.session_state.df_bills
 
     return None
+
+
+def generate_llm_response(user_question):
+    """
+    This function generates the LLM response to the user's question.
+
+    Args:
+        user_question (str): The user's question
+
+    Returns:
+        None
+
+    Output:
+        if question has already been asked:
+            st.write of the LLM response
+        if no relevant documents are found:
+            st.html of the LLM response
+        if new question and relevant documents are found:
+            st.session_state.llm_result updated with the new response
+            st.dataframe of the summary for each page used to generate response
+    """
+    if not isinstance(user_question, str):
+        raise TypeError("User question must be a string")
+    if "selected_state" not in st.session_state:
+        raise ValueError("Selected state not found in session state")
+
+    filtered_results = st.session_state.index.similarity_search_with_relevance_scores(
+        query=user_question,
+        k=10,
+        filter={"State": st.session_state.selected_state},
+        score_threshold=0.2,
+    )
+
+    if not filtered_results:
+        st.html(
+            """<p style = "font-weight:bold; font-size:1.3rem;">
+            "No relevant documents found for the selected state based on your query."
+            </p>
+        """
+        )
+
+    else:
+        # Prepare documents for the conversational chain.
+        docs_for_chain, chunk_ids_w_metadata = map_chunk_to_metadata(filtered_results)
+        # Gen summary from llm of relevant context
+        chain = get_conversational_chain()
+        firstresult = chain.invoke(
+            {"context": docs_for_chain, "question": user_question}
+        )
+        # Verify if the first LLM response was coherent or not.
+        chain = get_confirmation_result_chain()
+        result = chain.invoke(
+            {
+                "context": docs_for_chain,
+                "question": user_question,
+                "answer": firstresult,
+            }
+        )
+        if result != st.session_state.llm_result:
+            st.write_stream(stream_data(result))
+            st.write("---")
+        else:
+            st.write(result)
+        st.session_state.llm_result = result
+
+        if (
+            "Sorry, the LLM cannot currently generate a good enough response"
+            not in result
+        ):
+            records = generate_page_summary(chunk_ids_w_metadata, user_question)
+            st.session_state.df = pd.DataFrame(records)
+            st.session_state.relevant_df = st.session_state.df[
+                ["Document", "Page", "Relevant Information"]
+            ]
+        else:
+            records = False
 
 
 def stream_data(result_of_llm):
@@ -335,20 +368,37 @@ def initialize_session_state():
     """
     This function initializes the session state variables.
     """
-    if "index" not in st.session_state:
+    if "index" not in st.session_state or st.session_state.reset_state_page is True:
         st.session_state.index = load_faiss_index()
-    if "df" not in st.session_state:
+    if "df" not in st.session_state or st.session_state.reset_state_page is True:
         st.session_state.df = pd.DataFrame()
-    if "selected_pdf" not in st.session_state:
+    if (
+        "selected_pdf" not in st.session_state
+        or st.session_state.reset_state_page is True
+    ):
         st.session_state.selected_pdf = None
-    if "pdf_title" not in st.session_state:
+    if "pdf_title" not in st.session_state or st.session_state.reset_state_page is True:
         st.session_state.pdf_title = None
-    if "user_question" not in st.session_state:
+    if (
+        "user_question" not in st.session_state
+        or st.session_state.reset_state_page is True
+    ):
         st.session_state.user_question = ""
-    if "llm_result" not in st.session_state:
+    if (
+        "llm_result" not in st.session_state
+        or st.session_state.reset_state_page is True
+    ):
         st.session_state.llm_result = None
-    if "new_question" not in st.session_state:
+    if (
+        "new_question" not in st.session_state
+        or st.session_state.reset_state_page is True
+    ):
         st.session_state.new_question = True
+    if (
+        "question_input_key" not in st.session_state
+        or st.session_state.reset_state_page is True
+    ):
+        st.session_state.question_input_key = 0
 
 
 def run_state_privacy_page():
@@ -363,97 +413,51 @@ def run_state_privacy_page():
     with title_column:
         st.header("Explore State Privacy Laws")
 
-    # col1, col2 = st.columns([0.8, 0.2])
+    selected_state = create_state_selector()
 
-    # with col1:
-    st.session_state.selected_state = create_state_selector()
-    # st.write(f"You have chosen the state: {selected_state}")
-    if st.session_state.selected_state is not None:
-
-        with st.expander(
-            f"## Bills for {st.session_state.selected_state}", expanded=True
-        ):
-            display_selected_state_bills()
-
+    if selected_state:
+        with st.expander(f"## Bills for {selected_state}", expanded=True):
+            _, center_col, _ = st.columns([0.05, 0.9, 0.05])
+            with center_col:
+                display_selected_state_bills(selected_state)
+    if ("selected_state" not in st.session_state) or (
+        st.session_state.selected_state != selected_state
+    ):
+        st.session_state.question_input_key += 1
     # Get the user's question and store in session state
     user_question = st.text_input(
-        "Ask a question about State Privacy Laws:", key="question_input"
+        "Ask a question about State Privacy Laws:",
+        key=f"question_input_{st.session_state.question_input_key}",
     )
+    if ("selected_state" not in st.session_state) or (
+        st.session_state.selected_state != selected_state
+    ):
+        st.session_state.user_question = ""
+        st.session_state.new_question = True
+        st.session_state.df = pd.DataFrame()  # Reset results when state changes
+        st.session_state.llm_result = None  # Reset LLM result when state changes
+        st.session_state.selected_state = selected_state
 
-    if user_question:  # Only process if a question is asked
-        if user_question != st.session_state.user_question:
-            st.session_state.user_question = user_question
-            st.session_state.new_question = True
-            st.session_state.df = pd.DataFrame()  # Reset results when question changes
-            st.session_state.llm_result = None  # Reset LLM result when question changes
-        else:
-            st.session_state.new_question = False
-
-        if st.session_state.new_question:
-            filtered_results = (
-                st.session_state.index.similarity_search_with_relevance_scores(
-                    query=user_question,
-                    k=10,
-                    filter={"State": st.session_state.selected_state},
-                    score_threshold=0.2,
+    else:
+        if user_question:  # Only process if a question is asked
+            if user_question != st.session_state.user_question:
+                st.session_state.user_question = user_question
+                st.session_state.new_question = True
+                st.session_state.df = (
+                    pd.DataFrame()
+                )  # Reset results when question changes
+                st.session_state.llm_result = (
+                    None  # Reset LLM result when question changes
                 )
-            )
+            else:
+                st.session_state.new_question = False
 
-            if not filtered_results:
-                st.html(
-                    """<p style = "font-weight:bold; font-size:1.3rem;">
-                    "No relevant documents found for the selected state based on your query."
-                    </p>
-                """
-                )
+            if st.session_state.new_question:
+                generate_llm_response(user_question)
 
             else:
-                # Prepare documents for the conversational chain.
-                docs_for_chain, chunk_ids_w_metadata = map_chunk_to_metadata(
-                    filtered_results
-                )
-                # Gen summary from llm of relevant context
-                chain = get_conversational_chain()
-                firstresult = chain.invoke(
-                    {"context": docs_for_chain, "question": user_question}
-                )
-                # Verify if the first LLM response was coherent or not.
-                chain = get_confirmation_result_chain()
-                result = chain.invoke(
-                    {
-                        "context": docs_for_chain,
-                        "question": user_question,
-                        "answer": firstresult,
-                    }
-                )
-                if result != st.session_state.llm_result:
-                    st.write_stream(stream_data(result))
-                    st.write("---")
-                else:
-                    st.write(result)
-                st.session_state.llm_result = result
-
-                # generate table of contextual info for explainability
-
-                if (
-                    "Sorry, the LLM cannot currently generate a good enough response"
-                    not in result
-                ):
-                    records = generate_page_summary(chunk_ids_w_metadata, user_question)
-                    st.session_state.df = pd.DataFrame(records)
-                    st.session_state.relevant_df = st.session_state.df[
-                        ["Document", "Page", "Relevant Information"]
-                    ]
-                else:
-                    records = False  # None
-
-        else:
-            st.write(st.session_state.llm_result)
-            st.write("---")
-
-    # non text summary components
-    # with col2:
-    #    display_selected_state_bills()
+                st.write(st.session_state.llm_result)
+                st.write("---")
     display_pdf_section()
 
 
@@ -463,6 +467,7 @@ def main():
     """
     initialize_session_state()
     run_state_privacy_page()
+    st.session_state.reset_state_page = False
 
 
 if __name__ == "__main__":
