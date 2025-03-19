@@ -1,6 +1,8 @@
 # pylint: disable=invalid-name
 # pylint: disable=duplicate-code
-# Pylint suppression done to conform to streamlit rules
+# invalid-name error suppressed to snake case naming for the file conflicts with
+# streamlit functionality of pagination
+# Duplicate-code being used for styling
 """
 This module creates and generates the Home page for the streamlit app
 """

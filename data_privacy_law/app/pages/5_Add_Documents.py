@@ -3,6 +3,8 @@
 # pylint: disable=wrong-import-position
 # the above line is used to disable the invalid-name error for the file name.
 # Capital letters needed as Streamlit inherits case for page name from file name
+# "Wrong import position" pylint error is being suppressed because setting up
+# the path is needed before imports are called. Without this imports wont work.
 """
 This module creates and generates the Add Documents page for the streamlit app
 """
@@ -142,11 +144,25 @@ STYLING_FOR_ADD_DOC_PAGE = """
 
 st.markdown(STYLING_FOR_ADD_DOC_PAGE, unsafe_allow_html=True)
 
+def read_pdf(uploaded_file):
+    """
+    Gathers the textual content of the whole pdf and joins them together
+    Input Args: PDF File
+    Returns: String
+    """
+    text = ""
+    if uploaded_file is not None:
+        reader = PdfReader(uploaded_file)
+        for page in reader.pages:
+            page_text = page.extract_text()
+            if page_text:
+                text += page_text
+    return text
 
-def main(): # pylint: disable=too-many-locals, too-many-statements, unused-variable
+
+def main():
     """
     This function runs the Add Document page.
-    Pylint suppression being done as many variables used to create empty space
     """
     st.session_state.reset_state_page = True
     _, logo_column, title_column = st.columns(
@@ -157,9 +173,7 @@ def main(): # pylint: disable=too-many-locals, too-many-statements, unused-varia
     with title_column:
         st.title("Add a Document to our Database of Laws")
 
-    st.write("")
-    st.write("")
-    st.write("")
+    st.write("\n\n\n")
 
     _,input_1,_, input_2, _ = st.columns(
         [0.12,0.3,0.12,0.3,0.12]
@@ -195,23 +209,15 @@ def main(): # pylint: disable=too-many-locals, too-many-statements, unused-varia
         st.write("")
         st.write("State selection:", selected_state)
 
-    st.write("")
-    st.write("")
+    st.write("\n\n")
 
     _, file_upload_column, _ = st.columns([0.33,0.33,0.33])
     with file_upload_column:
         uploaded_file = st.file_uploader("Choose a PDF file", type = "pdf")
-        if uploaded_file is not None:
-            reader = PdfReader(uploaded_file)
-            text = ""
-            for page in reader.pages:
-                page_text = page.extract_text()
-                if page_text:
-                    text += page_text
+        text = ""
+        text = read_pdf(uploaded_file)
 
-    st.write("")
-    st.write("")
-    st.write("")
+    st.write("\n\n\n")
 
     _, button_col, _ = st.columns([0.25, 0.5, 0.25])
     with button_col:

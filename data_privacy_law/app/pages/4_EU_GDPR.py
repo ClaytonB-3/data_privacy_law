@@ -2,6 +2,7 @@
 # pylint: disable=duplicate-code
 # the above line is used to disable the invalid-name error for the file name.
 # Capital letters needed as Streamlit inherits case for page name from file name
+# Duplicate code being used for styling of streamlit file
 """
 This module creates and generates the EU GDPR page for the streamlit app
 """
