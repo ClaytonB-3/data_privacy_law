@@ -1,5 +1,6 @@
 # pylint: disable=invalid-name
 # pylint: disable=duplicate-code
+# pylint: disable=wrong-import-position
 # the above line is used to disable the invalid-name error for the file name.
 # Capital letters needed as Streamlit inherits case for page name from file name
 """
@@ -10,6 +11,12 @@ import os
 import sys
 import streamlit as st
 from PyPDF2 import PdfReader
+
+# Set up root directory for imports
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)    # This gives "app"
+root_dir = os.path.dirname(parent_dir)    # This gives "data_privacy_law"
+sys.path.append(root_dir)
 
 from db_manager.faiss_db_manager import (
     add_chunk_to_faiss_index,
@@ -23,11 +30,6 @@ from llm_manager.llm_manager import (
     parse_bill_variant_for_adding_docs,
 )
 
-# Set up root directory for imports
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)    # This gives "app"
-root_dir = os.path.dirname(parent_dir)    # This gives "data_privacy_law"
-sys.path.append(root_dir)
 
 
 
