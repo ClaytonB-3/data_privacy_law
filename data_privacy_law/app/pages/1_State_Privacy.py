@@ -432,6 +432,8 @@ def run_state_privacy_page():
         st.session_state.df = pd.DataFrame()  # Reset results when state changes
         st.session_state.llm_result = None  # Reset LLM result when state changes
         st.session_state.selected_state = selected_state
+        st.session_state.pdf_title = None
+        st.session_state.selected_pdf = None
 
     else:
         if user_question:  # Only process if a question is asked
