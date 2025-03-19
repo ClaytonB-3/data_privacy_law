@@ -81,7 +81,8 @@ def parse_bill_info(pdf_text):
 
 def parse_bill_variant_for_adding_docs(pdf_text: str, user_state: str, level_of_law: str) -> dict:
     """
-    A variant of parse_bill_info that is specifically meant for the adding documents to database page:
+    A variant of parse_bill_info that is specifically 
+    meant for the adding documents to database page:
       - Takes the 'level_of_law' and 'user_state' as direct inputs.
       - Forces the 'Type' to be whatever 'level_of_law' is.
       - Derives 'Sector' only if 'level_of_law' indicates "State-level sectoral", otherwise null.
@@ -137,13 +138,13 @@ def parse_bill_variant_for_adding_docs(pdf_text: str, user_state: str, level_of_
 
     model = ChatGoogleGenerativeAI(model="gemini-1.5-flash-8b", temperature=0.2)
     prompt = PromptTemplate(
-        template=prompt_template, 
+        template=prompt_template,
         input_variables=["context", "state", "lvl_law"]
     )
     chain = create_stuff_documents_chain(llm=model, prompt=prompt)
 
     doc = Document(page_content=pdf_text)
-    
+
     # Invoke the LLM with your custom inputs
     result = chain.invoke({
         "context": [doc],
@@ -174,7 +175,7 @@ def parse_bill_variant_for_adding_docs(pdf_text: str, user_state: str, level_of_
     # Make absolutely sure "Type" and "State" are set exactly as provided
     data["Type"] = level_of_law
     data["State"] = user_state
-    
+
     # If level_of_law != "State level sectoral" and the LLM gave some sector,
     # forcibly set it to null.
     if level_of_law != "State-level sectoral":

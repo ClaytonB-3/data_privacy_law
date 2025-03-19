@@ -321,15 +321,15 @@ def create_folder_for_added_files(chunk_metadatas, uploaded_file):
     """
     # If no metadata is provided, exit early.
     if not chunk_metadatas:
-        return
+        return chunk_metadatas
 
     # Use only the first metadata dictionary.
     individual_metadatas = chunk_metadatas[0]
-    
+
     # Determine the path to the 'pdfs' folder (2 levels above this file)
     current_dir = os.path.dirname(os.path.abspath(__file__))
     pdfs_dir = os.path.abspath(os.path.join(current_dir, "..", "pdfs"))
-    
+
     # Choose folder and file names based on metadata.
     if individual_metadatas["Type"] == "State-level sectoral":
         folder_name = individual_metadatas["State"]
@@ -343,17 +343,17 @@ def create_folder_for_added_files(chunk_metadatas, uploaded_file):
     # Append .pdf extension if not present.
     if not file_name.lower().endswith(".pdf"):
         file_name += ".pdf"
-    
+
     # Define the full destination directory path.
     dest_dir = os.path.join(pdfs_dir, folder_name)
-    
+
     # Create the folder if it doesn't exist.
     if not os.path.exists(dest_dir):
         os.makedirs(dest_dir)
-    
+
     # Build the full file path.
     file_path = os.path.join(dest_dir, file_name)
-    
+
     # Write the uploaded file's content to disk.
     uploaded_file.seek(0) # Sets the pointer to the start of the file
     with open(file_path, "wb") as f:

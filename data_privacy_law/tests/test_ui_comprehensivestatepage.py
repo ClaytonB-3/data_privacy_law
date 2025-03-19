@@ -1,3 +1,4 @@
+# pylint: disable=duplicate-code
 """
 Testing the State Comprehensive Laws page UI for subheaders, column content, and images.
 

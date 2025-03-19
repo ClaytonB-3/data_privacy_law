@@ -1,3 +1,6 @@
+# pylint: disable=invalid-name
+# pylint: disable=duplicate-code
+# Pylint suppression done to conform to streamlit rules
 """
 This module creates and generates the Home page for the streamlit app
 """

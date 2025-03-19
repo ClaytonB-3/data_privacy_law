@@ -41,6 +41,8 @@ from llm_manager.llm_manager import (
 us_states = [
     "Texas",
     "Washington",
+    "Florida", 
+    "Alaska"
 ]
 
 st.set_page_config(page_title="Explore State Privacy Laws", layout="wide")

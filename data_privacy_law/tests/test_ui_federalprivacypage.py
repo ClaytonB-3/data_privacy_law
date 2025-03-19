@@ -1,3 +1,4 @@
+# pylint: disable=duplicate-code
 """
 Testing the Federal Privacy Laws page UI for subheaders and column content.
 

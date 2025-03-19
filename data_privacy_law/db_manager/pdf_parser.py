@@ -80,7 +80,7 @@ def chunk_text_while_adding_docs(
         splitted_docs = text_splitter.create_documents([page_text])
         for doc in splitted_docs:
             chunk_texts.append(doc.page_content)
-            
+
             # Minimal metadata: path + page number
             chunk_metadatas.append({
                 "Path": "Submitted-Online",
@@ -125,6 +125,6 @@ def extract_uploaded_pdf_pages(uploaded_file):
         for page in reader.pages:
             page_text = page.extract_text() or ""
             all_pages.append(page_text)
-    except Exception as e:
+    except FileNotFoundError as e:
         print(f"Error reading PDF: {e}")
     return all_pages

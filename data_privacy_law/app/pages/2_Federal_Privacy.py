@@ -1,4 +1,5 @@
 # pylint: disable=invalid-name
+# pylint: disable=duplicate-code
 # the above line is used to disable the invalid-name error for the file name.
 # Capital letters needed as Streamlit inherits case for page name from file name
 """
