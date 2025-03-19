@@ -278,7 +278,7 @@ class TestFAISSIndex(unittest.TestCase):
 
         # Mock FAISS load
         mock_faiss_instance = MagicMock()
-        mock_faiss_instance.docstore._dict = {"123": "123"}
+        setattr(mock_faiss_instance.docstore, "_dict", {"123": "123"})
         mock_faiss.load_local.return_value = mock_faiss_instance
 
         add_chunk_to_faiss_index(["new chunk"], [{"Chunk_id": "456"}])  # New ID
@@ -300,7 +300,6 @@ class TestFAISSIndex(unittest.TestCase):
     def test_add_chunk_to_faiss_index_load_error(
         self, mock_chunks, mock_exists, mock_embeddings, mock_faiss
     ):
-     
         """
         Test whether add_chunk_to_faiss_index can handle load errors properly
 
@@ -310,7 +309,7 @@ class TestFAISSIndex(unittest.TestCase):
             mock_embeddings: mock patch for GoogleGenerativeAIEmbeddings
             mock_faiss: mock patch for FAISS
         """
-      
+
         with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
             mock_stdout.getvalue()
             mock_stdout.getvalue()
@@ -374,22 +373,22 @@ class TestFAISSIndex(unittest.TestCase):
         mock_doc3.metadata = {"Chunk_id": 1}
         mock_doc3.page_content = "text456"
 
-        mock_faiss_instance.docstore._dict = {
+        setattr(mock_faiss_instance.docstore, "_dict", {
             "Chunk_id_1": mock_doc1,
             "Chunk_id_2": mock_doc2,
             "Chunk_id_3": mock_doc3,
-        }
+            }
+        )
         self.assertEqual(obtain_text_of_chunk(1), "text123")
         self.assertEqual(obtain_text_of_chunk(2), None)
 
         # test2 - No page_content
         mock_doc1 = MagicMock(spec=[])
         mock_doc1.metadata = {"Chunk_id": 1}
-        mock_faiss_instance.docstore._dict = {"Chunk_id_1": mock_doc1}
+        setattr(mock_faiss_instance.docstore, "_dict", {"Chunk_id_1": mock_doc1})
         self.assertEqual(obtain_text_of_chunk(1), "")
 
 
-    
     @patch("db_manager.faiss_db_manager.add_chunk_to_faiss_index")
     @patch("db_manager.faiss_db_manager.chunk_pdf_pages")
     @patch("db_manager.faiss_db_manager.parse_bill_info")
