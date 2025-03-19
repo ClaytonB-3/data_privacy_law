@@ -1,3 +1,6 @@
+# pylint: disable=invalid-name
+# the above line is used to disable the invalid-name error for the file name.
+# Capital letters needed for displaying the page name in the sidebar
 """
 This module creates and generates the Home page for the streamlit app
 """
