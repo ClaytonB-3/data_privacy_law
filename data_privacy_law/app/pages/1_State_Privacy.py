@@ -41,6 +41,8 @@ from llm_manager.llm_manager import (
 us_states = [
     "Texas",
     "Washington",
+    "Florida", 
+    "Alaska"
 ]
 
 st.set_page_config(page_title="Explore State Privacy Laws", layout="wide")
@@ -60,10 +62,15 @@ STYLING_FOR_STATE_PAGE = """
     background-position: 0 0,28px 28px;
     color: #000;
     }
-    [data-testid="stSelectbox"] {
-        color: white !important;
+
+    [data-testid="stSelectbox"] *{
+        color: white;
     }
     
+    [data-testid="stWidgetLabel"] * {
+        color: black !important;
+    }
+
     div[data-baseweb="select"] * {
     background-color: light grey;
     }

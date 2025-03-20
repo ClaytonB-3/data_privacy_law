@@ -1,3 +1,5 @@
+# pylint: disable=duplicate-code
+# Duplicate code being used for testing the rendering of streamlit pages
 """
 Testing the GDPR page UI for subheaders and column content.
 
