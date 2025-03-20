@@ -11,7 +11,6 @@ This module contains functions to interact with the LLM models.
 """
 import os
 import json
-
 from dotenv import load_dotenv
 
 import google.generativeai as genai
@@ -78,6 +77,128 @@ def parse_bill_info(pdf_text):
     # print(f"bill_info is {bill_info}")
     return bill_info
 
+
+
+def parse_bill_variant_for_adding_docs(pdf_text: str, user_state: str, level_of_law: str) -> dict:
+    """
+    A variant of parse_bill_info that is specifically 
+    meant for the adding documents to database page:
+      - Takes the 'level_of_law' and 'user_state' as direct inputs.
+      - Forces the 'Type' to be whatever 'level_of_law' is.
+      - Derives 'Sector' only if 'level_of_law' indicates "State-level sectoral", otherwise null.
+      - Maps 'user_state' to the 'State' key in the returned JSON.
+      - Returns the JSON structure:
+            {
+                "Title": "",
+                "Date": "",
+                "Type": "",
+                "Sector": "",
+                "State": "",
+                "Topics": []
+                "Path": "Submitted-Online"
+            }
+    """
+    # You can tweak the prompt as needed, but here's a simple template:
+    prompt_template = """
+        You are given:
+          - The full text of a legal document: {context}
+          - A 'state': {state}
+          - A 'level_of_law': {lvl_law}
+
+        1. Always set "Type" in the JSON to the provided 'level_of_law'.
+        2. If 'level_of_law' == "State-level sectoral", read the document text to identify the sector. 
+           Possible sectors: 
+             "Health", "Education", "Finance", "Telecommunications & Technology", 
+             "Government & Public Sector", "Retail & E-Commerce", 
+             "Employment & HR", "Media & Advertising", 
+             "Critical Infrastructure (Energy, Transportation, etc.)", 
+             "Children’s Data Protection".
+           If it does not appear to be one of these, you can set "Sector" to "Other".
+        3. If 'level_of_law' != "State-level sectoral", set "Sector" to null.
+        4. Always set "State" in the JSON to the provided 'state' value.
+        5. For "Date", if there's a date in the text, provide it in MMDDYYYY format. 
+           If uncertain, set it to "".
+        6. For "Title", write it in 15 words or less. 
+           If the 'level_of_law' is "State-level sectoral" or "Comprehensive State level", 
+           begin with that state name, then a colon and a short descriptive title. 
+           If the 'level_of_law' is something else (e.g. "Federal"), 
+           begin with "Federal: " and then the title.
+        7. "Topics" is a list of up to six distinct topics that best fit the document.
+
+        Return ONLY a valid JSON in the following format (and no extra keys):
+        {{
+          "Title": "",
+          "Date": "",
+          "Type": "",
+          "Sector": "",
+          "State": "",
+          "Topics": []
+        }}
+    """
+
+    model = ChatGoogleGenerativeAI(model="gemini-1.5-flash-8b", temperature=0.2)
+    prompt = PromptTemplate(
+        template=prompt_template,
+        input_variables=["context", "state", "lvl_law"]
+    )
+    chain = create_stuff_documents_chain(llm=model, prompt=prompt)
+
+    doc = Document(page_content=pdf_text)
+
+    # Invoke the LLM with your custom inputs
+    result = chain.invoke({
+        "context": [doc],
+        "state": user_state,
+        "lvl_law": level_of_law
+    })
+
+    # Clean up any code fences, just like you do in parse_bill_info
+    try:
+        text_result = str(result).strip()
+        if text_result.startswith("```json"):
+            text_result = text_result[len("```json"):].strip()
+        if text_result.endswith("```"):
+            text_result = text_result[:-3].strip()
+
+        data = json.loads(text_result)
+    except (json.JSONDecodeError, TypeError):
+        # Fallback if parsing fails
+        data = {
+            "Title": "",
+            "Date": "",
+            "Type": level_of_law,    
+            "Sector": None,
+            "State": user_state,
+            "Topics": []
+        }
+
+    # Make absolutely sure "Type" and "State" are set exactly as provided
+    data["Type"] = level_of_law
+    data["State"] = user_state
+
+    # If level_of_law != "State level sectoral" and the LLM gave some sector,
+    # forcibly set it to null.
+    if level_of_law != "State-level sectoral":
+        data["Sector"] = None
+
+    # Ensure JSON structure has every expected field
+    # and no extras. Provide defaults if anything is missing:
+    final_data = {
+        "Title": data.get("Title", ""),
+        "Date": data.get("Date", ""),
+        "Type": data.get("Type", level_of_law),
+        "Sector": data.get("Sector"),
+        "State": data.get("State", user_state),
+        "Topics": data.get("Topics", [])
+    }
+
+    # Finally add the "Submitted-Online" value to "Path"
+    # And give "Filename" the same value as "Title" for consistency of our JSON object
+
+    final_data["Path"] = "Submitted-Online"
+    final_data["Filename"] = data.get("Title", "")
+
+    return final_data
 
 def get_conversational_chain():
     """

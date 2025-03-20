@@ -4,6 +4,7 @@ Functions for managing FAISS database and chunks
 
 import os
 import csv
+import re
 
 from dotenv import load_dotenv
 import google.generativeai as genai
@@ -199,7 +200,7 @@ def add_bills_to_faiss_index(pdf_paths):
     for pdf_path in pdf_paths:
         print(f"\nProcessing: {pdf_path}\n")
 
-        # Step 1: Extract text from the PDF.
+        # Step 1: Extract text from the PDF. Returns a list
         pages_of_pdf = extract_text_from_pdf(pdf_path)
 
         if not pages_of_pdf:
@@ -292,3 +293,73 @@ def write_bill_info_to_csv(bill_info_list, file_name="bill_info.csv"):
     except ValueError as e:
         print(e)
         print(f"Failed to write {path} into csv.")
+
+def sanitize_filename(filename):
+    """
+    Remove characters that are illegal in Windows file names.
+    """
+    # Remove: \ / * ? : " < > |
+    return re.sub(r'[\\/*?:"<>|]', "", filename)
+
+def create_folder_for_added_files(chunk_metadatas, uploaded_file):
+    """
+    Creates a folder to save the uploaded file, if there isn’t one already.
+    If the folder exists, the file is added to it.
+
+    For metadata with "Type" equal to "State-level sectoral":
+      - Uses individual_metadatas["State"] as the folder name.
+    Otherwise:
+      - Uses individual_metadatas["Type"] as the folder name.
+    
+    The folders are located inside the 'pdfs' directory, which is 2 levels above this file.
+    
+    Inputs: 
+        chunk_metadatas: List of dictionaries with metadata.
+        uploaded_file: PDF file from Streamlit.
+    Returns:
+        None
+    """
+    # If no metadata is provided, exit early.
+    if not chunk_metadatas:
+        return chunk_metadatas
+
+    # Use only the first metadata dictionary.
+    individual_metadatas = chunk_metadatas[0]
+
+    # Determine the path to the 'pdfs' folder (2 levels above this file)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    pdfs_dir = os.path.abspath(os.path.join(current_dir, "..", "pdfs"))
+
+    # Choose folder and file names based on metadata.
+    if individual_metadatas["Type"] == "State-level sectoral":
+        folder_name = individual_metadatas["State"]
+    else:
+        folder_name = individual_metadatas["Type"]
+
+    # Sanitize folder name.
+    folder_name = sanitize_filename(folder_name)
+
+    file_name = sanitize_filename(individual_metadatas["Title"])
+    # Append .pdf extension if not present.
+    if not file_name.lower().endswith(".pdf"):
+        file_name += ".pdf"
+
+    # Define the full destination directory path.
+    dest_dir = os.path.join(pdfs_dir, folder_name)
+
+    # Create the folder if it doesn't exist.
+    if not os.path.exists(dest_dir):
+        os.makedirs(dest_dir)
+
+    # Build the full file path.
+    file_path = os.path.join(dest_dir, file_name)
+
+    # Write the uploaded file's content to disk.
+    uploaded_file.seek(0) # Sets the pointer to the start of the file
+    with open(file_path, "wb") as f:
+        f.write(uploaded_file.getbuffer())
+
+    for individual_metadatas in chunk_metadatas:
+        individual_metadatas["Path"] = file_path
+
+    return chunk_metadatas

@@ -39,8 +39,55 @@ from llm_manager.llm_manager import (
 
 # List of US states.
 us_states = [
+    "Alabama",
+    "Alaska",
+    "Arizona",
+    "Arkansas",
+    "California",
+    "Colorado",
+    "Connecticut",
+    "Delaware",
+    "Florida",
+    "Georgia",
+    "Hawaii",
+    "Idaho",
+    "Illinois",
+    "Indiana",
+    "Iowa",
+    "Kansas",
+    "Kentucky",
+    "Louisiana",
+    "Maine",
+    "Massachusetts",
+    "Michigan",
+    "Minnesota",
+    "Mississippi",
+    "Missouri",
+    "Montana",
+    "Nebraska",
+    "Nevada",
+    "New Hampshire",
+    "New Jersey",
+    "New Mexico",
+    "New York",
+    "North Carolina",
+    "North Dakota",
+    "Ohio",
+    "Oklahoma",
+    "Oregon",
+    "Pennsylvania",
+    "Rhode Island",
+    "South Carolina",
+    "South Dakota",
+    "Tennessee",
     "Texas",
+    "Utah",
+    "Vermont",
+    "Virginia",
     "Washington",
+    "West Virginia",
+    "Wisconsin",
+    "Wyoming",
 ]
 
 st.set_page_config(page_title="Explore State Privacy Laws", layout="wide")
@@ -60,10 +107,15 @@ STYLING_FOR_STATE_PAGE = """
     background-position: 0 0,28px 28px;
     color: #000;
     }
-    [data-testid="stSelectbox"] {
-        color: white !important;
+
+    [data-testid="stSelectbox"] *{
+        color: white;
     }
     
+    [data-testid="stWidgetLabel"] * {
+        color: black !important;
+    }
+
     div[data-baseweb="select"] * {
     background-color: light grey;
     }
