@@ -12,7 +12,6 @@ This module creates and generates the Add Documents page for the streamlit app
 import os
 import sys
 import streamlit as st
-from PyPDF2 import PdfReader
 
 # Set up root directory for imports
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -26,7 +25,8 @@ from db_manager.faiss_db_manager import (
 )
 from db_manager.pdf_parser import (
     extract_uploaded_pdf_pages,
-    chunk_text_while_adding_docs
+    chunk_text_while_adding_docs,
+    read_pdf
 )
 from llm_manager.llm_manager import (
     parse_bill_variant_for_adding_docs,
@@ -143,21 +143,6 @@ STYLING_FOR_ADD_DOC_PAGE = """
 """
 
 st.markdown(STYLING_FOR_ADD_DOC_PAGE, unsafe_allow_html=True)
-
-def read_pdf(uploaded_file):
-    """
-    Gathers the textual content of the whole pdf and joins them together
-    Input Args: PDF File
-    Returns: String
-    """
-    text = ""
-    if uploaded_file is not None:
-        reader = PdfReader(uploaded_file)
-        for page in reader.pages:
-            page_text = page.extract_text()
-            if page_text:
-                text += page_text
-    return text
 
 
 def main():

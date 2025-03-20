@@ -3,6 +3,7 @@ Functions for parsing texts from pdf.
 """
 
 import PyPDF2
+from PyPDF2 import PdfReader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 def chunk_pdf_pages(texts_per_page, pdf_path, chunk_size=800, chunk_overlap=200):
@@ -128,3 +129,18 @@ def extract_uploaded_pdf_pages(uploaded_file):
     except FileNotFoundError as e:
         print(f"Error reading PDF: {e}")
     return all_pages
+
+def read_pdf(uploaded_file):
+    """
+    Gathers the textual content of the whole pdf and joins them together
+    Input Args: PDF File
+    Returns: String
+    """
+    text = ""
+    if uploaded_file is not None:
+        reader = PdfReader(uploaded_file)
+        for page in reader.pages:
+            page_text = page.extract_text()
+            if page_text:
+                text += page_text
+    return text
