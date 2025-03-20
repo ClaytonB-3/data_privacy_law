@@ -68,7 +68,7 @@ Replace `your_langchain_api_key` and `your_google_api_key` with your actual API 
 1. Start the Streamlit application:
 ```bash
 cd data_privacy_law
-streamlit run app/home.py
+streamlit run app/Home.py
 ```
 
 The application should open in your default web browser at `http://localhost:8501`
