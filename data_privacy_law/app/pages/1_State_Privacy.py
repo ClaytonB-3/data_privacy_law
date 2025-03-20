@@ -320,6 +320,9 @@ def generate_llm_response(user_question):
         if (
             "Sorry, the LLM cannot currently generate a good enough response"
             not in result
+        ) and (
+            "Sorry, the database does not have specific information about your question"
+            not in result
         ):
             records = generate_page_summary(chunk_ids_w_metadata, user_question)
             st.session_state.df = pd.DataFrame(records)
