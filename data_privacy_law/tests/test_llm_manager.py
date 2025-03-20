@@ -3,7 +3,7 @@ Unittest for the functions in llm_mamager.py
 """
 
 import os
-
+import json
 import unittest
 from unittest.mock import patch, MagicMock
 
@@ -14,6 +14,7 @@ from llm_manager.llm_manager import (
     get_confirmation_result_chain,
     get_document_specific_summary,
     generate_page_summary,
+    parse_bill_variant_for_adding_docs
     )
 
 
@@ -193,6 +194,46 @@ on TPLC's database"""
             in result2,
             msg=result2,
         )
+
+    @patch("llm_manager.llm_manager.Document")
+    @patch("llm_manager.llm_manager.create_stuff_documents_chain")
+    @patch("llm_manager.llm_manager.PromptTemplate")
+    @patch("llm_manager.llm_manager.ChatGoogleGenerativeAI")
+    def test_parse_bill_add_doc(self, mock_genai, mock_prompt, mock_create_stuff, mock_doc):
+        """
+        Test parse_bill_variant_for_adding_docs calls correct times 
+        and generates the proper results. 
+        """
+        pdf_text= "test1"
+        user_state="test_state"
+        level_of_law="State-level sectoral"
+        # Create your mock chain
+        mock_chain = MagicMock()
+        # Set the return value for the invoke method
+        mock_chain.invoke.return_value = json.dumps({
+            "Title": "Title1",
+            "Date": "01012025",
+            "Type": "State-level sectoral",
+            "Sector": "Sector1",
+            "State": "test_state",
+            "Topics": ["Topic1", "Topic2", "Topic3", "Topic4", "Topic5", "Topic6"]
+        })
+
+        mock_create_stuff.return_value = mock_chain
+        result = parse_bill_variant_for_adding_docs(pdf_text, user_state, level_of_law)
+        mock_genai.assert_called_once()
+        mock_prompt.assert_called_once()
+        mock_create_stuff.assert_called_once()
+        mock_doc.assert_called_once()
+        self.assertEqual(result['Title'], "Title1")
+        self.assertEqual(result['Date'], "01012025")
+        self.assertEqual(result['Type'], "State-level sectoral")
+        self.assertEqual(result['Sector'], "Sector1")
+        self.assertEqual(result['State'], "test_state")
+        self.assertEqual(result['Topics'], ["Topic1", "Topic2", "Topic3",
+                                            "Topic4", "Topic5", "Topic6"])
+        self.assertEqual(result['Path'], 'Submitted-Online')
+        self.assertEqual(result['Filename'], 'Title1')
 
 
 if __name__ == "__main__":
