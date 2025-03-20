@@ -22,6 +22,11 @@ Our goal is to create a platform that addresses both challenges by providing eas
 - **Requirement**: Simple, intuitive UI with the added ability to trace output back to the original legal documents.  
 - **Outcome**: Query results must include references to the specific documents or sections used to generate responses (e.g., “referenced from Bill HB 1672 of 2025”).
 
+### Technical App Support
+- **Expertise**: Limited understanding of the law, but significant computing knowledge. Able to run python files from the command line.
+- **Requirement**: The platform must provide the ability to rebuild the database if it is corrupted and to add new pdfs.
+- **Outcome**: Adding documents must be easy and doing a full reset of the database must require simple commands.
+
 ---
 
 ## Data Sources
@@ -30,6 +35,15 @@ Our goal is to create a platform that addresses both challenges by providing eas
 1. **LegiScan**  
 2. **Openstates**  
 3. **IAPP Databases**
+
+**Data Management**
+The data from these data sources exists in pdfs. In order to be able to work with the data we will do the following:
+1. Convert the pdfs to text
+2. Generate metadata for the document through an LLM
+3. Chunk the texts into smaller pieces and convert to vectors
+4. Store the vectors along with the text of the chunk and metadata of the PDF in a vector database. 
+
+The above process allows us to query the data by slicing on document metadata or by finding chunks similar to a natural language query using vector similarity. 
 
 ### Generated Data Sources
 - A **vector database** containing word embeddings and metadata about the bills.  
